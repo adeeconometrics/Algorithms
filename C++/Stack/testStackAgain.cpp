@@ -1,10 +1,8 @@
-// dynamic stack ADT -- build on a linked list
-// the dynamic stack will never be full(theoretically), but it is limted by your memory
-# pragma once
-# include <iostream>
+#include <iostream>
 
-template <class T> 
-class Stack {
+using namespace std;
+
+template <class T> class Stack {
   struct Node {
     T data;
     Node *next;
@@ -51,3 +49,18 @@ public:
 
   Node *top_reference() { return _top; }
 };
+
+int main() {
+  Stack<int> s;
+  for (int i = 0; i < 10; i++) {
+    s.push(i);
+    cout << s.top();
+    cout << " ";
+  }
+  cout << endl;
+  for (int i = 0; i < 10; i++) {
+    cout << s.top();
+    s.pop();
+    cout << " ";
+  }
+}

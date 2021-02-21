@@ -1,82 +1,92 @@
-//Dynstack test
+// Dynstack test
 
-# include <iostream>
+#include <iostream>
+#include <stack>
 //# include "dynamicStack.h"
 
-
-template<class T>
-class Stack{
+template <class T> 
+class Stack {
 	private:
-		struct stackNode{
-			T value;
-			stackNode *next;
-		};
-		
-		stackNode *top_;
-		int size;
-		
+	  struct stackNode {
+	    T value;
+	    stackNode *next;
+	  };
+	
+	  stackNode *top_;
+	  int size;
+	
 	public:
-		Stack(){
-			top_ = NULL;
-			size = 0;
-		}
-		
-		void push(T &data){
-			stackNode *newNode;
-			// create new node and initialize value
-			newNode = new stackNode;
-			newNode->value = data;
-			
-			if(isEmpty()){
-				top_ = newNode;
-				size++;
-			}	
-			else{
-				top_ = newNode;
-				newNode = top_->next;
-				size++;
-			}
-		}
-		
-		void pop(){
-			stackNode *temp;
-			
-			if(isEmpty())
-				std::cout<<"the stack is empty";
-			else{
-//				data = top_->value;
-				temp = top_->next;
-				delete top_;
-				top_ = temp;
-				--size;
-			}	
-		}
-		
-		
-		bool isEmpty(){
-			if(top_ == NULL)
-				return true;
-			else
-				return false;
-		};
-		
-		// will this return a reference of the top_?
-		void top(){
-			return &top_;
-		}
-		
-		int stackSize(){
-			return size;
-		}
+	  Stack() {
+	    top_ = NULL;
+	    size = 0;
+	  }
+	
+	  void push(T &data) {
+	    stackNode *newNode;
+	    // create new node and initialize value
+	    newNode = new stackNode();
+	    newNode->value = data;
+	
+	    if (isEmpty()) {
+	      top_ = newNode;
+	      size++;
+	    } else {
+	      top_ = newNode;
+	      newNode = top_->next;
+	      size++;
+	    }
+	  }
+	
+	  void pop() {
+
+	    if (isEmpty()){std::cout << "the stack is empty";}
+	    else {
+	      stackNode *temp = top_;
+	      top_ = top_->next;
+		  size--;
+	      delete (temp);
+	      
+	    }
+	  }
+	
+	  bool isEmpty() {
+	    if (top_ == NULL)
+	      return true;
+	    else
+	      return false;
+	  };
+	
+	  T top() { return top_->value; }
+	  stackNode* top_reference(){
+	  	return top_;
+	  }
+	
+	  int stackSize() { return size; }
 };
 
-int main(){
-	Stack<int> s;
-	
-	for(int i = 0; i<10; i++)
-		s.push(i);
-	
-z	for(int i = 0; i<s.size(); i++){
-//		std::cout<< s._top() << std::endl;
-//	}	
+int main() {
+  Stack<int> s;
+//  int catchVar;
+  std::stack<int> stk;
+
+  for (int i = 0; i < 10; i++){
+  	s.push(i);
+  	std::cout<<s.top()<<" ";
+  	stk.push(i);
+  }
+
+std::cout<<std::endl;
+//  for (int i = 0; i < s.stackSize(); i++) {
+////    std::cout<<s.top()<<" ";
+////    s.pop();
+//    std::cout<<s.top()<<" ";
+//    s.pop();
+//  }
+//  std::cout<<s.top_reference() <<" ";
+//  std::cout<<s.top_reference()->value;
+std::cout<<s.top()<<" ";
+s.pop();
+std::cout<<s.top()<<" ";
+s.pop();
+std::cout<<s.top()<<" ";
 }
