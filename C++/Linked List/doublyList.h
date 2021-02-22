@@ -1,4 +1,6 @@
 # pragma once
+# ifndef _DOUBLYLIST_H
+# define _DOUBLYLIST_H
 
 template <class T>
 class List{
@@ -19,6 +21,7 @@ class List{
         void pop_back();
         void push_front(T &data);
         void pop_front();
+        void clear();
         void filter(T &data);
         int match(T &data);
         Node *font();
@@ -29,3 +32,5 @@ class List{
         bool isEmpty();
         bool isElement(T &data);
 };
+
+# endif

@@ -1,5 +1,6 @@
 # pragma once
-
+# ifndef _DYNAMICQUEUE_H
+# define _DYNAMICQUEUE_H
 template <class T>
 class Queue{
     private:
@@ -26,3 +27,5 @@ class Queue{
 
         bool isEmpty();
 };
+
+# endif
