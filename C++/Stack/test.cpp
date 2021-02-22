@@ -38,14 +38,12 @@ class Stack {
 	  }
 	
 	  void pop() {
-
 	    if (isEmpty()){std::cout << "the stack is empty";}
 	    else {
 	      stackNode *temp = top_;
 	      top_ = top_->next;
 		  size--;
 	      delete (temp);
-	      
 	    }
 	  }
 	
@@ -66,27 +64,9 @@ class Stack {
 
 int main() {
   Stack<int> s;
-//  int catchVar;
-  std::stack<int> stk;
 
   for (int i = 0; i < 10; i++){
   	s.push(i);
   	std::cout<<s.top()<<" ";
-  	stk.push(i);
   }
-
-std::cout<<std::endl;
-//  for (int i = 0; i < s.stackSize(); i++) {
-////    std::cout<<s.top()<<" ";
-////    s.pop();
-//    std::cout<<s.top()<<" ";
-//    s.pop();
-//  }
-//  std::cout<<s.top_reference() <<" ";
-//  std::cout<<s.top_reference()->value;
-std::cout<<s.top()<<" ";
-s.pop();
-std::cout<<s.top()<<" ";
-s.pop();
-std::cout<<s.top()<<" ";
 }

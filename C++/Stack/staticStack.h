@@ -30,7 +30,7 @@ class Stack{
 
 // implementation
 template<class T>
-void Stack::push<T>(T &data){
+void Stack<T>::push(T &data){
     if (isFull())
       std::cout << "stack is full";
     else {
@@ -42,7 +42,7 @@ void Stack::push<T>(T &data){
 }
 
 template<class T>
-void Stack::pop<T>(int &num){
+void Stack<T>::pop(int &num){
     if (isEmpty())
       std::cout << "stack is empty";
     else {
@@ -52,23 +52,23 @@ void Stack::pop<T>(int &num){
 }
 
 template<class T>
-T Stack::top<T>(){
+T Stack<T>::top(){
    return stackArray[_top - 1];
 }
 
 template<class T>
-T* Stack::top_reference<T>(){
+T* Stack<T>::top_reference(){
     return stackArray + (_top - 1); 
 }
 
 template<class T>
-bool Stack::isEmpty<T>(){
+bool Stack<T>::isEmpty(){
     if(index == -1) return true;
     else return false;
 }
 
 template<class T>
-bool Stack::isFull<T>(){
+bool Stack<T>::isFull(){
     if(stackSize == index) return true;
     else return false;
 }
