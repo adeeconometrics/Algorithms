@@ -9,6 +9,7 @@ class Queue{
         }
 
         Node *front;
+        
     public:
         Queue(){
             top = NULL;
