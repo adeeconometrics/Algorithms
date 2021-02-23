@@ -24,7 +24,8 @@ class Vector{
         void sort(){
             // if the type sortable?
             if(std::is_integral<T>::value || 
-            std::is_floating_point<T>::value){
+            std::is_floating_point<T>::value || 
+            std::is_same<T, std::string>::value){
                 // sort
             }
             else{
