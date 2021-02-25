@@ -1,12 +1,11 @@
 // test singly sorting
 
 #include <iostream>
-# include<string>
 
-template <typename T> class List {
+class List {
 private:
   struct Node {
-    T value;
+    int value;
     struct Node *next;
   };
   Node *head, *front, *back;
@@ -22,25 +21,25 @@ public:
 
   ~List() { clear(); }
 
-		void append(T &data){
-			Node *newNode = new Node();
-			newNode->value = data;
-			
-			if(isEmpty()){
-				head = newNode;
-			}else{
-				Node *ptr;
-				ptr = head;
-				
-				while(ptr->next != NULL){
-					ptr = ptr->next;
-				}
-				ptr->next = newNode;
-				current_size += 1;
-			}
-		}
+  void append(int &data) {
+    Node *newNode = new Node();
+    newNode->value = data;
 
-  void remove(T &data) {
+    if (isEmpty()) {
+      head = newNode;
+    } else {
+      Node *ptr;
+      ptr = head;
+
+      while (ptr->next != NULL) {
+        ptr = ptr->next;
+      }
+      ptr->next = newNode;
+      current_size += 1;
+    }
+  }
+
+  void remove(int &data) {
     if (isEmpty())
       std::cout << "list is already empty." << std::endl;
 
@@ -50,6 +49,9 @@ public:
 
       if (ptr->next->value == data) {
         removeFront();
+        //					temp = ptr;
+        //					head = head->next;
+        //					delete temp;
       } else {
         while (ptr->next != NULL && ptr->value != data) {
           prev = ptr;
@@ -75,52 +77,40 @@ public:
   }
 
   // insertion sort
-  // impose restriction
-
   void sort() {
-    try {
-      if (std::is_same<T, std::string>::value || std::is_integral<T>::value ||std::is_floating_point<T>::value){
-      	if (isEmpty()) {
-	        std::cout << "list is empty" << std::endl;
-	        return;
-	      }
-	      Node *i = head;
-	      Node *j = head;
-
-	      while (i->next != NULL) {
-	        j = i->next;
-	        while (j->next != NULL) {
-	          if (i->value > j->value) {
-	            // swap
-	            swap(i, j);
-	          }
-	          j = j->next;
-	        }
-	        i = i->next;
-	      }
-		}
-		else{
-			const char* str = "type is not sortable";
-			throw str;
-		}
-    } catch (const char* &str) {
-      std::cout << str << std::endl;
+    if (isEmpty()) {
+      std::cout << "list is empty" << std::endl;
+      return;
     }
-}
+    Node *i = head;
+    Node *j = head;
 
-		void display(){
-			
-			if(isEmpty()) std::cout<<"list is empty."<<std::endl;
-			else{
-				Node *ptr;
-				ptr = head;
-				while(ptr->next != NULL){
-				std::cout<<ptr->value<<" ";
-				ptr = ptr->next;
-				}
-			}
+    while (i->next != NULL) {
+      j = i->next;
+      while (j->next != NULL) {
+        if (i->value > j->value) {
+          // swap
+          swap(i, j);
+        }
+        j = j->next;
+      }
+      i = i->next;
+    }
+  }
 
-		}
+  void display() {
+    Node *ptr;
+    ptr = head;
+
+    if (isEmpty())
+      std::cout << "list is empty." << std::endl;
+    else {
+      while (ptr->next != NULL) {
+        std::cout << ptr->value << " ";
+        ptr = ptr->next;
+      }
+    }
+  }
 
   void clear() {
     Node *ptr, *temp;
@@ -158,34 +148,35 @@ public:
   }
 
   void swap(Node *&ref1, Node *&ref2) {
-    T temp = ref1->value;
+    auto temp = ref1->value;
     ref1->value = ref2->value;
     ref2->value = temp;
   }
 };
 
-struct Node{
-	int a;
-};
 int main() {
-  List<std::string> list;
-  // test append
-  std::string str = "Renefe";
-  list.append(str);
-  str = "Dave";
-  list.append(str);
-  str = "Rose";
-  list.append(str);
-  str = "Ocao";
-  list.append(str);
-  std::string str2 = "last bit"; // apparently, it's not printing the last item
-  list.append(str2);
-  
-
-
+  List list;
+  int temp;
+  for (int i = 2; i < 10; i++) {
+    temp = 10 - i;
+    list.append(temp);
+  }
+  list.append(temp);
+  list.append(temp);
   list.display();
-  std::cout<<"\n";
+  //	list.clear();
+  //	temp = 3;
+  //	list.removeAll(temp); -- not working properly
+
+  std::cout << "\n";
   list.sort();
   list.display();
+  std::cout << "\n";
 
+  //	list.remove(temp);
+  temp = 1;
+  list.remove(temp);
+  list.display();
+  std::cout << "\n";
+  std::cout << list.size();
 }

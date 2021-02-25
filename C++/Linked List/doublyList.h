@@ -9,11 +9,17 @@ class List{
             T value;
             Node *next, *prev;
         }
-        Node *front, *back;
+        Node *head, *front, *back;
+        int current_size;
 
     public:
-        List();
-        ~List();
+        List(){
+            head = NULL;
+            front = head;
+            back = front;
+            current_size = 0;
+        }
+        ~List(){clear();}
 
         void append(T &data);
         void remove();
@@ -29,8 +35,13 @@ class List{
         T show_front();
         T show_back();
         void sort();
+        int size();
         bool isEmpty();
         bool isElement(T &data);
 };
 
+template <class T>
+void List<T>::append(T &data){
+    
+}
 # endif
