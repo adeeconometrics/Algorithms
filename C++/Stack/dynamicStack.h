@@ -1,6 +1,8 @@
 // dynamic stack ADT -- build on a linked list
 // the dynamic stack will never be full(theoretically), but it is limted by your memory
 # pragma once
+# define _DYNAMICSTACK_H
+# ifndef _DYNAMICSTACK_H
 # include <iostream>
 
 template <class T> 
@@ -51,3 +53,5 @@ public:
 
   Node *top_reference() { return _top; }
 };
+
+# endif

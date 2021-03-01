@@ -2,7 +2,7 @@
 # ifndef _DYNAMICQUEUE_H
 # define _DYNAMICQUEUE_H
 template <typename T>
-class Queue{
+class d_queue{
     private:
         struct Node{
             T value;
@@ -13,16 +13,16 @@ class Queue{
         int size;
         
     public:
-        Queue(){
+        d_queue(){
             front = NULL;
             rear = NULL;
             size = 0;
         }
-        ~Queue();
+        ~d_queue();
 
         void enqueue(T &data);
         void dequeue();
-        void top();
+        T top();
         void clear();
         void display();
         bool isEmpty();
@@ -31,13 +31,13 @@ class Queue{
 };
 
 template <typename T>
-bool Queue<T>::isEmpty(){
+bool d_queue<T>::isEmpty(){
 	if(size == 0) return true; 
 	else return false;
 }
 
 template <typename T>
-void Queue<T>::enqueue(T &data){
+void d_queue<T>::enqueue(T &data){
 	Node *newNode;
 	newNode = new Node;
 	newNode->data = data;
@@ -55,7 +55,7 @@ void Queue<T>::enqueue(T &data){
 }
 
 template <typename T>
-void Queue<T>::dequeue(){
+void d_queue<T>::dequeue(){
 	if(isEmpty()){
 		std::cout<<"the queue is already empty";
 	}
@@ -70,12 +70,12 @@ void Queue<T>::dequeue(){
 }
 
 template <typename T>
-int Queue<T>::currentSize(){
+int d_queue<T>::currentSize(){
 	return size;
 }
 
 template <typename T>
-void Queue<T>::clear(){
+void d_queue<T>::clear(){
 	int _size = size;
 	while(_size>0){
 		dequeue();
@@ -84,7 +84,7 @@ void Queue<T>::clear(){
 }
 
 template <typename T>
-void Queue<T>::display(){
+void d_queue<T>::display(){
 	Node *temp = front;
 	int _size = size;
 	
@@ -96,7 +96,7 @@ void Queue<T>::display(){
 }
 
 template <typename T>
-bool Queue<T>::isElement(T data){
+bool d_queue<T>::isElement(T data){
 	int _size = size;
 	Node *temp = front;
 	
@@ -109,7 +109,7 @@ bool Queue<T>::isElement(T data){
 }
 
 template<typename T>
-T Queue<T>::top(){
+T d_queue<T>::top(){
     return front->data;
 }
 # endif
