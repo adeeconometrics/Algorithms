@@ -25,15 +25,52 @@ interface ChildInterface extends BaseInterface{
 
 // base class
 class Base implements ChildInterface{
-    
+    private String name = "Base";
+
+    public Base(){
+        System.out.println("I have no method here; only the standards.");
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
+    }
 }
 // child class 
 class ChildRight extends Base{
+    private String name = "ChildRight";
 
+    public ChildRight(){
+        System.out.println("I have no method here; only the standards.");
+    }
+    @Override
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
+    }
 }
 // child 2 class
 class ChildLeft extends Base{
+    private String name = "ChildLeft";
 
+    public ChildLeft(){
+        System.out.println("I have no method here; only the standards.");
+    }
+    public void setName(String name){
+        Base b = new Base();
+        b.setName(name); // disambiguate call from super class; establish reference first
+        //super.setName(name) -- can also be used if you don't need to disambiguate method calls
+    }
+
+    public String getName(){
+        return name;
+    }
 }
 // multiple inheritance through interfaces
 

@@ -4,8 +4,12 @@
 #include <stack>
 //# include "dynamicStack.h"
 
+class parent{
+
+};
+
 template <class T> 
-class Stack {
+class Stack : public parent{
 	private:
 	  struct stackNode {
 	    T value;
@@ -60,13 +64,19 @@ class Stack {
 	  }
 	
 	  int stackSize() { return size; }
+	  
 };
 
 int main() {
+  parent *ptr;
   Stack<int> s;
+  ptr = s;
 
   for (int i = 0; i < 10; i++){
   	s.push(i);
   	std::cout<<s.top()<<" ";
   }
+  std::cout<<""<<std::endl;
+//ptr = s.top_reference();
+  std::cout<<*ptr;
 }

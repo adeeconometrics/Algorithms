@@ -43,6 +43,8 @@
         "xstring": "c",
         "xtr1common": "c",
         "xutility": "c",
-        "set": "c"
+        "set": "c",
+        "fstream": "cpp",
+        "xtree": "cpp"
     }
 }

@@ -1,180 +1,79 @@
+// creates a multi-level linked list
 # pragma once
-# include <iostream>
 # include <string>
-
+# include <iostream>
+# include <sstream>
+# include <fstream>
+template <typename T>
 class List{
     private:
-        struct Node{
-            int number;
-            int year;
-            std::string title;
-            Node *next, *str_ptr, *number_ptr, *year_ptr;
+      struct SubNode {
+            std::string n_string; // string representation for implicit type conversion
+            T subnode_value;
+            SubNode *next;
+
+            SubNode(T _subnode_value, SubNode *ptr = NULL): subnode_value(_subnode_value), ptr(next){}
+            operator const char *(){
+                std::ostringstream n_str;
+                // load components of the node in the string 
+                // connversion
+                // return converted n_string 
+            }
         };
-        Node *head, *front, *back;
+
+        struct Node {
+            T node_value;
+            Node *next;
+            struct SubNode *head_subnode;
+
+            Node(T _node_value, SubNode *_head_subnode = NULL, Node *_next = NULL){
+                node_value = _node_value;
+                next = _next;
+                head_subnode = _head_subnode;
+            }
+        };
+
+        Node *head;
         int counter;
 
     public:
-        List(){
+        explicit List(){
             head = NULL;
-            counter = 0;
-            front = head;
-            back = head;
         }
-        ~List(){
-            clear();
-        }
+        ~List(){clear();}
 
-        void clear();
-        void append(std::string title, int year){
-            Node *newNode = new Node();
-            counter += 1;
-            newNode->title = title;
-            newNode->year = year;
-            newNode->number = counter;
-
-            if(isEmpty()){
-                head = newNode;
-                newNode->next = NULL;
-                newNode->number_ptr = NULL;
-                newNode->year_ptr = NULL;
-                newNode->str_ptr = NULL;
-            } else{
-                Node *ptr = head;
-                while(ptr->next != NULL){
-                    ptr = ptr->next;
-                }
-                ptr->next = newNode;
-                back = newNode;
-            }
-        }
-
-        void removeTitle(std::string &title){
-            if(isEmpty())
-                std::cout<<"list is aready empty."<<std::endl;
-            else{
-                Node *ptr, *temp;
-                ptr = head;
-
-                while(ptr->next != NULL){
-                    if(ptr->title == title){
-                        // delete all items where it matches the title
-                        temp = ptr;
-                        ptr = ptr->next;
-                        delete temp;
-
-                        counter -= 1;
-                    }
-                    ptr = ptr->next;
-                }
-            }
-        };        
-        
-        void removeYear(int year){
-            if(isEmpty())
-                std::cout<<"list is aready empty."<<std::endl;
-            else{
-                Node *ptr, *temp;
-                ptr = head;
-
-                while(ptr->next != NULL){
-                    if(ptr->year == year){
-                        // delete all items where it matches the year
-                        temp = ptr;
-                        ptr = ptr->next;
-                        delete temp;
-
-                        counter -= 1;
-                    }
-                    ptr = ptr->next;
-                }
-            }
-        };
-
-        void removeFront(){
-            if(isEmpty())
-                std::cout<<"list is already empty."<<std::endl;
+        void addNode(T &node){
+            Node *node_ptr = new Node(node);
+            if(isEmpty()) head = node_ptr;
             else{
                 Node *ptr;
-                ptr = head;
-                head = head->next;
-                delete ptr;
-                
-                counter -= 1;
-            }
-
-        }
-        // void removeBack(){
-        //     if(isEmpty())
-        //         std::cout<<"list is already empty."<<std::endl;
-        //     else{
-        //         Node *ptr;
-        //         ptr = back;
-        //         back = back;
-        //         delete ptr;
-                
-        //         counter -= 1;
-        //     }
-
-        // }
-
-        void sortID(){
-            // Node *ptr;
-            // ptr = head;
-
-            // int size = counter;
-            // int minID, idx;
-            // for(int i = 0;i < size-1; i++){
-            //     idx = i;
-            //     for(int j = i+1; j < size; j++){
-            //         if()
-            //     }
-            // }
-        }
-
-        void sortYear(){
-            
-        }
-
-        void sortTitle(){
-
-        }
-
-        void display(){
-            Node *ptr = head;
-
-            while(ptr->next != NULL){
-                std::cout<<"ID number: " << ptr->number <<std::endl;
-                std::cout<< "Title: "<< ptr->title <<std::endl;
-                std::cout<<"Year: " << ptr->year <<std::endl;
-
-                ptr = ptr->next;
+                while(ptr->next !=NULL) ptr = ptr->next;
+                ptr->next = node_ptr;
             }
         }
 
-        void displayByTitle();
-        
-        void clear(){
-            Node *ptr, *temp;
-            ptr = head;
+        void addSubNode(T &n, T &value){
+            Node *node_ptr = head; // case where there is no n in the node, add n
+            if(node_ptr->head_subnode == NULL) node_ptr->head_subnode = new SubNode(value);
+            else{
+                SubNode *subnode_ptr = node_ptr->head_subnode;
 
-            while(ptr->next != NULL){
-                temp = ptr;
-                ptr = ptr->next;
-                delete temp;
+                while(subnode_ptr->next != NULL) subnode_ptr = subnode_ptr->next;
+                subnode_ptr->next = new SubNode(value);
             }
         }
+
+        void removeNode(T &value){
+            Node* node_ptr, *node_ptr_prev;
+            if(head == NULL) return; // when there is no Node
+            while()
+        }
+        void removeSubNode();
+        void clear();
+        void clearSubNode();
 
         bool isEmpty(){
-            if (head == NULL && counter == 0) return true;
-            else return false;
+            if(head == NULL) return true;
+            return false;
         }
-
-    private:
-        void swap(Node *ptr1, Node *ptr2){
-            Node *temp = ptr1;
-            ptr1 = ptr2;
-            ptr2 = ptr1;
-        }
-
-
 };
