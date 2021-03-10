@@ -45,6 +45,8 @@
         "xutility": "c",
         "set": "c",
         "fstream": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "vector": "cpp",
+        "list": "cpp"
     }
 }
