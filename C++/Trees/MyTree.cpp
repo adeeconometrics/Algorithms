@@ -23,14 +23,12 @@ public:
   void traverse_preorder(Node *node);
 
   void show_in_order() { Tree::traverse_inorder(root); }
-  Node *delete_element(int element, Node *ptr);
+  Node *delete_element(Node *ptr, int element);
   Node *find_max(Node *ptr);
   Node *find_min(Node *ptr);
 
   bool find_node(int element);
-  Node* _root(){
-  	return root;
-  }
+  Node *_root() { return root; }
 };
 
 void Tree::insert_element(int element) {
@@ -150,13 +148,13 @@ bool Tree::find_node(int element) {
   }
 }
 
-Tree::Node *Tree::delete_element(int element, Node *ptr) {
+Tree::Node *Tree::delete_element(Node *ptr, int element) {
   if (ptr == NULL)
     return ptr;
   else if (element < ptr->value)
-    ptr->left = delete_element(element, ptr->left);
+    ptr->left = delete_element(ptr->left, element);
   else if (element > ptr->value)
-    ptr->right = delete_element(element, ptr->right);
+    ptr->right = delete_element(ptr->right, element);
   else {
     // case 1: leaf node
     if (ptr->left == NULL && ptr->right == NULL) {
@@ -164,45 +162,38 @@ Tree::Node *Tree::delete_element(int element, Node *ptr) {
       ptr = NULL;
     }
     // case 2: one child
-    if (ptr->left == NULL) {
+    else if (ptr->left == NULL) {
       Node *temp = ptr;
       ptr = ptr->right;
       delete temp;
-      temp = NULL;
-
-    }
-    if (ptr->right == NULL) {
+    } else if (ptr->right == NULL) {
       Node *temp = ptr;
       ptr = ptr->left;
       delete temp;
-      temp = NULL;
-
     }
     // case 3: 2 child
-    if (ptr->left != NULL && ptr->right != NULL) {
+    else {
       Node *temp = find_min(ptr->right);
       ptr->value = temp->value;
-      ptr->right = delete_element(temp->value, ptr->right);
+      ptr->right = delete_element(ptr->right, temp->value);
     }
-    
+
     return ptr;
   }
 }
 
 Tree::Node *Tree::find_min(Node *ptr) {
   // finds min value of right child leftmost
-  while (ptr->left != NULL) ptr = ptr->left;
+  while (ptr->left != NULL)
+    ptr = ptr->left;
   return ptr;
 }
 
 Tree::Node *Tree::find_max(Node *ptr) {
   // finds min value of right child leftmost
-  if (ptr == NULL)
-    return ptr;
-  if (ptr->right != NULL)
-    ptr->right = find_min(ptr->right);
-  if (ptr->left != NULL)
-    ptr->left = find_min(ptr->left);
+  while (ptr->right != NULL)
+    ptr = ptr->left;
+  return ptr;
 }
 
 int main() {
@@ -215,15 +206,15 @@ int main() {
   tree.insert_element(6);
   tree.insert_element(5);
   tree.show_in_order();
-  
-  std::cout<<"inverse"<<std::endl;
+
+  std::cout << "inverse" << std::endl;
   tree.traverse_inverse(tree._root());
-  std::cout<<"post order"<<std::endl;
+  std::cout << "post order" << std::endl;
   tree.traverse_postorder(tree._root());
-  std::cout<<"pre-order"<<std::endl;
+  std::cout << "pre-order" << std::endl;
   tree.traverse_preorder(tree._root());
-  
-  std::cout<<"delete"<<std::endl;
-  tree.delete_element(10, tree._root());
+
+  std::cout << "10 deleted" << std::endl;
+  tree.delete_element(tree._root(), 10);
   tree.traverse_inorder(tree._root());
 }

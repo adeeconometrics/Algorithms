@@ -1,6 +1,6 @@
 #include <iostream>
+#include <list>
 #include <string>
-
 // iterators
 template <typename type> class iterator {
 private:

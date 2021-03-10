@@ -24,7 +24,7 @@ public:
   void traverse_preorder(Node *node);
 
   void show_in_order() { Tree::traverse_inorder(_root); }
-  Node *delete_element(const T &element, Node *ptr);
+  Node *delete_element(Node *ptr, const T &element);
   Node *find_max(Node *ptr);
   Node *find_min(Node *ptr);
 
@@ -159,13 +159,13 @@ bool Tree<T>::find_node(const T &element) {
 }
 
 template <typename T>
-Tree<T>::Node *Tree<T>::delete_element(const T &element, Node *ptr) {
+Tree<T>::Node *Tree<T>::delete_element(Node *ptr, const T &element) {
   if (ptr == NULL)
     return ptr;
   else if (element < ptr->value)
-    ptr->left = delete_element(element, ptr->left);
+    ptr->left = delete_element(ptr->left, element);
   else if (element > ptr->value)
-    ptr->right = delete_element(element, ptr->right);
+    ptr->right = delete_element(ptr->right, element);
   else {
     // case 1: leaf node
     if (ptr->left == NULL && ptr->right == NULL) {
@@ -191,7 +191,7 @@ Tree<T>::Node *Tree<T>::delete_element(const T &element, Node *ptr) {
     if (ptr->left != NULL && ptr->right != NULL) {
       Node *temp = find_min(ptr->right);
       ptr->value = temp->value;
-      ptr->right = delete_element(temp->value, ptr->right);
+      ptr->right = delete_element(ptr->right, temp->value);
     }
     
     return ptr;
@@ -207,11 +207,7 @@ Tree<T>::Node *Tree<T>::find_min(Node *ptr) {
 
 template <typename T>
 Tree<T>::Node *Tree<T>::find_max(Node *ptr) {
-  // finds min value of right child leftmost
-  if (ptr == NULL)
-    return ptr;
-  if (ptr->right != NULL)
-    ptr->right = find_min(ptr->right);
-  if (ptr->left != NULL)
-    ptr->left = find_min(ptr->left);
+  // finds min value of right child rightmost
+  while (ptr->right != NULL) ptr = ptr->right;
+  return ptr;
 }
