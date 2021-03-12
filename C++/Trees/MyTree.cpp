@@ -1,4 +1,4 @@
-// modified treee
+// modified tree -- format and implement level-order traversal
 
 #include <iostream>
 
@@ -29,6 +29,18 @@ public:
 
   bool find_node(int element);
   Node *_root() { return root; }
+  Node *parent(Node *child);
+  Node *child(Node *parent) {
+    if (parent->left == NULL && parent->right == NULL)
+      return nullptr;
+    else if (parent->left == NULL)
+      return parent->right;
+    else if (parent->right == NULL)
+      return parent->left;
+    else {
+      return parent;
+    }
+  }
 };
 
 void Tree::insert_element(int element) {
