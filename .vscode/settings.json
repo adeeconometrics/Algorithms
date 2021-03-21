@@ -47,6 +47,10 @@
         "fstream": "cpp",
         "xtree": "cpp",
         "vector": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "algorithm": "cpp",
+        "cstdarg": "cpp",
+        "random": "cpp",
+        "sstream": "cpp"
     }
 }
