@@ -45,7 +45,9 @@ public:
   void add_edge();
   void remove_edge();
   void set_vertex_value();
+
   int get_vertex_value();
+  int path_lenght();
 
   bool is_adjacent(const T &G, const int &x, const int &y);
   bool is_cyclic();
