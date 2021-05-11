@@ -61,6 +61,6 @@ int main() {
   for (int i = 0; i < 10; i++) {
     cout << s.top();
     s.pop();
-    cout << " ";
+    cout << " "<<s.top_reference() << " ";
   }
 }

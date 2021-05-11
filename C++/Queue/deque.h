@@ -1,8 +1,5 @@
-// implemmented as dobuly linked list
 
 # pragma once
-// # define _DEQUE_H
-// # ifndefine _DEQUEUE_H
 
 template <typename T>
 class deque{
