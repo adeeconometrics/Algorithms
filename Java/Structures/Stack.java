@@ -39,6 +39,10 @@ public class Stack {
     public int size(){
         return this.size;
     }
+
+    public int top(){
+        return this.top.data;
+    }
 }
 
 class MainStack{

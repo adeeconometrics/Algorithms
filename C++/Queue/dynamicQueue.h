@@ -6,16 +6,16 @@ class d_queue{
     private:
         struct Node{
             T value;
-            Node *rear;
+            Node *next;
         }
 
-        Node *front;
+        Node *front, *rear;
         int size;
         
     public:
         d_queue(){
-            front = NULL;
-            rear = NULL;
+            front = nullptr;
+            rear = nullptr;
             size = 0;
         }
         ~d_queue();

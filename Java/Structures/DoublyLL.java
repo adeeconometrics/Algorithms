@@ -28,6 +28,7 @@ public class DoublyLL{
                 ptr = ptr.next;
             
             ptr.next = node;
+            node.prev = ptr;
         }
     }
 
