@@ -25,8 +25,8 @@ public class Queue {
             this.front = node;
             this.rear = node;
         } else{
-            this.rear.next = node;
-            this.rear = this.rear.next;
+            node.next = this.rear;
+            this.rear = node;
         }
         ++ this.size;
     }
