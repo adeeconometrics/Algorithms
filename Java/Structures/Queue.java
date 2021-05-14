@@ -34,9 +34,9 @@ public class Queue {
     public void dequeue(){
         try {
             if(is_empty()) throw new Exception();
-            Node temp_node = this.front;
+            Node temp_node = this.front; // you can not use this?
             this.front = this.front.next;
-            temp_node = null;
+            temp_node = null; // you can not use this?
             
             -- this.size;
         } catch (Exception e) {
