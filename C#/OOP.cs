@@ -2,6 +2,12 @@ using System;
 
 //abstract class - may contain non abstract method.
 abstract class Abstract{
+    public Abstract(){
+        Console.WriteLine("Abstract constructor is called.");
+    }
+    ~Abstract(){
+        Console.WriteLine("Abstract destructor is called.");
+    }
     public abstract string AbstractMethod();
     public string PredefinedMethod(){
         return "this is a predefined method from abstract class.";
@@ -12,6 +18,9 @@ class Base: Abstract{
     private string name = "Base class method.";
     public Base(){
         Console.WriteLine("Base class constructor is called.");
+    }
+    ~Base(){
+        Console.WriteLine("Base class destructor is called.");
     }
     // to mark as override-able function
     public virtual string StringMethod(){
@@ -27,6 +36,9 @@ class Derived: Base{
     private string name = "Derived class method.";
     public Derived(){
         Console.WriteLine("Derived constructor is called.");
+    }
+    ~Derived(){
+        Console.WriteLine("Derived class destructor is called.");
     }
     //compile-time polymorphism (function overloading)
     public Derived(string name){
@@ -45,12 +57,13 @@ class Derived: Base{
 class MainClass{
     public static void Main(string [] args){
         Base b = new Base(); //instantiates base class
-        Console.WriteLine(b.StringMethod());
-        Console.WriteLine(b.AbstractMethod());
-        Console.WriteLine(b.PredefinedMethod());
         Derived d = new Derived(); //instatiates derived class
-        Console.WriteLine(d.StringMethod());
-        Console.WriteLine(d.AbstractMethod());
-        Console.WriteLine(d.PredefinedMethod());
+        function(b);
+        function(d);
+    }
+    public static void function(Base obj){ // you cannot parameterize an Abstract class
+        Console.WriteLine(obj.StringMethod());
+        Console.WriteLine(obj.AbstractMethod());
+        Console.WriteLine(obj.PredefinedMethod());
     }
 }
