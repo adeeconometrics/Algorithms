@@ -5,7 +5,7 @@ int partition(int *a, int low, int high) {
   pivot = a[high];
 
   i = (low - 1);
-  for (j = low, j <= high - 1; j++) {
+  for (j = low, j <= high - 1; ++j) {
     if (a[j] <= pivot) {
       i++;
       std::swap(a[i], a[j]);
