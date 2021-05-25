@@ -1,29 +1,92 @@
 // doubly linked list
 #include <initializer_list>
 #include <iostream>
+#include <list>
+template <typename List> class list_iterator {
+private:
+  pointer_type m_ptr;
 
-class List {
+public:
+  typedef typename List::value_type value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
+
+public:
+  list_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+  list_iterator &operator++() {
+    m_ptr = m_ptr->next;
+    return *this;
+  }
+
+  list_iterator &operator++(int) {
+    list_iterator iterator = *this;
+    m_ptr = m_ptr->next;
+    return iterator;
+  }
+
+  list_iterator &operator--() {
+    m_ptr = m_ptr->prev;
+    return *this;
+  }
+
+  list_iterator &operator--(int) {
+    list_iterator iterator = *this;
+    m_ptr = m_ptr->prev;
+    return iterator;
+  }
+
+  reference_type operator*() { return *m_ptr; }
+
+  pointer_type operator->() { return m_ptr; }
+
+  bool operator==(const list_iterator &other) const {
+    return m_ptr == other.m_ptr;
+  }
+
+  bool operator!=(const list_iterator &other) const {
+    return !(*this == other);
+  }
+};
+template <typename T> class List {
+public:
+  typedef head value_type;
+  typedef list_iterator<List<T>> iterator;
+
 private:
   struct Node {
-    int data;
+    T data;
     Node *next, *prev;
-    Node(int _data) : data{data} {
+    Node(const T &_data) : data{_data} {
       next = nullptr;
       prev = nullptr;
     }
   } * head, *back;
-  int size;
+  size_t m_size;
 
 public:
   explicit List() {
-    size = 0;
+    m_size = 0;
     head = nullptr;
     back = nullptr;
   }
 
+  explicit List(std::initializer_list<T> _list) {
+    m_size = 0;
+    head = nullptr;
+    back = nullptr;
+
+    for (auto i : list)
+      add(i);
+  }
+  // move constructor
+  // copy constructor
+  // move assignment
+  // copy assignment
+
   ~List() { clear(); }
 
-  void add(const int &data) {
+  void add(const T &data) {
     Node *node = new Node(data);
     if (is_empty())
       head = node;
@@ -36,7 +99,7 @@ public:
       node->prev = ptr;
       back = node;
     }
-    ++size;
+    ++m_size;
   }
 
   void remove(const int &data) {
@@ -67,7 +130,7 @@ public:
 
     } catch (const char *error_msg) {
       std::cerr << error_msg << std::endl;
-      return;
+      exit(0);
     }
   }
 
@@ -78,8 +141,6 @@ public:
       ptr = ptr->next;
     }
   }
-
-  void sort() {} // implement quick sort in linked list
 
   void clear() {
     if (is_empty())
@@ -98,10 +159,15 @@ public:
     ptr = nullptr;
   }
 
-  int top() { return head->data; }
-  int bottom() { return back->data; }
+  size_t size() { return m_size; }
 
-  bool is_empty() { return head == nullptr && size == 0; }
+  T top() { return head->data; }
+  T bottom() { return back->data; }
+
+  iterator begin() { return iterator(m_ptr); }
+  iterator end() { return iterator(m_ptr + m_size); }
+
+  bool is_empty() { return head == nullptr && m_size == 0; }
 
 private:
   void remove_head() {
@@ -123,8 +189,6 @@ private:
 
     return;
   }
-
-  void swap(const int &a, const int &b);
 };
 
 int main() {}
