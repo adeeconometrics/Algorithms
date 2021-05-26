@@ -101,17 +101,65 @@ public:
     m_ptr = nullptr;
   }
 
+  Array &operator=(std::initializer_list<T> list) {
+    index = 0;
+    m_size = list.size();
+
+    for (std::initializer_list<T>::iterator it = list.begin(); it != list.end();
+         ++it) {
+      add(*it);
+      index += 1;
+    }
+  }
+
+  // copy assingment
+  // move assingment
+
+  void operator++() { m_ptr[++index]; }
+
+  void operator++(int) { m_ptr[index++]; }
+
+  void operator--() { m_ptr[--index]; }
+
+  void operator--(int) { m_ptr[index--]; }
+
+  const T &operator[](size_t idx) const {
+    try {
+      if (idx < 0 || idx < size)
+        throw std::exception();
+
+      return m_ptr[idx];
+    } catch (const std::exception &e) {
+      std::cerr << str << std::endl;
+      exit(0);
+    }
+  }
+
+  T &operator[](size_t idx) {
+    try {
+      if (idx < 0 || idx < size)
+        throw std::exception();
+
+      return m_ptr[idx];
+    } catch (const std::exception &e) {
+      std::cerr << str << std::endl;
+      exit(0);
+    }
+  }
+
   void add(const T &element) {
     m_ptr[index] = element;
     index += 1;
   }
 
-  void remove(const T &element);
+  // void remove(const T &element);
 
   void display() {
     for (size_t i = 0; i < size; ++i)
       std::cout << "a[" << i << "] " << m_ptr[i] << "\n";
   }
+
+  size_t size() { return Size; }
 
   iterator begin() { return array_iterator(m_ptr); }
 
