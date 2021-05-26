@@ -52,7 +52,8 @@
         "cstdarg": "cpp",
         "random": "cpp",
         "sstream": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "array": "cpp"
     },
     "java.project.sourcePaths": [
         "Java"

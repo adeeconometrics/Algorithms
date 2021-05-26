@@ -50,7 +50,7 @@ public:
 };
 template <typename T> class List {
 public:
-  typedef head value_type;
+  typedef front value_type;
   typedef list_iterator<List<T>> iterator;
 
 private:
@@ -61,19 +61,19 @@ private:
       next = nullptr;
       prev = nullptr;
     }
-  } * head, *back;
+  } * front, *back;
   size_t m_size;
 
 public:
   explicit List() {
     m_size = 0;
-    head = nullptr;
+    front = nullptr;
     back = nullptr;
   }
 
   explicit List(std::initializer_list<T> _list) {
     m_size = 0;
-    head = nullptr;
+    front = nullptr;
     back = nullptr;
 
     for (auto i : list)
@@ -84,14 +84,17 @@ public:
   // move assignment
   // copy assignment
 
-  ~List() { clear(); }
+  ~List() {
+    if (!is_empty())
+      clear();
+  }
 
   void add(const T &data) {
     Node *node = new Node(data);
     if (is_empty())
-      head = node;
+      front = node;
     else {
-      Node *ptr = head;
+      Node *ptr = front;
       while (ptr->next != nullptr)
         ptr = ptr->next;
 
@@ -107,12 +110,12 @@ public:
       if (is_empty())
         throw "Error: list is already empty.";
 
-      if (head->data == data)
-        remove_head();
+      if (front->data == data)
+        remove_front();
       if (back->data == data)
         remove_back();
 
-      Node *ptr = head;
+      Node *ptr = front;
       Node *prev = ptr;
       while (ptr->next != nullptr) {
         if (ptr->data == data) {
@@ -121,6 +124,7 @@ public:
 
           delete ptr;
           ptr = nullptr;
+          m_size -= 1;
           return;
         }
         prev = ptr;
@@ -135,7 +139,7 @@ public:
   }
 
   void display() const {
-    Node *ptr = head;
+    Node *ptr = front;
     while (ptr->next != nullptr) {
       std::cout << ptr->data << " ";
       ptr = ptr->next;
@@ -145,7 +149,7 @@ public:
   void clear() {
     if (is_empty())
       return;
-    Node *ptr = head;
+    Node *ptr = front;
     Node *temp = ptr;
 
     while (ptr->next != nullptr) {
@@ -157,25 +161,27 @@ public:
     }
     delete ptr;
     ptr = nullptr;
+    m_size = 0;
   }
 
-  size_t size() { return m_size; }
+  size_t size() const { return m_size; }
 
-  T top() { return head->data; }
-  T bottom() { return back->data; }
+  T top() const { return front->data; }
+  T bottom() const { return back->data; }
 
   iterator begin() { return iterator(m_ptr); }
-  iterator end() { return iterator(m_ptr + m_size); }
+  iterator end() { return iterator(back); }
 
-  bool is_empty() { return head == nullptr && m_size == 0; }
+  bool is_empty() const { return front == nullptr && m_size == 0; }
 
 private:
-  void remove_head() {
-    Node *ptr = head;
-    head = head->next;
+  void remove_front() {
+    Node *ptr = front;
+    front = front->next;
 
     delete ptr;
     ptr = nullptr;
+    m_size -= 1;
 
     return;
   }
@@ -186,6 +192,7 @@ private:
 
     delete ptr;
     ptr = nullptr;
+    m_size -= 1;
 
     return;
   }
