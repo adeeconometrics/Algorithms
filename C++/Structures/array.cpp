@@ -2,8 +2,6 @@
 #include <iostream>
 
 template <typename Array> class array_iterator {
-private:
-  pointer_type m_ptr;
 
 public:
   typedef typename Array::value_type value_type;
@@ -46,6 +44,9 @@ public:
   bool operator!=(const array_iterator &other) const {
     return !(*this == other);
   }
+
+private:
+  pointer_type m_ptr;
 };
 
 template <typename T, size_t Size> class Array {

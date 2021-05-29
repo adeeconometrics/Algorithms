@@ -3,11 +3,8 @@
 // #include <iterator> // look at const and non const iterator
 
 template <typename Vector> class vector_iterator {
-private:
-  pointer_type m_ptr;
-
 public:
-  typedef typename Vector::value_type value_type;
+  using value_type = typename Vector::value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
@@ -49,6 +46,9 @@ public:
   bool operator!=(const vector_iterator &other) const {
     return !(*this == other);
   }
+
+private:
+  pointer_type m_ptr;
 };
 
 template <typename T> class Vector {
@@ -80,8 +80,11 @@ public:
   explicit Vector(std::initializer_list<T> list) {
     m_index = 0;
     m_size = 1;
+    m_ptr = new T[list.size()];
+
     for (auto i : list)
       push_back(i);
+    m_index += 1;
   }
 
   ~Vector() {
@@ -181,15 +184,26 @@ public:
     return iterator(m_ptr); // return iterator at a particular offset
   }
 
-  iterator end(){return iterator(m_ptr + m_size)}
+  iterator end() { return iterator(m_ptr + m_size); }
 
-  size_t size() {
-    return m_size;
+  size_t size() { return m_size; }
+
+  void fit() {
+    size_t t_size = m_size * 2;
+    T *temp = (T *)::operator new(t_size * sizeof(T));
+    for (size_t i = 0; i < m_index; ++i)
+      temp[i] = std::move(m_ptr[i]);
+
+    ::operator delete(m_ptr, t_size * sizeof(T));
+    m_ptr = nullptr;
+    m_ptr = temp;
+    m_size = m_index;
   }
 
 private:
   void grow() {
-    T *temp = (T *)::operator new T(m_size * 2 * sizeof(T));
+    size_t t_size = m_size * 2;
+    T *temp = (T *)::operator new(t_size * sizeof(T));
 
     for (size_t i = 0; i < m_index; ++i)
       temp[i] = std::move(m_ptr[i]);
@@ -197,32 +211,21 @@ private:
     for (size_t i = 0; i < m_size; ++i)
       m_ptr[i].~T();
 
-    ::operator delete(m_ptr, m_size * 2 * sizeof(T));
+    ::operator delete(m_ptr, t_size * sizeof(T));
     m_ptr = nullptr;
     m_ptr = temp;
-
-    m_size *= 2;
-  }
-
-  void fit() {
-    T *temp = new T[m_index];
-    for (size_t i = 0; i < m_index; ++i)
-      temp[i] = m_ptr[i];
-
-    delete[] m_ptr;
-    m_ptr = nullptr;
-    m_ptr = temp;
-    temp = nullptr;
-
-    m_size = m_index;
+    m_size = t_size;
   }
 };
 
-size_t main() {
-  Vector<size_t> v;
+int main() {
+  Vector<size_t> v{1, 2, 3};
 
-  for (size_t i = 0; i < 10; ++i)
-    v[i] = i;
+  for (size_t i = 0; i < 16; ++i)
+    v.push_back(i + 2);
 
-  v.peek();
+  v.fit();
+
+  for (Vector<size_t>::iterator it = v.begin(); it != v.end(); ++it)
+    std::cout << *it << "\n";
 }

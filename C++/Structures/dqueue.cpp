@@ -179,6 +179,7 @@ public:
   T bottom() { return back->data; }
 
   iterator begin() { return queue_iterator(front); }
+  
   iterator end() { return queue_iterator(back); }
 
   bool is_empty() { return front == nullptr && m_size == 0; }
