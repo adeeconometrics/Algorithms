@@ -100,6 +100,7 @@ public:
 private:
   pointer_type m_ptr;
 };
+
 template <typename T, size_t Size> class Array {
 public:
   typedef m_ptr value_type;

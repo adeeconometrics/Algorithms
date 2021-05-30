@@ -6,7 +6,7 @@ template <typename T> class squeue_iterator {};
 
 template <typename T, size_t Size> class SQueue {
 private:
-  T *m_ptr;
+  T *m_ptr{nullptr};
   size_t index;
 
 public:

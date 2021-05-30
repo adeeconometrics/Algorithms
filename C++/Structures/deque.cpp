@@ -1,66 +1,207 @@
 #include <initalizer_list>
 #include <iostream>
 
-template <typename Deque> class deque_iterator {
-private:
-  front_pointer_type m_ptr;
-
+template <typaname T> class Node final {
 public:
-  typedef Deque::front_type front_type;
-  typedef front_type *front_pointer_type;
-  typedef front_type &front_reference_type;
-  typedef Deque::rear_type rear_type;
-  typedef rear_type *rear_pointer_type;
-  typedef rear_type &rear_reference_type;
+  T data;
+  Node *next{nullptr}, *prev{nullptr};
 
-public:
-  deque_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  explicit Node(){};
+  explicit Node(const T &_data) : data(_data) {}
 };
-template <typename T> class Deque {
-public:
-  typedef front front_type;
-  typedef rear rear_type;
-  typedef deque_iterator<Deque<T>> iterator;
 
-private:
-  struct Node {
-    T data;
-    Node *next, *prev;
-    Node(const T &_data) : data(_data) {
-      prev = nullptr;
-      next = nullptr;
-    }
-  } * front, *rear;
-  size_t size;
+template <typename Deque> class deque_iterator {
 
 public:
-  explicit Deque() {
-    size = 0;
-    front = nullptr;
-    rear = nullptr;
+  typedef Node<T> value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
+
+public:
+  constexpr deque_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+  deque_iterator &operator++() {
+    m_ptr = m_ptr->next;
+    return *this;
   }
 
-  explicit Deque(std::initializer_list<T> _list) {
-    size = 0;
-    front = nullptr;
-    rear = nullptr;
+  deque_iterator &operator++(int) {
+    deque_iterator temp = *this;
+    m_ptr = m_ptr->next;
+    return temp;
+  }
 
+  deque_iterator &operator--() {
+    m_ptr = m_ptr->prev;
+    return *this;
+  }
+
+  deque_iterator &operator--(int) {
+    deque_iterator temp = *this;
+    m_ptr = m_ptr->prev;
+    return temp;
+  }
+
+  reference_type operator*() { return m_ptr->next->data; }
+
+  pointer_type operator->() { return m_ptr; }
+
+  bool operator==(const deque_iterator &rhs) { return m_ptr == rhs.m_ptr; }
+
+  bool operator!=(const deque_iterator &rhs) { return !(*this == rhs); }
+
+private:
+  pointer_type m_ptr;
+};
+
+template <typename Deque> class cdeque_iterator {
+
+public:
+  typedef Node<T> value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
+
+public:
+  constexpr cdeque_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+  cdeque_iterator &operator++() {
+    m_ptr = m_ptr->next;
+    return *this;
+  }
+
+  cdeque_iterator &operator++(int) {
+    cdeque_iterator temp = *this;
+    m_ptr = m_ptr->next;
+    return temp;
+  }
+
+  cdeque_iterator &operator--() {
+    m_ptr = m_ptr->prev;
+    return *this;
+  }
+
+  cdeque_iterator &operator--(int) {
+    cdeque_iterator temp = *this;
+    m_ptr = m_ptr->prev;
+    return temp;
+  }
+
+  const reference_type operator*() const { return m_ptr->next->data; }
+
+  const pointer_type operator->() const { return m_ptr; }
+
+  bool operator==(const cdeque_iterator &rhs) { return m_ptr == rhs.m_ptr; }
+
+  bool operator!=(const cdeque_iterator &rhs) { return !(*this == rhs); }
+
+private:
+  pointer_type m_ptr;
+};
+
+template <typename T> class Deque {
+private:
+  friend deque_iterator<T>;
+  friend cdeque_iterator<T>;
+
+  Node<T> *front{nullptr}, *back{nullptr};
+  size_t m_size{0};
+
+public:
+  typedef deque_iterator<T> iterator;
+  typedef cdeque_iterator<T> const_iterator;
+
+public:
+  explicit Deque() {}
+
+  explicit Deque(std::initializer_list<T> _list) {
     for (auto i : list)
       push_front(i);
   }
 
   ~Deque() { clear(); }
 
-  void push_front(const T &data);
-  void push_back(const T &data);
-  void pop_front();
-  void pop_back();
-  void display();
-  void display_reverse();
-  void clear();
+  void push_front(const T &data) {
+    Node<T> *node = new Node(data);
+    if (is_empty()) {
+      front = node;
+      back = node;
+    } else {
+      node->next = front;
+      node->prev = front->prev;
+      front = node;
+    }
+    ++m_size;
+  }
 
-  iterator begin();
-  iterator end();
+  void push_back(const T &data) {
+    Node<T> *node = new Node(data);
+    if (is_empty()) {
+      front = node;
+      back = node;
+    } else {
+      back->next = node;
+      node->prev = back;
+      back = node;
+    }
+    ++m_size;
+  }
+
+  void pop_front() {
+    Node<T> *ptr = front;
+    front = front->next;
+
+    delete ptr;
+    ptr = nullptr;
+    --m_size;
+  }
+
+  void pop_back() {
+    Node<T> *ptr = back;
+    back = back->prev;
+    delete ptr;
+    ptr = nullptr;
+
+    --m_size;
+  }
+
+  void display() {
+    Node<T> *ptr = front;
+    while (ptr->next != nullptr) {
+      std::cout << ptr->data << std::endl;
+      ptr = ptr->next;
+    }
+  }
+
+  void display_reverse() {
+    Node<T> *ptr = back;
+    while (ptr->prev != nullptr) {
+      ptr = ptr->prev;
+      std::cout << ptr->data << std::endl;
+    }
+  }
+
+  void clear() {
+    Node<T> *ptr = front;
+    Node<T> *temp = ptr;
+    while (ptr->next != nullptr) {
+      temp = ptr;
+      delete temp;
+      temp = nullptr;
+      ptr = ptr->next;
+    }
+
+    m_size = 0;
+  }
+
+  size_t size() { return m_size; }
+
+  iterator begin() { return iterator(front); }
+
+  iterator end() { return iterator(back); }
+
+  const_iterator cbegin() { return const_iterator(begin); }
+
+  const_iterator cend() { return const_iterator(end); }
 
 private:
   bool is_empty();

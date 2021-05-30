@@ -8,6 +8,7 @@
  * - proper implementation of destructors
  * - insert method
  */
+
 template <typename T> class Node final {
 public:
   T data;
@@ -31,9 +32,9 @@ public:
   }
 
   list_iterator &operator++(int) {
-    list_iterator iterator = *this;
+    list_iterator temp = *this;
     m_ptr = m_ptr->next;
-    return iterator;
+    return temp;
   }
 
   list_iterator &operator--() {
@@ -42,9 +43,9 @@ public:
   }
 
   list_iterator &operator--(int) {
-    list_iterator iterator = *this;
+    list_iterator temp = *this;
     m_ptr = m_ptr->prev;
-    return iterator;
+    return temp;
   }
 
   reference_type operator*() { return m_ptr->next->data; }
@@ -78,9 +79,9 @@ public:
   }
 
   clist_iterator &operator++(int) {
-    clist_iterator iterator = *this;
+    clist_iterator temp = *this;
     m_ptr = m_ptr->next;
-    return iterator;
+    return temp;
   }
 
   clist_iterator &operator--() {
@@ -89,9 +90,9 @@ public:
   }
 
   clist_iterator &operator--(int) {
-    clist_iterator iterator = *this;
+    clist_iterator temp = *this;
     m_ptr = m_ptr->prev;
-    return iterator;
+    return temp;
   }
 
   const reference_type operator*() const { return m_ptr->next->data; }
