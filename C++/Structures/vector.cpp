@@ -51,40 +51,82 @@ private:
   pointer_type m_ptr;
 };
 
+template <typename Vector> class cvector_iterator {
+public:
+  using value_type = typename Vector::value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
+
+public:
+  cvector_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+  cvector_iterator &operator++() {
+    m_ptr++;
+    return *this;
+  }
+
+  cvector_iterator operator++(int) {
+    cvector_iterator iterator = *this;
+    ++(*this);
+    return iterator;
+  }
+
+  cvector_iterator &operator--() {
+    m_ptr--;
+    return *this;
+  }
+
+  cvector_iterator operator--(int) {
+    cvector_iterator iterator = *this;
+    --(*this);
+    return iterator;
+  }
+
+  const reference_type operator[](int index) const { return m_ptr[index]; }
+
+  const reference_type operator*() const { return *m_ptr; }
+
+  const pointer_type operator->() const { return m_ptr; }
+
+  bool operator==(const cvector_iterator &other) const {
+    return m_ptr == other.m_ptr;
+  }
+
+  bool operator!=(const cvector_iterator &other) const {
+    return !(*this == other);
+  }
+
+private:
+  pointer_type m_ptr;
+};
+
 template <typename T> class Vector {
 public:
   typedef T value_type;
   typedef vector_iterator<Vector<T>> iterator;
+  typedef cvector_iterator<Vector<T>> const_iterator;
 
 private:
-  size_t m_size;
-  size_t m_index;
-  T *m_ptr = nullptr;
+  size_t m_size{1};
+  size_t m_index{0};
+  T *m_ptr{nullptr};
 
 public:
   explicit Vector(const size_t &_m_size) {
     if (_m_size)
       throw std::length_error();
 
-    m_index = 0;
     m_size = _m_size;
     m_ptr = new T[m_size];
   }
 
-  explicit Vector() {
-    m_index = 0;
-    m_size = 1;
-    m_ptr = new T[m_size];
-  }
+  explicit Vector() { m_ptr = new T[m_size]; }
 
   explicit Vector(std::initializer_list<T> list) {
-    m_index = 0;
-    m_size = 1;
     m_ptr = new T[list.size()];
-
+    m_size = list.size();
     for (auto i : list)
       push_back(i);
-    m_index += 1;
   }
 
   ~Vector() {
@@ -185,6 +227,10 @@ public:
   }
 
   iterator end() { return iterator(m_ptr + m_size); }
+
+  const_iterator cbegin() { return const_iterator(m + ptr); }
+
+  const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
   size_t size() { return m_size; }
 

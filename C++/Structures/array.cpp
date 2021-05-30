@@ -34,7 +34,9 @@ public:
   }
 
   reference_type operator[](int index) { return m_ptr[index]; }
+
   reference_type operator*() { return *m_ptr; }
+
   pointer_type operator->() { return m_ptr; }
 
   bool operator==(const array_iterator &other) const {
@@ -49,23 +51,72 @@ private:
   pointer_type m_ptr;
 };
 
+template <typename Array> class carray_iterator {
+
+public:
+  typedef typename Array::value_type value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
+
+public:
+  carray_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+  carray_iterator &operator++() {
+    m_ptr++;
+    return *this;
+  }
+
+  carray_iterator &operator++(int) {
+    array_iterator temp = *this;
+    ++(*this);
+    return temp;
+  }
+
+  carray_iterator &operator--() {
+    m_ptr--;
+    return *this;
+  }
+
+  carray_iterator &operator--(int) {
+    carray_iterator temp = *this;
+    --(*this);
+    return temp;
+  }
+
+  const reference_type operator[](int index) const { return m_ptr[index]; }
+
+  const reference_type operator*() const { return *m_ptr; }
+
+  const pointer_type operator->() const { return m_ptr; }
+
+  bool operator==(const carray_iterator &other) const {
+    return m_ptr == other.m_ptr;
+  }
+
+  bool operator!=(const carray_iterator &other) const {
+    return !(*this == other);
+  }
+
+private:
+  pointer_type m_ptr;
+};
 template <typename T, size_t Size> class Array {
 public:
   typedef m_ptr value_type;
   typedef array_iterator<Array<T, Size>> iterator;
+  typedef carray_iterator<Array<T, Size>> const_iterator;
 
 private:
-  T *m_ptr;
-  size_t m_size;
-  size_t index;
+  T *m_ptr{nullptr};
+  size_t m_size{Size};
+  size_t index{0};
 
 public:
   explicit Array() {
     try {
       if (Size < 0)
         throw std::bad_alloc();
-      m_size = Size;
-      m_ptr = nullptr;
+
       index = 0;
       m_ptr = new T[size];
 
@@ -81,8 +132,6 @@ public:
       if (list.size() > Size)
         throw std::bad_alloc();
 
-      m_size = Size;
-      m_ptr = nullptr;
       index = 0;
       for (std::list_initalizer<T>::iterator it = list.begin();
            it != list.end(); ++it) {
@@ -107,10 +156,8 @@ public:
     m_size = list.size();
 
     for (std::initializer_list<T>::iterator it = list.begin(); it != list.end();
-         ++it) {
+         ++it)
       add(*it);
-      index += 1;
-    }
   }
 
   // copy assingment
@@ -165,6 +212,10 @@ public:
   iterator begin() { return array_iterator(m_ptr); }
 
   iterator end() { return array_iterator(m_ptr + Size); }
+
+  const_iterator cbegin() { return const_iterator(m + ptr); }
+
+  const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
 private:
   bool is_empty() { return m_ptr == nullptr && size == 0; }

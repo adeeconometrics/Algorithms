@@ -1,6 +1,13 @@
 #include <initializer_list>
 #include <iostream>
 
+/**
+ * featues to implement
+ * - move semantics
+ * - emplace feature
+ * - proper implementation of destructors
+ * - insert method
+ */
 template <typename T> class Node final {
 public:
   T data;
@@ -9,116 +16,111 @@ public:
   Node() = default;
 };
 
-// template <typename List> class list_iterator {
+template <typename T> class list_iterator {
+public:
+  typedef Node<T> value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
 
-// public:
-//   typedef typename List::value_type value_type;
-//   typedef value_type *pointer_type;
-//   typedef value_type &reference_type;
+public:
+  constexpr list_iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-// public:
-//   constexpr list_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  list_iterator &operator++() {
+    m_ptr = m_ptr->next;
+    return *this;
+  }
 
-//   list_iterator &operator++() {
-//     m_ptr = m_ptr->next;
-//     return *this; // is this reasonable?
-//   }
+  list_iterator &operator++(int) {
+    list_iterator iterator = *this;
+    m_ptr = m_ptr->next;
+    return iterator;
+  }
 
-//   list_iterator &operator++(int) {
-//     list_iterator iterator = *this;
-//     m_ptr = m_ptr->next;
-//     return iterator;
-//   }
+  list_iterator &operator--() {
+    m_ptr = m_ptr->prev;
+    return *this;
+  }
 
-//   list_iterator &operator--() {
-//     m_ptr = m_ptr->prev;
-//     return *this; // is this reasonable?
-//   }
+  list_iterator &operator--(int) {
+    list_iterator iterator = *this;
+    m_ptr = m_ptr->prev;
+    return iterator;
+  }
 
-//   list_iterator &operator--(int) {
-//     list_iterator iterator = *this;
-//     m_ptr = m_ptr->prev;
-//     return iterator;
-//   }
+  reference_type operator*() { return m_ptr->next->data; }
 
-//   reference_type operator*() { return m_ptr->data; }
+  pointer_type operator->() { return m_ptr; }
 
-//   const reference_type operator*() const { return m_ptr->data; }
+  bool operator==(const list_iterator &other) const {
+    return m_ptr == other.m_ptr;
+  }
 
-//   pointer_type operator->() { return m_ptr; }
+  bool operator!=(const list_iterator &other) const {
+    return !(*this == other);
+  }
 
-//   bool operator==(const list_iterator &other) const {
-//     return m_ptr == other.m_ptr;
-//   }
+private:
+  pointer_type m_ptr;
+};
 
-//   bool operator!=(const list_iterator &other) const {
-//     return !(*this == other);
-//   }
+template <typename T> class clist_iterator {
+public:
+  typedef Node<T> value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
 
-// private:
-//   pointer_type m_ptr;
-// };
+public:
+  constexpr clist_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+  clist_iterator &operator++() {
+    m_ptr = m_ptr->next;
+    return *this;
+  }
+
+  clist_iterator &operator++(int) {
+    clist_iterator iterator = *this;
+    m_ptr = m_ptr->next;
+    return iterator;
+  }
+
+  clist_iterator &operator--() {
+    m_ptr = m_ptr->prev;
+    return *this;
+  }
+
+  clist_iterator &operator--(int) {
+    clist_iterator iterator = *this;
+    m_ptr = m_ptr->prev;
+    return iterator;
+  }
+
+  const reference_type operator*() const { return m_ptr->next->data; }
+
+  const pointer_type operator->() const { return m_ptr; }
+
+  bool operator==(const clist_iterator &other) const {
+    return m_ptr == other.m_ptr;
+  }
+
+  bool operator!=(const clist_iterator &other) const {
+    return !(*this == other);
+  }
+
+private:
+  pointer_type m_ptr;
+};
 
 template <typename T> class List {
 private:
+  friend list_iterator<T>;
+  friend clist_iterator<T>;
+
   Node<T> *front{nullptr}, *back{nullptr}, *m_ptr{nullptr};
   size_t m_size{0};
 
 public:
-  class list_iterator {
-    friend class List;
-
-  public:
-    typedef Node<T> value_type;
-    typedef value_type *pointer_type;
-    typedef value_type &reference_type;
-
-  public:
-    constexpr list_iterator(pointer_type ptr) : m_ptr(ptr) {}
-
-    list_iterator &operator++() {
-      m_ptr = m_ptr->next;
-      return *this; // is this reasonable?
-    }
-
-    list_iterator &operator++(int) {
-      list_iterator iterator = *this;
-      m_ptr = m_ptr->next;
-      return iterator;
-    }
-
-    list_iterator &operator--() {
-      m_ptr = m_ptr->prev;
-      return *this; // is this reasonable?
-    }
-
-    list_iterator &operator--(int) {
-      list_iterator iterator = *this;
-      m_ptr = m_ptr->prev;
-      return iterator;
-    }
-
-    reference_type operator*() { return m_ptr->data; }
-
-    const reference_type operator*() const { return m_ptr->data; }
-
-    pointer_type operator->() { return m_ptr; }
-
-    bool operator==(const list_iterator &other) const {
-      return m_ptr == other.m_ptr;
-    }
-
-    bool operator!=(const list_iterator &other) const {
-      return !(*this == other);
-    }
-
-  private:
-    pointer_type m_ptr;
-  };
-
-public:
-  typedef Node<T> value_type;
-  typedef list_iterator iterator;
+  typedef clist_iterator<T> const_iterator;
+  typedef list_iterator<T> iterator;
 
 public:
   explicit List() { front = back = m_ptr = new Node<T>(); }
@@ -222,11 +224,16 @@ public:
   size_t size() const { return m_size; }
 
   T top() const { return front->data; }
+
   T bottom() const { return back->data; }
 
   iterator begin() { return iterator(front); }
 
   iterator end() { return iterator(back); }
+
+  const_iterator cbegin() { return const_iterator(front); }
+
+  const_iterator cend() { return const_iterator(back); }
 
   bool is_empty() const { return front == nullptr && m_size == 0; }
 
