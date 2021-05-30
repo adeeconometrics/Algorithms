@@ -2,6 +2,14 @@
 #include <iostream>
 #include <stdexcept>
 
+template <typename T> class Node final {
+public:
+  T data;
+  Node *next{nullptr};
+  explicit Node() {}
+  explicit Node(const T &_data) : data(_data) {}
+};
+
 template <typename T> class queue_iterator {
 private:
   pointer_type m_ptr;
@@ -12,7 +20,7 @@ public:
   typedef value_type &reference_type;
 
 public:
-  queue_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr queue_iterator(pointer_type ptr) : m_ptr(ptr) {}
 
   queue_iterator &operator++() {
     m_ptr = m_ptr->next;
@@ -36,38 +44,59 @@ public:
   }
 };
 
-template <typename T> class Queue {
-public:
-  typedef m_ptr value_type;
-  typedef queue_iterator<Queue<T>> iterator;
-
+template <typename T> class cqueue_iterator {
 private:
-  struct Node {
-    T data;
-    Node *next;
-    Node(const T &element) : data(element) { next = nullptr; }
-  } * front, *back, *m_ptr;
-  size_t m_size;
+  pointer_type m_ptr;
 
 public:
-  explicit Queue() {
-    m_size = 0;
-    m_ptr = nullptr;
-    front = nullptr;
-    back = nullptr;
+  typedef Queue::value_type value_type;
+  typedef value_type *pointer_type;
+  typedef value_type &reference_type;
+
+public:
+  constexpr cqueue_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+  cqueue_iterator &operator++() {
+    m_ptr = m_ptr->next;
+    return m_ptr;
   }
 
-  explicit Queue(std::initializer_list<T> list) {
-    m_size = 0;
-    m_ptr = nullptr;
-    front = nullptr;
-    back = nullptr;
+  cqueue_iterator operator++(int) {
+    cqueue_iterator temp = *this;
+    m_ptr = m_ptr->next;
+    return temp;
+  }
 
+  const reference_type operator*() const { return *m_ptr; }
+
+  const pointer_type operator->() const { return mm_ptr; }
+
+  bool operator==(const cqueue_iterator &other) { return m_ptr == other.m_ptr; }
+
+  bool operator!=(const cqueue_iterator &other) {
+    return !(m_ptr == other.m_ptr);
+  }
+};
+
+template <typename T> class Queue {
+private:
+  friend queue_iterator<T>;
+  friend cqueue_iterator<T>;
+
+  Node<T> *front{nullptr}, *back{nullptr}, *m_ptr{nullptr};
+  size_t m_size{0};
+
+public:
+  typedef queue_iterator<T> iterator;
+  typedef cqueue_iterator<T> const_iterator;
+
+public:
+  explicit Queue() {}
+
+  explicit Queue(std::initializer_list<T> list) {
     for (std::initializer_list<T>::iterator it = list.begin(); it != list.end();
-         ++it) {
+         ++it)
       enqueue(*it);
-      m_size += 1;
-    }
   }
 
   ~Queue() {
@@ -179,8 +208,13 @@ public:
   T bottom() { return back->data; }
 
   iterator begin() { return queue_iterator(front); }
-  
+
   iterator end() { return queue_iterator(back); }
 
+  const_iterator cbegin() { return const_iterator(front); }
+
+  const_iterator back() { return const_iterator(back); }
+
+private:
   bool is_empty() { return front == nullptr && m_size == 0; }
 };

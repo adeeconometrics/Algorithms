@@ -31,7 +31,7 @@ public:
 
   void push(const T &element);
 
-  void enqueue(cosnt T &element);
+  void enqueue(const T &element);
 
   void add(const T &element);
 
