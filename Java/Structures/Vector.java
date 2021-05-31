@@ -1,11 +1,11 @@
 package Structures;
 
-public class DynamicArray {
+public class Vector {
     private int [] ptr_arr;
     private int _size;
     private int _counter;
 
-    public DynamicArray() {
+    public Vector() {
         _size = 1;
         _counter = 0;
         ptr_arr = new int[_size];
@@ -35,7 +35,7 @@ public class DynamicArray {
     }
 }
 
-class MainDynamicArray{
+class MainVector{
     public static void main(String [] args){
 
     }

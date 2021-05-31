@@ -1,11 +1,12 @@
-package Structures;
+package GenericStructures;
 
-public class DoublyLL{
+
+public class List<T>{
     class Node{
-        int data;
+        T data;
         Node prev, next;
 
-        Node(int data){
+        Node(T data){
             this.data = data;
             this.prev = null;
             this.next = null;
@@ -14,11 +15,11 @@ public class DoublyLL{
 
     Node head;
 
-    public DoublyLL(){
+    public List(){
         this.head = null;
     }
 
-    public void add(int data){
+    public void add(T data){
         Node node = new Node(data);
         if(is_empty()) 
             this.head = node;
@@ -32,7 +33,7 @@ public class DoublyLL{
         }
     }
 
-    public void remove(int data){
+    public void remove(T data){
         Node ptr = this.head;
 
         try {
@@ -66,13 +67,12 @@ public class DoublyLL{
     }
 
     public boolean is_empty(){
-        if(this.head ==  null) return true;
-        return false;
+        return this.head == null;
     }
 
 }
 
-class MainDoubly{
+class MainList{
     public void main(String [] args){
 
     }

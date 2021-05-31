@@ -1,10 +1,10 @@
-package Structures;
+package GenericStructures;
 
-public class LinkedList{
-    class Node{
-        int data;
+public class ForwardList<T> {
+        class Node{
+        T data;
         Node next;
-        Node(int data){
+        Node(T data){
             this.data = data;
             next = null;
         }
@@ -14,9 +14,11 @@ public class LinkedList{
 
     Node head;
 
-    public LinkedList(){}
+    public ForwardList(){
+        this.head = null;
+    }
 
-    public void add(int data){
+    public void add(T data){
         Node node = new Node();
         node.data = data;
 
@@ -31,7 +33,7 @@ public class LinkedList{
         }
     }
 
-    public void remove(int data){
+    public void remove(T data){
         Node node = new Node();
         node.data = data;
 
@@ -81,7 +83,7 @@ public class LinkedList{
 
 class Main{
     public static void main(String [] args){
-        LinkedList list = new LinkedList();
+        ForwardList<Integer> list = new ForwardList<>();
         for(int i = 0; i<5; ++i)
             list.add(i);
         
