@@ -41,6 +41,7 @@ public class Stack<T> {
     }
 
     public T top(){
+        if(this.top == null) return null;
         return this.top.data;
     }
 }

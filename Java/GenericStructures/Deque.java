@@ -100,9 +100,15 @@ public class Deque<T> {
     }
   }
 
-  public T front() { return this.front.data; }
+  public T front() { 
+    if(is_empty()) return null;
+    return this.front.data; 
+  }
 
-  public T rear() { return this.rear.data; }
+  public T rear() { 
+    if(is_empty()) return null;
+    return this.rear.data; 
+  }
 
   public int size() { return this.size; }
 

@@ -22,7 +22,7 @@ public class ForwardList<T> {
         Node node = new Node();
         node.data = data;
 
-        if(this.head == null)
+        if(is_empty())
             this.head = node;
         else{
             Node ptr = this.head; // this works!
@@ -69,6 +69,10 @@ public class ForwardList<T> {
 
         ptr = null;
     }
+    public T head(){
+        if(is_empty()) return null;
+        return head.data;
+    }
 
     public void display(){
         Node ptr = this.head;
@@ -79,6 +83,9 @@ public class ForwardList<T> {
         }
     }
 
+    boolean is_empty(){
+        return this.head == null;
+    }
 }
 
 class Main{

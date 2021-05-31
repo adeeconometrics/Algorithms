@@ -13,28 +13,33 @@ public class List<T>{
         }
     }
 
-    Node head;
+    Node front, back;
+    int size = 0;
 
     public List(){
-        this.head = null;
+        this.front = null;
+        this.back = null;
     }
 
     public void add(T data){
         Node node = new Node(data);
-        if(is_empty()) 
-            this.head = node;
+        if(is_empty()){ 
+            this.front = node;
+            this.back = node;
+        }
         else{
-            Node ptr = this.head;
+            Node ptr = this.front;
             while(ptr.next != null)
                 ptr = ptr.next;
             
             ptr.next = node;
             node.prev = ptr;
         }
+        this.size += 1;
     }
 
     public void remove(T data){
-        Node ptr = this.head;
+        Node ptr = this.front;
 
         try {
             boolean is_element = false;
@@ -44,6 +49,8 @@ public class List<T>{
                     ptr.prev = ptr.prev.prev;
                     ptr.next = ptr.next.next;
                     is_element = true;
+                    this.size -=1;
+
                     return;
                 }
                 ptr = ptr.next;
@@ -57,8 +64,48 @@ public class List<T>{
         }
     }
 
+    public void add_front(T data){
+        Node node = new Node(data);
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }
+        else{
+            node.next = this.front;
+            this.front.prev = node;
+            this.front = node;
+        }
+        this.size += 1;
+    }
+
+    public void add_back(T data){
+        Node node = new Node(data);
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }
+        else{
+            node.prev = this.back;
+            this.back.next = node;
+            this.back = node;
+        }
+        this.size += 1;
+    }    
+
+    public void remove_front(){
+        if(is_empty()) return;
+        this.front = this.front.next;
+        this.size -=1;
+    }
+
+    public void remove_back(){
+        if(is_empty()) return;
+        this.back = this.back.prev;
+        this.size -=1;
+    }
+
     public void display(){
-        Node ptr = this.head;
+        Node ptr = this.front;
         
         while(ptr.next != null){
             System.out.print(String.valueOf(ptr.data) + " ");
@@ -66,8 +113,20 @@ public class List<T>{
         }
     }
 
+    public T top(){
+        if(is_empty()) return null;
+        return this.front.data;
+    }
+
+    public T bottom(){
+        if(is_empty()) return null;
+        return this.back.data;
+    }
+
+    public int size(){return this.size;}
+
     public boolean is_empty(){
-        return this.head == null;
+        return this.front == null;
     }
 
 }
