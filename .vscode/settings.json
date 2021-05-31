@@ -53,7 +53,9 @@
         "random": "cpp",
         "sstream": "cpp",
         "iterator": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp"
     },
     "java.project.sourcePaths": [
         "Java"

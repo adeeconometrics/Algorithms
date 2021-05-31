@@ -96,12 +96,12 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
-template <typename T, size_t Size> class SQueue {
+template <typename T, size_t Size> class CSQueue {
 
 public:
   typedef T value_type;
-  typedef squeue_iterator<SQueue<T, Size>> iterator;
-  typedef csqueue_iterator<SQueue<T, Size>> const_iterator;
+  typedef squeue_iterator<CSQueue<T, Size>> iterator;
+  typedef csqueue_iterator<CSQueue<T, Size>> const_iterator;
 
 private:
   friend squeue_iterator<T>;
@@ -111,16 +111,14 @@ private:
   size_t m_index{0};
 
 public:
-  explicit SQueue() {
+  explicit CSQueue() {
     m_ptr = new T[Size];
     // initalize elements to 0
     for (size_t i = 0; i < Size; ++i)
       m_ptr[i] = 0;
   }
 
-  // explicit SQueue(std::initalizer_list<T> list) {
-  // for (size_t i = 0; i < Size; ++i)
-  //   m_ptr[i] = 0;
+  // explicit CSQueue(std::initalizer_list<T> list) {
   //   try {
   //     if (list.size() > Size)
   //       throw std::exception;
@@ -134,7 +132,7 @@ public:
   //   }
   // }
 
-  ~SQueue() {
+  ~CSQueue() {
     if (!is_empty())
       clear();
   }
@@ -152,56 +150,40 @@ public:
   }
 
   void push(const T &element) {
-    try {
-      if (is_full())
-        throw std::length_error();
-
-      if (m_index < Size) {
-        m_ptr[m_index] = element;
-        ++m_index;
-      }
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
-      exit(0);
+    if (m_index < Size) {
+      m_ptr[m_index] = element;
+      ++m_index;
+    } else {
+      m_index = 0;
+      m_ptr[m_index] = element;
     }
   }
 
   void enqueue(const T &element) {
-    try {
-      if (is_full())
-        throw std::length_error();
-
-      if (m_index < Size) {
-        m_ptr[m_index] = element;
-        ++m_index;
-      }
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
-      exit(0);
+    if (m_index < Size) {
+      m_ptr[m_index] = element;
+      ++m_index;
+    } else {
+      m_index = 0;
+      m_ptr[m_index] = element;
     }
   }
 
   void dequeue() {
-    try {
-      if (is_empty())
-        throw std::exception();
+    if (m_index > 0) {
       m_ptr[m_index - 1] = 0;
       --m_index;
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
-      exit(0);
+    } else {
+      m_index = Size;
     }
   }
 
   void pop() {
-    try {
-      if (is_empty())
-        throw std::exception();
+    if (m_index > 0) {
       m_ptr[m_index - 1] = 0;
       --m_index;
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
-      exit(0);
+    } else {
+      m_index = Size;
     }
   }
 
@@ -228,24 +210,18 @@ public:
 
   const_iterator cend() { return const_iterator(m_ptr + Size); }
 
-  bool is_empty() {
-    for (size_t i = 0; i < Size; ++i) {
-      if (m_ptr[i] != 0)
-        return false;
-    }
-    return true;
-  }
+  bool is_empty() { return m_ptr == nullptr; }
 
   bool is_full() { return m_index == Size; }
 };
 
 int main() {
-  SQueue<int, 3> s;
+  CSQueue<int, 3> s;
   s.push(1);
   s.enqueue(2);
   s.push(3);
   s.pop();
-  for (SQueue<int, 3>::iterator it = s.begin(); it != s.end(); ++it)
+  for (CSQueue<int, 3>::iterator it = s.begin(); it != s.end(); ++it)
     std::cout << *it << " ";
 
   std::cout << "\n";
