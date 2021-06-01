@@ -3,6 +3,9 @@
 template <typename Container> class Iterable{
     public:
         Iterable() = default;
+        Iterable(const Container& other) =  delete;
+        Iterable(Container&& other) = delete;
+        
         virtual ~Iterable() = default;
 
         Container& operator=(const Container& other) = delete;

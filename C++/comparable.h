@@ -9,8 +9,9 @@ template <typename T> class Comparable{
 
         T& operator=(const T& other) = delete;
         T& operator=(T&& other) = delete;
-        bool operator==(const T& other) = 0;
-        bool operator!=(const T& other) = 0;
-        bool operator<(const T& other) = 0;
-        bool operator>(const T& other) = 0; 
+        
+        virtual bool operator==(const T& other) = 0;
+        virtual bool operator!=(const T& other) = 0;
+        virtual bool operator<(const T& other) = 0;
+        virtual bool operator>(const T& other) = 0; 
 };
