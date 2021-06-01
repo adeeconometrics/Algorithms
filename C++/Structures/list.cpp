@@ -137,9 +137,9 @@ public:
   // copy constructor
   List(const List<T> &other) = delete;
   // move assignment
-  List &operator=(List<T> &&other) = delete;
+  List<T> &operator=(List<T> &&other) = delete;
   // copy assignment
-  List &operator=(const List<T> &other) = delete;
+  List<T> &operator=(const List<T> &other) = delete;
 
   ~List() {
     if (!is_empty())
