@@ -1,26 +1,25 @@
 using System;
 
-class Stack{
+class Stack <T>{
     public class Node{
-        public int data;
-        public Node next;
-        public Node(int data){
+        public T data;
+        public Node next = null;
+        public Node(T data){
             this.data = data;
-            this.next = null;
         }
     }
-    Node top;
+    Node top = null;
     int m_size;
 
     public Stack(){
-        this.top = null;
         this.m_size = 0;
     }
 
-    public void push(int data){
+    public void push(T data){
         Node node = new Node(data);
         node.next = this.top;
         this.top = node;
+
         ++ this.m_size;
     }
 
@@ -41,7 +40,7 @@ class Stack{
         }
 
     }
-    public int top_value(){
+    public T top_value(){
         return this.top.data;
     }
 

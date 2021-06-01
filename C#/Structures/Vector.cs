@@ -1,24 +1,24 @@
 using System;
 
-class Array{
+class Vector{
     int [] ptr = null;
-    int _size; 
+    int m_size; 
     int counter;
 
-    public Array(int size){
-        this._size  = size;
+    public Vector(int size){
+        this.m_size  = size;
         this.ptr = new int[size];
         this.counter = 0;
     }
 
-    public Array(){
-        this._size = 1;
+    public Vector(){
+        this.m_size = 1;
         this.ptr  = new int[1];
         this.counter = 0;
     }
     
     public void add(int data){
-        if(this.counter == this._size) grow();
+        if(this.counter == this.m_size) grow();
         this.ptr[counter] = data;
         ++ this.counter;
     }
@@ -29,20 +29,20 @@ class Array{
     }
     
     private void grow(){
-        int new_size = this._size * 2;
-        int [] temp = new int[new_size];
+        int newm_size = this.m_size * 2;
+        int [] temp = new int[newm_size];
 
-        for(int i = 0; i < this._size; ++i)
+        for(int i = 0; i < this.m_size; ++i)
             temp[i] = this.ptr[i];
         
         this.ptr = temp;
-        this._size = new_size;
+        this.m_size = newm_size;
     }
 }
 
-class MainArray{
+class MainVector{
     public static void Main(string [] args){
-        Array a = new Array();
+        Vector a = new Vector();
         for(int i = 0; i<10; ++i)
             a.add(i);
         a.display();
