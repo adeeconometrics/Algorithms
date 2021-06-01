@@ -114,11 +114,15 @@ public:
   explicit Deque() {}
 
   explicit Deque(std::initializer_list<T> _list) {
+    // stacked
     for (auto i : list)
       push_front(i);
   }
 
-  ~Deque() { clear(); }
+  ~Deque() {
+    if (!is_empty())
+      clear();
+  }
 
   void push_front(const T &data) {
     Node<T> *node = new Node(data);
@@ -147,24 +151,38 @@ public:
   }
 
   void pop_front() {
-    Node<T> *ptr = front;
-    front = front->next;
+    try {
+      if (is_empty())
+        throw std::exception(); // null value exception
 
-    delete ptr;
-    ptr = nullptr;
-    --m_size;
+      Node<T> *ptr = front;
+      front = front->next;
+
+      delete ptr;
+      ptr = nullptr;
+      --m_size;
+    } catch (const std::exception &e) {
+      std::cerr << e.what() << '\n';
+    }
   }
 
   void pop_back() {
-    Node<T> *ptr = back;
-    back = back->prev;
-    delete ptr;
-    ptr = nullptr;
+    try {
+      if (is_empty())
+        throw std::exception();
 
-    --m_size;
+      Node<T> *ptr = back;
+      back = back->prev;
+      delete ptr;
+      ptr = nullptr;
+
+      --m_size;
+    } catch (const std::exception &e) {
+      std::cerr << e.what() << '\n';
+    }
   }
 
-  void display() {
+  void display() const {
     Node<T> *ptr = front;
     while (ptr->next != nullptr) {
       std::cout << ptr->data << std::endl;
@@ -172,7 +190,7 @@ public:
     }
   }
 
-  void display_reverse() {
+  void display_reverse() const {
     Node<T> *ptr = back;
     while (ptr->prev != nullptr) {
       ptr = ptr->prev;
@@ -193,7 +211,7 @@ public:
     m_size = 0;
   }
 
-  size_t size() { return m_size; }
+  size_t size() const { return m_size; }
 
   iterator begin() { return iterator(front); }
 
@@ -204,7 +222,7 @@ public:
   const_iterator cend() { return const_iterator(end); }
 
 private:
-  bool is_empty();
+  bool is_empty() const { return front = nullptr && back == nullptr; }
 };
 
 int main() {}

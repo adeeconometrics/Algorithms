@@ -163,6 +163,24 @@ public:
     ++m_size;
   }
 
+  void add_front(const T &data) {
+    Node<T> *node = new Node<T>(data);
+    front->prev = node;
+    node->next = front;
+    front = node;
+
+    ++m_size;
+  }
+
+  void add_back(const T &data) {
+    Node<T> *node = new Node<T>(data);
+    back->next = node;
+    node->prev = back;
+    back = node;
+
+    ++m_size;
+  }
+
   void remove(const T &data) {
     try {
       if (is_empty())

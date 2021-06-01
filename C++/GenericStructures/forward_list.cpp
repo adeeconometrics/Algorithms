@@ -140,6 +140,22 @@ public:
     ++m_size;
   }
 
+  void add_front(const T &data) {
+    Node<T> *node = new Node<T>(data);
+    node->next = front;
+    front = node;
+
+    ++m_size;
+  }
+
+  void add_back(const T &data) {
+    Node<T> *node = new Node<T>(data);
+    back->next = node;
+    back = node;
+
+    ++m_size;
+  }
+
   void remove(const T &data) {
     try {
       if (is_empty())
@@ -152,6 +168,11 @@ public:
       Node<T> *prev = ptr;
       while (ptr->next != nullptr) {
         if (ptr->data == data) {
+          if (ptr->data == back->data) {
+            remove_back(prev);
+            return;
+          }
+
           prev->next = ptr->next;
 
           delete ptr;
@@ -213,6 +234,13 @@ public:
   bool is_empty() const { return front == nullptr && m_size == 0; }
 
 private:
+  void remove_back(Node<T> *prev) {
+    Node<T> *temp = back;
+    back = prev;
+    delete temp;
+    temp = nullptr;
+  }
+
   void remove_front() {
     Node<T> *ptr = front;
     front = front->next;

@@ -89,18 +89,27 @@ private:
 
 public:
   SStack() {
-    for (size_t i = 0; i < Size; ++i)
-      m_ptr[i] = 0;
+    try {
+      if (Size < 0)
+        throw std::bad_alloc;
+      initialize();
+    } catch (const std::bad_alloc &e) {
+      std::cerr << "Allocation failed: " << e.what
+                << ". Size must be positive." std::endl;
+      exit(0);
+    }
   }
 
   SStack(std::initializer_list<T> list) {
     try {
+      if (Size < 0)
+        throw std::bad_alloc();
       if (list.size() > Size)
-        throw std::length_error();
+        throw std::bad_alloc();
+
       m_ptr = new T[Size];
 
-      for (size_t i = 0; i < Size; ++i)
-        m_ptr[i] = 0;
+      initialize();
 
       for (auto i : list)
         push(i);
@@ -141,6 +150,11 @@ public:
       std::cerr << e.what() << '\n';
       exit(0);
     }
+  }
+
+  void initialize() {
+    for (size_t i = 0; i < Size; ++i)
+      m_ptr[i] = 0;
   }
 
   void display() {

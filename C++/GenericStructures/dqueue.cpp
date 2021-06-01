@@ -175,7 +175,7 @@ public:
     }
   }
 
-  void display() {
+  void display() const {
     Node *ptr = front;
     std::cout << "[ ";
     while (ptr->next != nullptr) {
@@ -201,11 +201,11 @@ public:
     m_size = 0;
   }
 
-  size_t size() { return m_size; }
+  size_t size() const { return m_size; }
 
-  T top() { return front->data; }
+  T top() const { return front->data; }
 
-  T bottom() { return back->data; }
+  T bottom() const { return back->data; }
 
   iterator begin() { return queue_iterator(front); }
 
@@ -216,5 +216,5 @@ public:
   const_iterator back() { return const_iterator(back); }
 
 private:
-  bool is_empty() { return front == nullptr && m_size == 0; }
+  bool is_empty() const { return front == nullptr && m_size == 0; }
 };

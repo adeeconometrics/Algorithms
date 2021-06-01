@@ -113,9 +113,7 @@ private:
 public:
   explicit SQueue() {
     m_ptr = new T[Size];
-    // initalize elements to 0
-    for (size_t i = 0; i < Size; ++i)
-      m_ptr[i] = 0;
+    initialize();
   }
 
   // explicit SQueue(std::initalizer_list<T> list) {
@@ -203,6 +201,11 @@ public:
       std::cerr << e.what() << '\n';
       exit(0);
     }
+  }
+
+  void initialize() {
+    for (size_t i = 0; i < Size; ++i)
+      m_ptr[i] = 0;
   }
 
   void display() {

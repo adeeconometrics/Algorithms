@@ -121,6 +121,8 @@ public:
       index = 0;
       m_ptr = new T[size];
 
+      initialize();
+
     } catch (const std::bad_alloc &e) {
       std::cerr << "Allocation failed: " << e.what
                 << ". Size must be positive." std::endl;
@@ -130,15 +132,17 @@ public:
 
   explicit Array(std::initializer_list<T> list) {
     try {
+      if (Size < 0)
+        throw std::bad_alloc;
+
       if (list.size() > Size)
         throw std::bad_alloc();
 
-      index = 0;
+      initialize();
+
       for (std::list_initalizer<T>::iterator it = list.begin();
-           it != list.end(); ++it) {
+           it != list.end(); ++it)
         add(*it);
-        index += 1;
-      }
 
     } catch (const std::bad_alloc &e) {
       std::cerr << "Allocation failed: " << e.what()
@@ -199,6 +203,12 @@ public:
   void add(const T &element) {
     m_ptr[index] = element;
     index += 1;
+  }
+
+  void initialize() {
+    // initalize elements to 0
+    for (size_t i = 0; i < Size; ++i)
+      m_ptr[i] = 0;
   }
 
   // void remove(const T &element);

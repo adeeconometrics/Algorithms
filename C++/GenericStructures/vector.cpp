@@ -113,9 +113,6 @@ private:
 
 public:
   explicit Vector(const size_t &_m_size) {
-    if (_m_size)
-      throw std::length_error();
-
     m_size = _m_size;
     m_ptr = new T[m_size];
   }
