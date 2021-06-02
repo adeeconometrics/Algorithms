@@ -6,36 +6,37 @@ class Tree {
 private:
   struct Node {
     int value;
-    Node *left;
-    Node *right;
+    Node *left{nullptr};
+    Node *right{nullptr};
   };
 
-  Node *root;
+  Node *m_root{nullptr};
 
 public:
-  explicit Tree() { root = NULL; }
+  explicit Tree() = default;
+  ~Tree() = default; // is this okay?
 
   void insert_node(Node *node);
-  void insert_element(int element);
+  void insert_element(const int &element);
   void traverse_inorder(Node *node);
   void traverse_inverse(Node *node);
   void traverse_postorder(Node *node);
   void traverse_preorder(Node *node);
 
-  void show_in_order() { Tree::traverse_inorder(root); }
-  Node *delete_element(Node *ptr, int element);
+  void show_in_order() { Tree::traverse_inorder(m_root); }
+  Node *delete_element(Node *ptr, const int &element);
   Node *find_max(Node *ptr);
   Node *find_min(Node *ptr);
 
-  bool find_node(int element);
-  Node *_root() { return root; }
+  bool find_node(const int &element);
+  Node *root() { return m_root; }
   Node *parent(Node *child);
   Node *child(Node *parent) {
-    if (parent->left == NULL && parent->right == NULL)
+    if (parent->left == nullptr && parent->right == nullptr)
       return nullptr;
-    else if (parent->left == NULL)
+    else if (parent->left == nullptr)
       return parent->right;
-    else if (parent->right == NULL)
+    else if (parent->right == nullptr)
       return parent->left;
     else {
       return parent;
@@ -43,16 +44,15 @@ public:
   }
 };
 
-void Tree::insert_element(int element) {
+void Tree::insert_element(const int &element) {
   Node *node = new Node;
   node->value = element;
-  node->left = node->right = NULL;
 
-  if (root == NULL)
-    root = node;
+  if (m_root == nullptr)
+    m_root = node;
   else {
-    Node *ptr = root;
-    while (ptr != NULL) {
+    Node *ptr = m_root;
+    while (ptr != nullptr) {
       if (element < ptr->value) {
         if (ptr->left)
           ptr = ptr->left;
@@ -67,9 +67,8 @@ void Tree::insert_element(int element) {
           ptr->right = node;
           break;
         }
-      } else {
-        break;
       }
+      break;
     }
     if (ptr->value < element)
       node = ptr->right;
@@ -79,11 +78,11 @@ void Tree::insert_element(int element) {
 }
 
 void Tree::insert_node(Node *node) {
-  if (root == NULL)
-    root = node;
+  if (m_root == nullptr)
+    m_root = node;
   else {
-    Node *ptr = root;
-    while (ptr != NULL) {
+    Node *ptr = m_root;
+    while (ptr != nullptr) {
       if (ptr->value < node->value)
         ptr = ptr->right;
       if (ptr->value > node->value)
@@ -138,15 +137,15 @@ void Tree::traverse_postorder(Node *node) {
   }
 }
 
-bool Tree::find_node(int element) {
+bool Tree::find_node(const int &element) {
   bool flag = false;
 
-  if (root == NULL) {
+  if (m_root == nullptr) {
     //		std::cout<<"the tree is empty."<<std::endl;
     return flag;
   } else {
-    Node *ptr = root;
-    while (ptr != NULL) {
+    Node *ptr = m_root;
+    while (ptr != nullptr) {
       if (element < ptr->value)
         ptr = ptr->left;
       if (element > ptr->value)
@@ -160,8 +159,8 @@ bool Tree::find_node(int element) {
   }
 }
 
-Tree::Node *Tree::delete_element(Node *ptr, int element) {
-  if (ptr == NULL)
+Tree::Node *Tree::delete_element(Node *ptr, const int &element) {
+  if (ptr == nullptr)
     return ptr;
   else if (element < ptr->value)
     ptr->left = delete_element(ptr->left, element);
@@ -169,16 +168,16 @@ Tree::Node *Tree::delete_element(Node *ptr, int element) {
     ptr->right = delete_element(ptr->right, element);
   else {
     // case 1: leaf node
-    if (ptr->left == NULL && ptr->right == NULL) {
+    if (ptr->left == nullptr && ptr->right == nullptr) {
       delete ptr;
-      ptr = NULL;
+      ptr = nullptr;
     }
     // case 2: one child
-    else if (ptr->left == NULL) {
+    else if (ptr->left == nullptr) {
       Node *temp = ptr;
       ptr = ptr->right;
       delete temp;
-    } else if (ptr->right == NULL) {
+    } else if (ptr->right == nullptr) {
       Node *temp = ptr;
       ptr = ptr->left;
       delete temp;
@@ -196,14 +195,14 @@ Tree::Node *Tree::delete_element(Node *ptr, int element) {
 
 Tree::Node *Tree::find_min(Node *ptr) {
   // finds min value of right child leftmost
-  while (ptr->left != NULL)
+  while (ptr->left != nullptr)
     ptr = ptr->left;
   return ptr;
 }
 
 Tree::Node *Tree::find_max(Node *ptr) {
   // finds min value of right child leftmost
-  while (ptr->right != NULL)
+  while (ptr->right != nullptr)
     ptr = ptr->left;
   return ptr;
 }
@@ -220,13 +219,13 @@ int main() {
   tree.show_in_order();
 
   std::cout << "inverse" << std::endl;
-  tree.traverse_inverse(tree._root());
+  tree.traverse_inverse(tree.root());
   std::cout << "post order" << std::endl;
-  tree.traverse_postorder(tree._root());
+  tree.traverse_postorder(tree.root());
   std::cout << "pre-order" << std::endl;
-  tree.traverse_preorder(tree._root());
+  tree.traverse_preorder(tree.root());
 
   std::cout << "10 deleted" << std::endl;
-  tree.delete_element(tree._root(), 10);
-  tree.traverse_inorder(tree._root());
+  tree.delete_element(tree.root(), 10);
+  tree.traverse_inorder(tree.root());
 }

@@ -3,24 +3,25 @@
 #include <stdexcept>
 #include <type_traits>
 
-class Node final {
+template <typename T> class Node final {
 public:
   Node *left{nullptr};
   Node *right{nullptr};
-  int data;
+  T data;
 
-  Node(const int &data) : data(data) {}
+  Node(const T &data) : data(data) {}
   Node() = default;
+  ~Node() = default;
 };
 
-class Tree {
+template <typename T, Node<T>> class Tree {
 private:
   Node *m_root{nullptr};
   size_t m_size{0};
 
 public:
   explicit Tree() = default;
-  explicit Tree(std::initializer_list<int> list) {
+  explicit Tree(std::initializer_list<T> list) {
     for (auto i : list) {
       insert_element(i);
     }
