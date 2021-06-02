@@ -128,7 +128,7 @@ public:
   //       enqueue(i);
   //   } catch (const std::exception &e) {
   //     std::cerr << e.what() << '\n';
-  //     exit(0);
+  //     exit(1);
   //   }
   // }
 
@@ -145,7 +145,7 @@ public:
       return m_ptr[idx];
     } catch (const char *str) {
       std::cerr << str << std::endl;
-      exit(0);
+      exit(1);
     }
   }
 

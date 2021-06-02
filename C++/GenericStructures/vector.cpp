@@ -151,7 +151,7 @@ public:
       return m_ptr[idx];
     } catch (const char *str) {
       std::cerr << str << std::endl;
-      exit(0);
+      exit(1);
     }
   }
 
@@ -166,7 +166,7 @@ public:
       return m_ptr[idx];
     } catch (const char *str) {
       std::cerr << str << std::endl;
-      exit(0);
+      exit(1);
     }
   }
 

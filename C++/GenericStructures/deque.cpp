@@ -163,6 +163,7 @@ public:
       --m_size;
     } catch (const std::exception &e) {
       std::cerr << e.what() << '\n';
+      exit(1);
     }
   }
 
@@ -179,6 +180,7 @@ public:
       --m_size;
     } catch (const std::exception &e) {
       std::cerr << e.what() << '\n';
+      exit(1);
     }
   }
 

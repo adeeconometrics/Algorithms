@@ -96,7 +96,7 @@ public:
     } catch (const std::bad_alloc &e) {
       std::cerr << "Allocation failed: " << e.what
                 << ". Size must be positive." std::endl;
-      exit(0);
+      exit(1);
     }
   }
 
@@ -116,7 +116,7 @@ public:
 
     } catch (const std::exception &e) {
       std::cerr << e.what << '\n';
-      exit(0);
+      exit(1);
     }
   }
 
@@ -134,7 +134,7 @@ public:
       ++m_front;
     } catch (const std::exception &e) {
       std::cerr << e.what << '\n';
-      exit(0);
+      exit(1);
     }
   }
 
@@ -148,7 +148,7 @@ public:
 
     } catch (const std::exception &e) {
       std::cerr << e.what() << '\n';
-      exit(0);
+      exit(1);
     }
   }
 

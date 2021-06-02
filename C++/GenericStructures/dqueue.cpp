@@ -146,7 +146,7 @@ public:
   void pop() {
     try {
       if (is_empty())
-        throw std::exception;
+        throw std::exception();
 
       Node *temp = front;
       front = front->next;
@@ -156,6 +156,7 @@ public:
 
     } catch (const std::exception &e) {
       std::cout << "Error: " << e.what() << std::endl;
+      exit(1);
     }
   }
 
@@ -172,6 +173,7 @@ public:
 
     } catch (const std::exception &e) {
       std::cout << "Error: " << e.what() << std::endl;
+      exit(1);
     }
   }
 

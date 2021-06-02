@@ -210,7 +210,7 @@ public:
 
     } catch (const char *error_msg) {
       std::cerr << error_msg << std::endl;
-      exit(0);
+      exit(1);
     }
   }
 
