@@ -1,19 +1,19 @@
-class Node {
+class Node<T> {
   Node? next = null;
-  late int data;
-  Node(int data) {
+  late T data;
+  Node(T data) {
     this.data = data;
   }
 }
 
-class Stack {
+class Stack<T> {
   Node? head = null;
   int size = 0;
 
   Stack() {}
 
-  void push(int data) {
-    Node node = new Node(data);
+  void push(T data) {
+    Node node = new Node<T>(data);
     if (isEmpty())
       this.head = node;
     else {
@@ -46,7 +46,7 @@ class Stack {
 }
 
 void main() {
-  var s = new Stack();
+  var s = new Stack<int>();
   for (int i = 0; i < 10; ++i) {
     s.push(i);
   }

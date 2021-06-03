@@ -1,21 +1,17 @@
 class Node {
   int data = 0;
-  Node? next;
+  Node? next = null;
 
   Node(int data) {
     this.data = data;
-    this.next = null;
   }
 }
 
 class SinglyList {
-  Node? head;
-  late int size;
+  Node? head = null;
+  int size = 0;
 
-  SinglyList() {
-    this.head = null;
-    this.size = 0;
-  }
+  SinglyList() {}
 
   void add(int data) {
     Node node = new Node(data);

@@ -1,20 +1,21 @@
-class Node {
-  Node? next = null;
-  late int data;
-  Node(int data) {
+class Node<T> {
+  Node? next;
+  late T data;
+  Node(T data) {
     this.data = data;
+    this.next = null;
   }
 }
 
-class Queue {
+class Queue<T> {
   Node? front = null;
   Node? back = null;
   int size = 0;
 
   Queue() {}
 
-  void enqueue(int data) {
-    Node node = new Node(data);
+  void enqueue(T data) {
+    Node node = new Node<T>(data);
     if (isEmpty()) {
       this.front = node;
       this.back = node;
@@ -49,7 +50,7 @@ class Queue {
 }
 
 void main() {
-  var q = new Queue();
+  var q = new Queue<int>();
   for (int i = 0; i < 10; ++i) q.enqueue(i);
   q.display();
   print("dequeued");

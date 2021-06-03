@@ -1,23 +1,18 @@
 class Node {
-  Node? next;
-  Node? prev;
+  Node? next = null;
+  Node? prev = null;
   late int data;
   Node(int data) {
     this.data = data;
-    this.prev = null;
-    this.next = null;
   }
 }
 
 class DoublyList {
-  Node? front;
-  Node? back;
-  late int size;
-  DoublyList() {
-    this.size = 0;
-    this.front = null;
-    this.back = null;
-  }
+  Node? front = null;
+  Node? back = null;
+  int size = 0;
+
+  DoublyList() {}
 
   void add(int data) {
     Node node = new Node(data);
