@@ -14,7 +14,8 @@ public:
   ~Node() = default;
 };
 
-template <typename T, Node<T>> class Tree {
+// std::enable_if<is_base_of<Comparable>::value>
+template <typename T, typename Node = Node<T>> class Tree {
 private:
   Node *m_root{nullptr};
   size_t m_size{0};
@@ -50,9 +51,16 @@ public:
     ++m_size;
   }
 
-  void insert_element(const int &data) {
+  void insert_element(const T &data) {
     Node *node = new Node(data);
     insert_node(node);
+  }
+
+  void remove_element(const T &data) {
+    if (is_empty())
+      return;
+    delete_element(m_root, data);
+    --m_size;
   }
 
   void traverse_inorder(Node *node) {
@@ -79,7 +87,40 @@ public:
     }
   }
 
-  Node *delete_element(Node *ptr, const int &data) { // minus m_size
+  Node *find_max(const Node *ptr) const {
+    while (ptr->right != nullptr)
+      ptr = ptr->left;
+    return ptr;
+  }
+
+  Node *find_min(const Node *ptr) const {
+    while (ptr->left != nullptr)
+      ptr = ptr->left;
+    return ptr;
+  }
+
+  T &min(const Node *ptr) const {
+    Node *min_val = find_min(ptr);
+    return min_val->data;
+  }
+
+  T &min(const Node *ptr) const {
+    Node *max_val = find_max(ptr);
+    return max_val->data;
+  }
+
+  const Node *root() const { return m_root; }
+
+  const T &root_val() const { return m_root->data; }
+
+  bool is_element(const int &data);
+
+  bool is_empty() const { return m_root == nullptr; }
+
+  size_t size() const { return m_size; }
+
+private:
+  Node *delete_element(Node *ptr, const T &data) { // minus m_size
     if (ptr == nullptr)
       return ptr;
     else if (data < ptr->data)
@@ -112,27 +153,12 @@ public:
       return ptr;
     }
   }
-
-  Node *find_max(Node *ptr) const {
-    while (ptr->right != nullptr)
-      ptr = ptr->left;
-    return ptr;
-  }
-
-  Node *find_min(Node *ptr) const {
-    while (ptr->left != nullptr)
-      ptr = ptr->left;
-    return ptr;
-  }
-
-  const Node *root() const { return m_root; }
-
-  bool find_node(const int &data);
-
-  bool is_empty() const { return m_root == nullptr; }
-
-  size_t size() const { return m_size; }
-
   // enable find max, find min values
-  // count m_size
+  // void print_tree
+  // const Node* child_of
+  // const Node* parent_of
+  // size_t height
+  // size_t level
+  // exceptions
+  // iterators
 };
