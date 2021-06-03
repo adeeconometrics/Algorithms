@@ -62,6 +62,7 @@ public:
       traverse_inorder(node->right);
     }
   }
+
   void traverse_preorder(Node *node) {
     if (node != nullptr) {
       std::cout << node->data << " ";
@@ -78,7 +79,7 @@ public:
     }
   }
 
-  Node *delete_element(Node *ptr, const int &data) {
+  Node *delete_element(Node *ptr, const int &data) { // minus m_size
     if (ptr == nullptr)
       return ptr;
     else if (data < ptr->data)
@@ -131,4 +132,7 @@ public:
   bool is_empty() const { return m_root == nullptr; }
 
   size_t size() const { return m_size; }
+
+  // enable find max, find min values
+  // count m_size
 };

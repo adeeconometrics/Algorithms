@@ -59,5 +59,6 @@
     },
     "java.project.sourcePaths": [
         "Java"
-    ]
+    ],
+    "python.formatting.provider": "black"
 }
