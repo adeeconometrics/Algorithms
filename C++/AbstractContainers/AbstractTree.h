@@ -1,11 +1,14 @@
+#pragma once
+
 template <typename T> class Node final{
     public:
         T data; 
-        Node<T> *left;
-        Node<T> *right;
+        Node<T> *left{nullptr};
+        Node<T> *right{nullptr};
         
         Node(const T& _data):data(_data){}
-        Node(){}
+        Node() = default;
+        ~Node() = default;
 };
 
 template<typename T, typename Node = Node<T>> class AbstractBinaryTree{
@@ -24,6 +27,6 @@ template<typename T, typename Node = Node<T>> class AbstractBinaryTree{
         virtual void insert_node(Node* ptr) = 0;
         virtual void insert_element(const T& data) = 0;
 
-        virtual bool is_empty() = 0;
-        virtual bool is_element() = 0;
+        virtual bool is_empty() const = 0;
+        virtual bool is_element() const = 0;
 };
