@@ -1,8 +1,7 @@
 #include <initalizer_list>
 #include <iostream>
 
-template <typaname T> class Node final {
-public:
+template <typaname T> struct Node final {
   T data;
   Node *next{nullptr}, *prev{nullptr};
 

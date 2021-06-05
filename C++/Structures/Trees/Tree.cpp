@@ -2,9 +2,9 @@
 #include <iostream>
 #include <stdexcept>
 #include <type_traits>
+// #include <stack>
 
-class Node final {
-public:
+struct Node {
   Node *left{nullptr};
   Node *right{nullptr};
   int data;
@@ -12,6 +12,40 @@ public:
   Node(const int &data) : data(data) {}
   Node() = default;
 };
+
+// bidirectional iterator
+// template <typename T> class tree_iterator {
+//   friend class Tree<T>;
+
+// public:
+//   typedef Node<T> value_type;
+//   typedef value_type *pointer_type;
+//   typedef value_type &reference_type;
+
+// public:
+//   constexpr tree_iterator(pointer_type ptr) : m_ptr(ptr) {}
+
+//   tree_iterator &operator++(){
+//     Node<T> *ptr{nullptr};
+//     if(m_ptr == nullptr){
+//       // m_ptr =
+//     }
+//   }
+//   tree_iterator &operator++(int);
+//   tree_iterator &operator--();
+//   tree_iterator &operator--(int);
+
+//   reference_type operator*();
+//   pointer_type operator->();
+//   pointer_type begin();
+//   pointer_type end();
+
+//   bool operator==(const tree_iterator &rhs) const;
+//   bool operator!=(const tree_iterator &rhs) const;
+
+// private:
+//   pointer_type m_ptr{nullptr};
+// };
 
 class Tree {
 private:

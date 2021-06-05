@@ -2,8 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
-template <typename T> class Node final {
-public:
+template <typename T> struct Node final {
   T data;
   Node *next{nullptr};
   explicit Node() {}

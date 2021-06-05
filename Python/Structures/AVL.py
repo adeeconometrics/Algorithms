@@ -17,7 +17,7 @@ class Node:
 class AVL:
     m_size: int = 0
     node_count: int = 0
-    height: int = 0
+    # height: int = 0
     lh: int = 0
     rh: int = 0
 

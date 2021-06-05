@@ -9,8 +9,7 @@
  * - insert method
  */
 
-template <typename T> class Node final {
-public:
+template <typename T> struct Node final {
   T data;
   Node *next{nullptr}, *prev{nullptr};
   Node(const T &m_data) : data(m_data) {}

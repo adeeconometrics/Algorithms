@@ -3,7 +3,6 @@
 #include <stdexcept>
 
 template <typename T> class Node final {
-public:
   T data;
   Node *next{nullptr};
 
