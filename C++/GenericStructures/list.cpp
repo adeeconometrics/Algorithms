@@ -185,25 +185,26 @@ public:
       if (is_empty())
         throw "Error: list is already empty.";
 
-      if (front->data == data)
+      else if (front->data == data)
         remove_front();
-      if (back->data == data)
+      else if (back->data == data)
         remove_back();
+      else {
+        Node<T> *ptr = front;
+        Node<T> *prev = ptr;
+        while (ptr->next != nullptr) {
+          if (ptr->data == data) {
+            prev->next = ptr->next;
+            ptr->prev = prev;
 
-      Node<T> *ptr = front;
-      Node<T> *prev = ptr;
-      while (ptr->next != nullptr) {
-        if (ptr->data == data) {
-          prev->next = ptr->next;
-          ptr->prev = prev;
-
-          delete ptr;
-          ptr = nullptr;
-          m_size -= 1;
-          return;
+            delete ptr;
+            ptr = nullptr;
+            m_size -= 1;
+            return;
+          }
+          prev = ptr;
+          ptr = ptr->next;
         }
-        prev = ptr;
-        ptr = ptr->next;
       }
       throw "Error: element not found";
 
@@ -263,8 +264,6 @@ private:
     delete ptr;
     ptr = nullptr;
     m_size -= 1;
-
-    return;
   }
 
   void remove_back() {
@@ -274,8 +273,6 @@ private:
     delete ptr;
     ptr = nullptr;
     m_size -= 1;
-
-    return;
   }
 };
 

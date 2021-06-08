@@ -37,18 +37,24 @@ public:
     if (is_empty()) {
       front = node;
       back = node;
-    } else if (data > front->data) {
+    } else if (data >= front->data) {
       add_front(node);
-    } else if (data > back->data) {
+    } else if (data <= back->data) {
       add_back(node);
     } else {
       Node *ptr = front;
       while (ptr->next != nullptr) {
-        if (ptr->data > data)
+        if (ptr->next->data < data)
           break;
+        ptr = ptr->next;
       }
-      node->prev = ptr;
-      ptr->next = node;
+
+      if (ptr->next != nullptr) {
+        ptr->next->prev = node;
+        node->next = ptr->next;
+        node->prev = ptr;
+        ptr->next = node;
+      }
     }
     m_size += 1;
   }
@@ -58,23 +64,28 @@ public:
       if (is_empty())
         throw std::exception();
 
-      Node *ptr = front;
-      Node *prev = ptr;
-      while (ptr->next != nullptr) {
-        if (ptr->data == data) {
-          prev->next = ptr->next;
-          ptr->prev = prev;
+      else if (front->data == data)
+        remove_front();
+      else if (back->data == data)
+        remove_back();
+      else {
+        Node *ptr = front;
+        Node *prev = ptr;
+        while (ptr->next != nullptr) {
+          if (ptr->data == data) {
+            prev->next = ptr->next;
+            ptr->prev = prev;
 
-          delete ptr;
-          ptr = nullptr;
-          m_size -= 1;
-          return;
+            delete ptr;
+            ptr = nullptr;
+            m_size -= 1;
+            return;
+          }
+          prev = ptr;
+          ptr = ptr->next;
         }
-        prev = ptr;
-        ptr = ptr->next;
+        throw "Error: element not found in the list.";
       }
-
-      throw "data not found in the list.";
     } catch (const std::exception &e) {
       std::cerr << e.what() << '\n';
       exit(1);
@@ -90,6 +101,7 @@ public:
       std::cout << ptr->data << " ";
       ptr = ptr->next;
     }
+    std::cout << ptr->data << '\n';
   }
 
   void clear() {
@@ -120,20 +132,21 @@ private:
     front = node;
   }
 
-  // improve these!
-  //   void remove_front() {
-  //     Node *temp = front;
-  //     front = front->next;
+  void remove_front() {
+    Node *temp = front;
+    front = front->next;
 
-  //     delete temp;
-  //     temp = nullptr;
-  //   }
+    delete temp;
+    temp = nullptr;
+    m_size -= 1;
+  }
 
-  //   void remove_back(Node *ptr) {
-  //       Node* temp = back;
-  //       back = ptr;
+  void remove_back() {
+    Node *temp = back;
+    back = back->prev;
 
-  //       delete temp;
-  //       temp = nullptr;
-  //   }
+    delete temp;
+    temp = nullptr;
+    m_size -= 1;
+  }
 };
