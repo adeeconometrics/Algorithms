@@ -233,10 +233,15 @@ public:
 
   void fit() {
     size_t t_size = m_size * 2;
+    // instead of calling the constructor, we call new to allocate
     T *temp = (T *)::operator new(t_size * sizeof(T));
     for (size_t i = 0; i < m_index; ++i)
       temp[i] = std::move(m_ptr[i]);
 
+    for (size_t i = 0; i < m_index; ++i)
+      m_ptr[i].~T(); // calls the destructor and maintains RAII
+
+    // instead calling the destructor
     ::operator delete(m_ptr, t_size * sizeof(T));
     m_ptr = nullptr;
     m_ptr = temp;
