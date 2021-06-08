@@ -1,12 +1,18 @@
+#include "..\AbstractContainers\Comparable.h"
 #include <initializer_list>
 #include <iostream>
+#include <type_traits>
 
+template <typename T, typename = typename std::enable_if<
+                          std::is_base_of<Comparable<T>, T>::value ||
+                          std::is_integral<T>::value>>
 class ordered_list {
 private:
   struct Node {
     Node *next{nullptr};
-    int data;
-    Node(int arg_data) : data(arg_data) {}
+    Node *prev{nullptr};
+    T data;
+    Node(T arg_data) : data(arg_data) {}
     Node() = default;
   };
 
@@ -16,7 +22,7 @@ private:
 
 public:
   ordered_list() = default;
-  ordered_list(std::initializer_list<int> _list) {
+  ordered_list(const std::initializer_list<T> &_list) {
     for (auto i : _list)
       add(i);
   }
@@ -26,7 +32,7 @@ public:
       clear();
   }
 
-  void add(int data) {
+  void add(const T &data) {
     Node *node = new Node(data);
     if (is_empty()) {
       front = node;
@@ -41,12 +47,13 @@ public:
         if (ptr->data > data)
           break;
       }
+      node->prev = ptr;
       ptr->next = node;
     }
     m_size += 1;
   }
 
-  void remove(int data) {
+  void remove(const T &data) {
     try {
       if (is_empty())
         throw std::exception();
@@ -56,15 +63,17 @@ public:
       while (ptr->next != nullptr) {
         if (ptr->data == data) {
           prev->next = ptr->next;
+          ptr->prev = prev;
+
           delete ptr;
           ptr = nullptr;
-
           m_size -= 1;
           return;
         }
         prev = ptr;
         ptr = ptr->next;
       }
+
       throw "data not found in the list.";
     } catch (const std::exception &e) {
       std::cerr << e.what() << '\n';
@@ -100,11 +109,13 @@ public:
 
 private:
   void add_back(Node *node) {
+    node->prev = back;
     back->next = node;
     back = node;
   }
 
   void add_front(Node *node) {
+    front->prev = node;
     node->next = front;
     front = node;
   }
@@ -126,11 +137,3 @@ private:
   //       temp = nullptr;
   //   }
 };
-
-int main() {
-  ordered_list ol;
-  for (int i = 0; i < 10; ++i)
-    ol.add(i);
-  ol.display();
-  return 0;
-}
