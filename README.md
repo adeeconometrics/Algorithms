@@ -1,4 +1,4 @@
-# Algorithms
+# Algorithms and Data Structures
 
 This repository is a collection of different implementations of Fundamental Data Structures and some basic algorithm. 
 
