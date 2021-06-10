@@ -1,19 +1,21 @@
 from typing import TypeVar, Generic
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class Node(Generic[T]):
-    left:Node = None
-    right:Node = None
-    def __init__(self, data:T =None):
+    left: Node[T] = None
+    right: Node[T] = None
+
+    def __init__(self, data: T = None):
         self.data = data
 
 
 class Tree(Generic[T]):
     m_size: int = 0
-    m_root:Node = None
+    m_root: Node[T] = None
 
-    def insert_node(self, node: Node) -> None:
+    def insert_node(self, node: Node[T]) -> None:
         if self.is_empty():
             self.m_root = node
         else:
@@ -34,7 +36,7 @@ class Tree(Generic[T]):
         self.m_size += 1
 
     def insert_element(self, data: int) -> None:
-        node = Node(data)
+        node = Node[T](data)
         if self.is_empty():
             self.m_root = node
         else:
@@ -54,25 +56,25 @@ class Tree(Generic[T]):
 
         self.m_size += 1
 
-    def traverse_inorder(self, node: Node) -> None:
+    def traverse_inorder(self, node: Node[T]) -> None:
         if node is not None:
             self.traverse_inorder(node.left)
             print(node.data)
             self.traverse_inorder(node.right)
 
-    def traverse_preorder(self, node: Node) -> None:
+    def traverse_preorder(self, node: Node[T]) -> None:
         if node is not None:
             print(node.data)
             self.traverse_preorder(node.left)
             self.traverse_preorder(node.right)
 
-    def traverse_postorder(self, node: Node) -> None:
+    def traverse_postorder(self, node: Node[T]) -> None:
         if node is not None:
             self.traverse_postorder(node.left)
             self.traverse_postorder(node.right)
             print(node.data)
 
-    def delete_element(self, node: Node, data: int) -> None:
+    def delete_element(self, node: Node[T], data: int) -> None:
         if node is not None:
             return node
         elif data < node.data:
@@ -99,7 +101,7 @@ class Tree(Generic[T]):
                 node.data = ptr.data
                 ptr.right = self.delete_element(node.right, ptr.data)
 
-    def find_min(self, node: Node) -> Node:
+    def find_min(self, node: Node[T]) -> Node[T]:
         while node.left is not None:
             node = node.left
         return node
@@ -110,7 +112,7 @@ class Tree(Generic[T]):
 
 if __name__ == "__main__":
     t: Tree = Tree()
-    ptr: Node = t.m_root
+    ptr: Node[T] = t.m_root
 
     for i in range(0, 10):
         t.insert_element(i)

@@ -4,17 +4,17 @@ T = TypeVar("T")
 
 
 class Node(Generic[T]):
-    next: Node = None
+    next: Node[T] = None
 
     def __init__(self, data=None) -> None:
         self.data = data
 
 
 class SinglyList(Generic[T]):
-    head: Node = None
+    head: Node[T] = None
 
     def add(self, obj: int) -> None:
-        node = Node(obj)
+        node = Node[T](obj)
         if self.is_empty():
             node.next = self.head
             self.head = node
@@ -32,7 +32,7 @@ class SinglyList(Generic[T]):
             ptr = ptr.next
 
     def remove(self, data: int) -> None:
-        node = Node(data)
+        node = Node[T](data)
         ptr = self.head
         prev = ptr
         while ptr.next != None:

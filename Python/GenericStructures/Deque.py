@@ -1,22 +1,22 @@
 from typing import TypeVar, Generic
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class Node(Generic[T]):
-    next: Node = None
+    next: Node[T] = None
 
     def __init__(self, data: T) -> None:
         self.data = data
 
 
 class Deque(Generic[T]):
-    size:int = 0
-    front:Node = None
-    back:Node = None
-
+    size: int = 0
+    front: Node[T] = None
+    back: Node[T] = None
 
     def push_back(self, data: int) -> None:
-        node = Node(data)
+        node = Node[T](data)
         if self.is_empty():
             self.front = node
             self.back = node
@@ -28,7 +28,7 @@ class Deque(Generic[T]):
         self.size += 1
 
     def push_front(self, data: int) -> None:
-        node = Node(data)
+        node = Node[T](data)
         if self.is_empty():
             self.front = node
             self.back = node
@@ -67,7 +67,7 @@ class Deque(Generic[T]):
         return self.front == None and self.size == 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dq = Deque()
     for i in range(0, 9):
         dq.push_front(i)

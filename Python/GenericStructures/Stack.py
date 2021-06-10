@@ -4,18 +4,18 @@ T = TypeVar("T")
 
 
 class Node(Generic[T]):
-    next: Node = None
+    next: Node[T] = None
 
     def __init__(self, data: T) -> None:
         self.data = data
 
 
 class Stack(Generic[T]):
-    top: Node = None
+    top: Node[T] = None
     size: int = 0
 
     def push(self, data: int) -> None:
-        node = Node(data)
+        node = Node[T](data)
         node.next = self.top
         self.top = node
         self.size += 1
