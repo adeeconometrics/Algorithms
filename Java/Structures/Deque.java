@@ -3,20 +3,18 @@ package Structures;
 public class Deque {
     private class Node{
         int data;
-        Node next, prev;
+        Node next = null;
+        Node prev = null;
         Node(int data){
             this.data = data;
-            this.next = null;
-            this.prev = null;
         }
     }
 
-    Node front, rear;
-    int size;
+    private Node front = null;
+    private Node rear = null;
+    private int size;
 
     public Deque(){
-        this.front = null;
-        this.rear = null;
         this.size = 0;
     }
 
@@ -32,7 +30,7 @@ public class Deque {
             this.rear = this.rear.next;
             this.rear.prev = temp_node;
         }
-        ++ this.size;
+        this.size += 1;
     }
     
     public void dequeue(){
@@ -43,7 +41,7 @@ public class Deque {
             this.front = this.front.next;
             temp_node = null;
 
-            -- this.size;
+            this.size -= 1;
         } catch (Exception e) {
             System.out.println("Error: Deque is already empty.");
             return;
@@ -60,7 +58,7 @@ public class Deque {
             this.rear.next = node;
             this.rear = this.rear.next;
         }
-        ++ this.size;
+        this.size += 1;
     }
 
     public void push_front(int data){
@@ -74,7 +72,7 @@ public class Deque {
             node.prev = this.front.prev;
             this.front = node;
         }
-        ++ this.size;
+        this.size += 1;
     }
 
     public void pop_back(){
@@ -85,7 +83,7 @@ public class Deque {
             this.front = this.front.next;
             temp_node = null;
 
-            -- this.size;
+            this.size -= 1;
         } catch (Exception e) {
             System.out.println("Error: Deque is already empty.");
             return;
@@ -97,7 +95,7 @@ public class Deque {
             if(is_empty()) throw new Exception();
 
             this.front = this.front.next;
-            -- this.size;
+            this.size -= 1;
 
         } catch (Exception e) {
             System.out.println("Error: Deque is empty.");

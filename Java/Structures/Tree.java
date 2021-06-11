@@ -63,7 +63,7 @@ public class Tree {
         }
     }
 
-    public Node deleteNode(Node ptr, int data){
+    public Node deleteNode(Node ptr, int data){ // check this out
         if(ptr==null)
             return ptr;
         else if(data < ptr.data)

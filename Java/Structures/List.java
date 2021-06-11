@@ -3,38 +3,64 @@ package Structures;
 public class List{
     class Node{
         int data;
-        Node prev, next;
+        Node prev = null;
+        Node next = null;
 
-        Node(int data){
-            this.data = data;
-            this.prev = null;
-            this.next = null;
-        }
+        Node(int data){ this.data = data;}
     }
 
-    Node head;
+    Node front = null;
+    Node back = null;
+    int size;
 
     public List(){
-        this.head = null;
+        this.size = 0;
     }
 
     public void add(int data){
         Node node = new Node(data);
-        if(is_empty()) 
-            this.head = node;
-        else{
-            Node ptr = this.head;
-            while(ptr.next != null)
-                ptr = ptr.next;
-            
-            ptr.next = node;
-            node.prev = ptr;
+        if(is_empty()){
+            this.front = node;
+            this.back  = node;
         }
+        else{
+            this.back.next = node;
+            node.prev = this.back;
+            back = node;
+        }
+        this.size += 1;
+    }
+
+    public void add_front(int data){
+        Node node = new Node(data); 
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }
+        else{
+            node.next = this.front;
+            this.front.prev = node;
+            this.front = node;
+        }
+        this.size += 1;
+    }
+
+    public void add_back(int data){
+        Node node = new Node(data);
+        if(is_empty()){
+            this.front = node;
+            this.back  = node;
+        }
+        else{
+            this.back.next = node;
+            node.prev = this.back;
+            back = node;
+        }
+        this.size += 1;
     }
 
     public void remove(int data){
-        Node ptr = this.head;
-
+        Node ptr = this.front;
         try {
             boolean is_element = false;
 
@@ -57,18 +83,24 @@ public class List{
     }
 
     public void display(){
-        Node ptr = this.head;
+        Node ptr = this.front;
         
         while(ptr.next != null){
             System.out.print(String.valueOf(ptr.data) + " ");
             ptr = ptr.next;
         }
     }
+    
+    public int top(){return this.front.data; }
+    
+    public int bottom(){return this.back.data; }
 
     public boolean is_empty(){
-        if(this.head ==  null) return true;
+        if(this.front ==  null) return true;
         return false;
     }
+
+    public int size(){return this.size; }
 
 }
 

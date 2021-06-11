@@ -3,20 +3,18 @@ package GenericStructures;
 public class Deque<T> {
   private class Node {
     T data;
-    Node next, prev;
+    Node next = null;
+    Node prev = null;
     Node(T data) {
       this.data = data;
-      this.next = null;
-      this.prev = null;
     }
   }
 
-  Node front, rear;
-  int size;
+  private Node front = null;
+  private Node rear = null;
+  private int size;
 
   public Deque() {
-    this.front = null;
-    this.rear = null;
     this.size = 0;
   }
 
@@ -32,7 +30,7 @@ public class Deque<T> {
       this.rear = this.rear.next;
       this.rear.prev = temp_node;
     }
-    ++this.size;
+    this.size += 1;
   }
 
   public void dequeue() {
@@ -40,7 +38,7 @@ public class Deque<T> {
       if (is_empty()) throw new Exception();
 
       this.front = this.front.next;
-      --this.size;
+      this.size -= 1;
     } catch (Exception e) {
       System.out.println("Error: Deque is already empty.");
       return;
@@ -57,7 +55,7 @@ public class Deque<T> {
       this.rear.next = node;
       this.rear = this.rear.next;
     }
-    ++this.size;
+    this.size += 1;
   }
 
   public void push_front(T data) {
@@ -71,7 +69,7 @@ public class Deque<T> {
       node.prev = this.front.prev;
       this.front = node;
     }
-    ++this.size;
+    this.size += 1;
   }
 
   public void pop_back() {
@@ -79,7 +77,7 @@ public class Deque<T> {
       if (is_empty()) throw new Exception();
 
       this.front = this.front.next;
-      --this.size;
+      this.size -= 1;
     } catch (Exception e) {
       System.out.println("Error: Deque is already empty.");
       return;
@@ -92,7 +90,7 @@ public class Deque<T> {
         throw new Exception();
 
       this.front = this.front.next;
-      --this.size;
+      this.size -= 1;
 
     } catch (Exception e) {
       System.out.println("Error: Deque is empty.");
@@ -101,12 +99,10 @@ public class Deque<T> {
   }
 
   public T front() { 
-    if(is_empty()) return null;
     return this.front.data; 
   }
 
   public T rear() { 
-    if(is_empty()) return null;
     return this.rear.data; 
   }
 

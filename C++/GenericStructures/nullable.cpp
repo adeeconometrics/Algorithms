@@ -5,7 +5,7 @@
 
 template <typename T> class nullable final {
 public:
-  nullable() {}
+  nullable() = default;
 
   nullable(const T &value) : Value(value) {}
 

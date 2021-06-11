@@ -1,5 +1,6 @@
 #include <initializer_list>
 #include <iostream>
+#include <list>
 
 template <typename Array> class array_iterator {
 
@@ -141,6 +142,14 @@ public:
     }
   }
 
+  explicit Array(const Array<T> &rhs) {
+    m_ptr = new T[rhs.size()];
+    m_size = rhs.size();
+    std::copy(rhs.begin(), rhs.end(), m_ptr);
+  }
+
+  explicit Array(Array &&rhs);
+
   explicit Array(std::initializer_list<T> list) {
     try {
       if (Size < 0)
@@ -176,8 +185,13 @@ public:
       add(*it);
   }
 
-  // copy assingment
-  // move assingment
+  Array &operator=(const Array &rhs) {
+    Array<T> copy(rhs);
+    copy.swap(rhs);
+    return *this;
+  }
+
+  Array &operator=(Array &&rhs);
 
   void operator++() { m_ptr[++index]; }
 
@@ -227,6 +241,11 @@ public:
   void display() const {
     for (size_t i = 0; i < size; ++i)
       std::cout << "a[" << i << "] " << m_ptr[i] << "\n";
+  }
+
+  void swap(Array &array) {
+    std::swap(*this, array);
+    return;
   }
 
   size_t size() { return Size; }

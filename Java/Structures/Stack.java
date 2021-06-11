@@ -1,19 +1,19 @@
 package Structures;
 
 public class Stack {
-    private int size;
     private class Node{
         int data; 
-        Node next;
+        Node next = null;
         Node(int data){
             this.data = data;
-            this.next = null;
         }
     }
+    
+    private int size;
+    private Node top = null;
+    // private Node bottom = null; -- implement this 
 
-    Node top;
     public Stack(){
-        this.top = null;
         this.size = 0;
     }
 

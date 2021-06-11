@@ -1,19 +1,19 @@
 package GenericStructures;
 
-public class Stack<T> {
-    private int size;
+public class Stack <T>{
     private class Node{
         T data; 
-        Node next;
+        Node next = null;
         Node(T data){
             this.data = data;
-            this.next = null;
         }
     }
+    
+    private int size;
+    private Node top = null;
+    // private Node bottom = null; -- implement this 
 
-    Node top;
     public Stack(){
-        this.top = null;
         this.size = 0;
     }
 
@@ -41,7 +41,6 @@ public class Stack<T> {
     }
 
     public T top(){
-        if(this.top == null) return null;
         return this.top.data;
     }
 }

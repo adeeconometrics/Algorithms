@@ -1,71 +1,38 @@
 package GenericStructures;
 
-
 public class List<T>{
     class Node{
         T data;
-        Node prev, next;
+        Node prev = null;
+        Node next = null;
 
-        Node(T data){
-            this.data = data;
-            this.prev = null;
-            this.next = null;
-        }
+        Node(T data){ this.data = data;}
     }
 
-    Node front, back;
-    int size = 0;
+    private Node front = null;
+    private Node back = null;
+    private int size;
 
     public List(){
-        this.front = null;
-        this.back = null;
+        this.size = 0;
     }
 
     public void add(T data){
         Node node = new Node(data);
-        if(is_empty()){ 
+        if(is_empty()){
             this.front = node;
-            this.back = node;
+            this.back  = node;
         }
         else{
-            Node ptr = this.front;
-            while(ptr.next != null)
-                ptr = ptr.next;
-            
-            ptr.next = node;
-            node.prev = ptr;
+            this.back.next = node;
+            node.prev = this.back;
+            back = node;
         }
         this.size += 1;
     }
 
-    public void remove(T data){
-        Node ptr = this.front;
-
-        try {
-            boolean is_element = false;
-
-            while(ptr.next != null){
-                if(ptr.data == data){
-                    ptr.prev = ptr.prev.prev;
-                    ptr.next = ptr.next.next;
-                    is_element = true;
-                    this.size -=1;
-
-                    return;
-                }
-                ptr = ptr.next;
-            }
-
-            if(is_element == false) throw new Exception();
-
-        } catch (Exception e) {
-            System.out.println(String.valueOf(data) + " is not element of the list.");
-            return;
-        }
-    }
-
     public void add_front(T data){
-        Node node = new Node(data);
+        Node node = new Node(data); 
         if(is_empty()){
             this.front = node;
             this.back = node;
@@ -82,26 +49,37 @@ public class List<T>{
         Node node = new Node(data);
         if(is_empty()){
             this.front = node;
-            this.back = node;
+            this.back  = node;
         }
         else{
-            node.prev = this.back;
             this.back.next = node;
-            this.back = node;
+            node.prev = this.back;
+            back = node;
         }
         this.size += 1;
-    }    
-
-    public void remove_front(){
-        if(is_empty()) return;
-        this.front = this.front.next;
-        this.size -=1;
     }
 
-    public void remove_back(){
-        if(is_empty()) return;
-        this.back = this.back.prev;
-        this.size -=1;
+    public void remove(T data){
+        Node ptr = this.front;
+        try {
+            boolean is_element = false;
+
+            while(ptr.next != null){
+                if(ptr.data == data){
+                    ptr.prev = ptr.prev.prev;
+                    ptr.next = ptr.next.next;
+                    is_element = true;
+                    return;
+                }
+                ptr = ptr.next;
+            }
+
+            if(is_element == false) throw new Exception();
+
+        } catch (Exception e) {
+            System.out.println(String.valueOf(data) + " is not element of the list.");
+            return;
+        }
     }
 
     public void display(){
@@ -113,25 +91,20 @@ public class List<T>{
         }
     }
 
-    public T top(){
-        if(is_empty()) return null;
-        return this.front.data;
-    }
-
-    public T bottom(){
-        if(is_empty()) return null;
-        return this.back.data;
-    }
-
-    public int size(){return this.size;}
+    public T top(){return this.front.data; }
+    
+    public T bottom(){return this.back.data; }
 
     public boolean is_empty(){
-        return this.front == null;
+        if(this.front ==  null) return true;
+        return false;
     }
+
+    public int size(){return this.size; }
 
 }
 
-class MainList{
+class MainDoubly{
     public void main(String [] args){
 
     }

@@ -3,13 +3,13 @@ package GenericStructures;
 public class Queue<T> {
     private class Node{
         T data;
-        Node next;
+        Node next = null;
         Node(T data){
             this.data = data;
-            this.next = null;
         }
     }
-    private Node front, rear;
+    private Node front = null;
+    private Node rear = null;
     private int size;
 
     Queue(){
