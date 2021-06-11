@@ -4,11 +4,11 @@ T = TypeVar("T")
 
 
 class Node(Generic[T]):
-    next: Node[T] = None
-    prev: Node[T] = None
+    next = None
+    prev = None
 
     def __init__(self, data: T = None) -> None:
-        self.data = data
+        self.data: T = data
 
 
 class List(Generic[T]):
@@ -54,11 +54,11 @@ class List(Generic[T]):
 
             while ptr.next is not None:
                 if ptr.data == data:
-                    ptr.next = ptr.next
-                    ptr.prev = prev
+                    prev.next = ptr.next
+                    ptr.next.prev = prev
 
                     ptr = None
-                    size -= 1
+                    self.size -= 1
                     return
                 prev = ptr
                 ptr = ptr.next
@@ -73,16 +73,28 @@ class List(Generic[T]):
         temp: Node[T] = self.front
         self.front = self.front.next
         temp = None
-        size -= 1
+        self.size -= 1
 
     def _remove_back(self) -> None:
         temp: Node[T] = self.back
         self.back = self.back.prev
         temp = None
-        size -= 1
+        self.size -= 1
 
     def is_empty(self) -> bool:
         return self.front is None and self.back is None
 
     def display_reverse(self) -> None:
-        pass
+        ptr: Node[T] = self.back
+        while ptr.next is not None:
+            print(ptr.data)
+            ptr = ptr.next
+
+
+if __name__ == "__main__":
+    l = List[int]()
+    for i in range(1, 10):
+        l.add_back(i)
+
+    l.remove(3)
+    l.display_reverse()

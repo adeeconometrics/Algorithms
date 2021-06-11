@@ -55,11 +55,11 @@ class OrderedList(Generic[T]):
 
             while ptr.next is not None:
                 if ptr.data == data:
-                    ptr.next = ptr.next
+                    prev.next = ptr.next
                     ptr.prev = prev
 
                     ptr = None
-                    size -= 1
+                    self.size -= 1
                     return
                 prev = ptr
                 ptr = ptr.next
@@ -84,13 +84,13 @@ class OrderedList(Generic[T]):
         temp: Node[T] = self.front
         self.front = self.front.next
         temp = None
-        size -= 1
+        self.size -= 1
 
     def _remove_back(self) -> None:
         temp: Node[T] = self.back
         self.back = self.back.prev
         temp = None
-        size -= 1
+        self.size -= 1
 
     def is_empty(self) -> bool:
         return self.front is None and self.back is None

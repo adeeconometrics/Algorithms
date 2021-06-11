@@ -31,11 +31,19 @@ class List{
             return;
         }
         else{
-            var ptr:Node? = self.front
+            var ptr:Node? = self.front;
+            var prev:Node? = self.ptr;
+
             while (ptr.next != nil){
                 if(ptr.data == data){
-                    // ptr.prev = ptr.next.
+                    prev.next = ptr.next;
+                    ptr.next.prev = prev;
+
+                    self.m_size -= 1;
+                    return; 
                 }
+                prev = ptr;
+                ptr = ptr.next;
             }
         }
     }
