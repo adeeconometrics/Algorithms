@@ -89,6 +89,19 @@ private:
   pointer_type m_ptr;
 };
 
+/**
+ * Summary of complexity on List:
+ * - void add_front(const T& data) = O(1)
+ * - void add_back(const T& data) = O(1)
+ * - void remove() = O(1) (best-case), O(n) (worst-case)
+ * - void display() = O(n)
+ * - void clear() = O(n)
+ * - size_t size() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ */
 template <typename T> class List {
 private:
   friend list_iterator<T>;

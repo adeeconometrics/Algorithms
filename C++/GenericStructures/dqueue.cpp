@@ -77,6 +77,22 @@ public:
   }
 };
 
+/**
+ * Summary of complexity on Queue:
+ * - void enqueue(const T& data) = O(1)
+ * - void add(const T& data) = O(1)
+ * - void push(const T& data) = O(1)
+ * - void dequeue() = O(1)
+ * - void remove() = O(1)
+ * - void pop() = O(1)
+ * - void display() = O(n)
+ * - void clear() = O(n)
+ * - size_t size() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ */
 template <typename T> class Queue {
 private:
   friend queue_iterator<T>;
@@ -149,6 +165,7 @@ public:
 
       Node *temp = front;
       front = front->next;
+      delete temp;
       temp = nullptr;
 
       m_size -= 1;
@@ -166,6 +183,7 @@ public:
 
       Node *temp = front;
       front = front->next;
+      delete temp;
       temp = nullptr;
 
       m_size -= 1;

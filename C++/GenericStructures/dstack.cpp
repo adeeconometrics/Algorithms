@@ -82,6 +82,20 @@ private:
   pointer_type m_ptr;
 };
 
+/**
+ * Summary of complexity on Stack:
+ * - void push(const T& data) = O(1)
+ * - void pop() = O(1)
+ * - void display() = O(n)
+ * - T top() = O(1)
+ * - T bottom() = O(1)
+ * - void clear() = O(n)
+ * - size_t size() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ */
 template <typename T> class Stack {
 private:
   friend stack_iterator<T>;
@@ -141,7 +155,7 @@ public:
     m_size = 0;
   }
 
-  void display() {
+  void display() const {
     Node<T> *ptr = front;
     while (ptr->next != nullptr) {
       std::cout << ptr->data << std::endl;
@@ -151,9 +165,9 @@ public:
 
   size_t size() { return m_size; }
 
-  T top() { return front->data; }
+  T top() const { return front->data; }
 
-  T bottom() { return back->data; }
+  T bottom() const { return back->data; }
 
   iterator begin() { return iterator(front); }
 
@@ -164,5 +178,5 @@ public:
   const_iterator cend() { return const_iterator(back); }
 
 private:
-  bool is_empty() { return front == nullptr && back == nullptr; }
+  bool is_empty() const { return front == nullptr && back == nullptr; }
 };

@@ -86,15 +86,21 @@ public:
   void display_reverse() const {
     Node *_back = back;
     while (_back->prev != nullptr) {
-      _back = _back->prev;
       std::cout << _back->data << " ";
+      _back = _back->prev;
     }
   }
 
   void clear() {
     Node *ptr = front;
+    Node *temp{nullptr};
     while (ptr->next != nullptr) {
+      temp = ptr;
+      ptr = ptr->next;
+      delete temp;
+      temp = nullptr;
     }
+    front = nullptr;
   }
 
   int top() const { return front->data; }
@@ -131,7 +137,7 @@ int main() {
   for (size_t i = 0; i < 10; ++i)
     l.add(i);
 
-  l.remove(10);
+  l.remove(0);
 
   l.display();
   std::cout << "\nreversed: \n";

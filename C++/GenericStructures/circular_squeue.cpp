@@ -96,6 +96,23 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
+/**
+ * Summary of complexity on CSQueue:
+ * - void enqueue(const T& data) = O(1)
+ * - void push(const T& data) = O(1)
+ * - void dequeue() = O(1)
+ * - void pop() = O(1)
+ * - void initialize() = O(n)
+ * - void display() = O(n)
+ * - void clear() = O(n)
+ * - size_t size() = O(1)
+ * - T top() = O(1)
+ * - T bottom() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ */
 template <typename T, size_t Size> class CSQueue {
 
 public:
@@ -187,7 +204,7 @@ public:
     }
   }
 
-  void display() {
+  void display() const {
     T *ptr = m_ptr[0];
     for (size_t i = 0; i < Size; ++i)
       std::cout << ptr[i] << '\n';
@@ -198,9 +215,9 @@ public:
     m_ptr = nullptr;
   }
 
-  T top() { return m_ptr[0]; }
+  T top() const { return m_ptr[0]; }
 
-  T bottom() { return m_ptr[Size - 1]; }
+  T bottom() const { return m_ptr[Size - 1]; }
 
   iterator begin() { return iterator(m_ptr); }
 
@@ -210,9 +227,9 @@ public:
 
   const_iterator cend() { return const_iterator(m_ptr + Size); }
 
-  bool is_empty() { return m_ptr == nullptr; }
+  bool is_empty() const { return m_ptr == nullptr; }
 
-  bool is_full() { return m_index == Size; }
+  bool is_full() const { return m_index == Size; }
 };
 
 int main() {

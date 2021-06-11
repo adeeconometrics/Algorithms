@@ -74,6 +74,23 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
+/**
+ * Summary of complexity on SStack:
+ * - void push(const T& data) = O(1)
+ * - void pop() = O(1)
+ * - void initialize() = O(n)
+ * - void display() = O(n)
+ * - void clear() = O(n)
+ * - size_t size() = O(1)
+ * - T top() = O(1)
+ * - T bottom() = O(1)
+ * - bool is_full() = O(1)
+ * - bool is_empty() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ */
 template <typename T, size_t Size> class SStack {
 public:
   typedef T value_type;
@@ -157,7 +174,7 @@ public:
       m_ptr[i] = 0;
   }
 
-  void display() {
+  void display() const {
     T *ptr = m_ptr[0];
     for (size_t i = 0; i < Size; ++i)
       std::cout << ptr[i] << '\n';
@@ -168,11 +185,19 @@ public:
     m_ptr = nullptr;
   }
 
-  T top() { return m_ptr[m_index]; }
+  T top() const { return m_ptr[m_index]; }
 
-  T bottom() { return m_ptr[0]; }
+  T bottom() const { return m_ptr[0]; }
 
-  bool is_full() { return Size == m_index; }
+  // iterator begin() { return iterator(m_ptr); }
 
-  bool is_empty() { return m_ptr == nullptr; }
+  // iterator end() { return iterator(m_ptr + Size); }
+
+  // const_iterator cbegin() { return const_iterator(m_ptr); }
+
+  // const_iterator cend() { return const_iterator(m_ptr + Size); }
+
+  bool is_full() const { return Size == m_index; }
+
+  bool is_empty() const { return m_ptr == nullptr; }
 };

@@ -97,6 +97,21 @@ private:
   pointer_type m_ptr;
 };
 
+/**
+ * Summary of complexity on Deque:
+ * - void push_front(const T& data) = O(1)
+ * - void push_back(const T& data) = O(1)
+ * - void pop_front() = O(1)
+ * - void pop_back() = O(1)
+ * - void display() = O(n)
+ * - void display_reverse() = O(n)
+ * - void clear() = O(n)
+ * - size_t size() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ */
 template <typename T> class Deque {
 private:
   friend deque_iterator<T>;

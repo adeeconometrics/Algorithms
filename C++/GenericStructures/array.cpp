@@ -101,6 +101,17 @@ private:
   pointer_type m_ptr;
 };
 
+/**
+ * Summary of complexity on Array:
+ * - void add(const T& element) = O(1)
+ * - void initialize() = O(n)
+ * - void display() = O(n)
+ * - size_t size() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ */
 template <typename T, size_t Size> class Array {
 public:
   typedef m_ptr value_type;
@@ -213,7 +224,7 @@ public:
 
   // void remove(const T &element);
 
-  void display() {
+  void display() const {
     for (size_t i = 0; i < size; ++i)
       std::cout << "a[" << i << "] " << m_ptr[i] << "\n";
   }
@@ -229,5 +240,5 @@ public:
   const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
 private:
-  bool is_empty() { return m_ptr == nullptr && size == 0; }
+  bool is_empty() const { return m_ptr == nullptr && size == 0; }
 };

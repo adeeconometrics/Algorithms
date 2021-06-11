@@ -110,6 +110,23 @@ private:
   pointer_type m_ptr;
 };
 
+/**
+ * Summary of complexity on List:
+ * - void add(const T& data) = O(1)
+ * - void add_front(const T& data) = O(1)
+ * - void add_back(const T& data) = O(1)
+ * - void remove(const T& data)
+ * - void display() = O(n)
+ * - void clear() = O(n)
+ * - size_t size() = O(1)
+ * - T top() = O(1)
+ * - T bottom() = O(1)
+ * - iterator begin() = O(1)
+ * - iterator end() = O(1)
+ * - const_iterator cbegin() = O(1)
+ * - const_iterator cend() = O(1)
+ * - bool is_empty() = O(1)
+ */
 template <typename T> class List {
 private:
   friend list_iterator<T>;
@@ -151,12 +168,8 @@ public:
       front = node;
       m_ptr = node;
     } else {
-      Node<T> *ptr = front;
-      while (ptr->next != nullptr)
-        ptr = ptr->next;
-
-      ptr->next = node;
-      node->prev = ptr;
+      node->prev = back;
+      back->next = node;
       back = node;
     }
     ++m_size;
@@ -185,11 +198,13 @@ public:
       if (is_empty())
         throw "Error: list is already empty.";
 
-      else if (front->data == data)
+      else if (front->data == data) {
         remove_front();
-      else if (back->data == data)
+        return;
+      } else if (back->data == data) {
         remove_back();
-      else {
+        return;
+      } else {
         Node<T> *ptr = front;
         Node<T> *prev = ptr;
         while (ptr->next != nullptr) {
@@ -205,8 +220,8 @@ public:
           prev = ptr;
           ptr = ptr->next;
         }
+        throw "Error: element not found";
       }
-      throw "Error: element not found";
 
     } catch (const char *error_msg) {
       std::cerr << error_msg << std::endl;
@@ -242,9 +257,9 @@ public:
 
   size_t size() const { return m_size; }
 
-  T top() const { return front->data; }
+  const T top() const { return front->data; }
 
-  T bottom() const { return back->data; }
+  const T bottom() const { return back->data; }
 
   iterator begin() { return iterator(front); }
 

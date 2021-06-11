@@ -113,7 +113,7 @@ public:
 
   const T &root_val() const { return m_root->data; }
 
-  bool is_element(const int &data);
+  bool is_element(const int &data) const;
 
   bool is_empty() const { return m_root == nullptr; }
 
