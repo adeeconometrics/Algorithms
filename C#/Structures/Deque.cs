@@ -3,22 +3,19 @@ using System;
 class Deque{
     class Node{
         public int data;
-        public Node next;
-        public Node prev;
+        public Node next = null;
+        public Node prev = null;
         public Node(int data){
             this.data = data;
-            this.next = null;
-            this.prev = null;
         }
     }
 
-    Node front, back;
-    int _size;
+    private Node front = null;
+    private Node back = null;
+    int m_size;
 
     public Deque(){
-        this.front = null;
-        this.back = null;
-        this._size = 0;
+        this.m_size = 0;
     }
 
     public void push_back(int data){
@@ -32,7 +29,7 @@ class Deque{
             node.prev = this.back;
             this.back = node;
         }
-        ++ this._size;
+        this.m_size += 1;
     }
 
     public void push_front(int data){
@@ -46,7 +43,7 @@ class Deque{
             node.prev = this.front.prev;
             this.front = node;
         }
-        ++ this._size;
+        this.m_size += 1;
     }
     
     public void pop_back(){
@@ -54,7 +51,7 @@ class Deque{
         this.back = this.back.prev;
         Console.Write(ptr);
         ptr = null;
-        -- this._size;
+        this.m_size -= 1;
     }
     
     public void pop_front(){
@@ -63,7 +60,7 @@ class Deque{
         
         ptr = null;
         
-        -- this._size;
+        this.m_size -= 1;
     }
     
     public void display(){
@@ -82,10 +79,10 @@ class Deque{
         }
     }
     
-    public int size(){return this._size;}
+    public int size(){return this.m_size;}
 
     public bool is_empty(){
-        return this.front == null && this._size == 0;
+        return this.front == null && this.m_size == 0;
     }
 }
 

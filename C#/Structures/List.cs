@@ -3,66 +3,69 @@ using System;
 class List{
     class Node{
         public int data;
-        public Node prev, next;
+        public Node prev = null; 
+        public Node next = null;
         public Node(int data){
             this.data = data;
-            this.next = null;
-            this.prev = null;
         }
     }
 
-    Node head;
-    Node back;
+    private Node front = null;
+    private Node back = null;
 
     int m_size;
     public List(){
-        this.head = null;
-        this.back = null;
         m_size = 0;
     }
 
     public void add(int data){
         Node node = new Node(data);
         if(is_empty()){
-            this.head = node;
+            this.front = node;
             this.back = node;
         }
         else{
-            Node ptr = this.head;
-
-            while(ptr.next != null)
-                ptr = ptr.next;
-            
-            ptr.next = node; 
-            node.prev = ptr;
-            this.back = node;
+            node.prev = this.back;
+            this.back.next = node;
+            this.back = node;    
         }
-        ++ this.m_size;
+        this.m_size += 1;
     }
 
     public void add_front(int data){
         Node node = new Node(data);
-        node.next = this.front;
-        this.front.prev = node;
-        this.front = node;
-        
-        ++this.m_size;
+
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }else{
+            node.next = this.front;
+            this.front.prev = node;
+            this.front = node;            
+        }
+        this.m_size += 1;
     }
 
     public void add_back(int data){
         Node node = new Node(data);
-        node.prev = this.back;
-        this.back.next = node;
-        this.back = node;
-        
-        ++this.m_size;
+
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }
+        else{
+            node.prev = this.back;
+            this.back.next = node;
+            this.back = node;            
+        }
+        this.m_size += 1;
     }
 
     public void remove(int data){
         if(is_empty()){
             // error
         }else{
-            Node ptr = this.head;
+            Node ptr = this.front;
 
             while(ptr.next != null){
                 if(ptr.data == data){
@@ -101,7 +104,7 @@ class List{
     }
 
     public void display(){
-        Node ptr = this.head;
+        Node ptr = this.front;
         while(ptr.next != null){
             Console.Write(ptr.data + " ");
             ptr = ptr.next;
@@ -117,7 +120,7 @@ class List{
     }
 
     public bool is_empty(){
-        return this.head == null && this.m_size == 0;
+        return this.front == null && this.m_size == 0;
     }
 }
 

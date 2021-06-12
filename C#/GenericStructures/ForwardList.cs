@@ -25,11 +25,8 @@ class ForwardList <T>{
             this.back = node;
         }
         else{
-            Node ptr = this.front;
-            while(ptr.next != null)
-                ptr = ptr.next;
-            
-            ptr.next = node;
+            this.back.next = node;
+            this.back = node;
         }
 
         ++ this.m_size;
@@ -37,18 +34,29 @@ class ForwardList <T>{
 
     public void add_front(T data){
         Node node = new Node(data);
-        node.next = this.front;
-        this.front = node;
+        if (is_empty()){
+            this.front = node;
+            this.back = node;
+        }else{
+            node.next = this.front;
+            this.front = node;            
+        }
 
-        ++this.m_size;
+
+        this.m_size += 1;
     }
 
     public void add_back(T data){
         Node node = new Node(data);
-        node.next = this.back;
-        this.back = node;
+        if (is_empty()){
+            this.front = node;
+            this.back = node;
+        }else{
+            node.next = this.back;
+            this.back = node;
+        }
 
-        ++this.m_size;
+        this.m_size += 1;
     }
 
     public void remove(T data){
@@ -81,6 +89,7 @@ class ForwardList <T>{
     }
 
     private void remove_front(){
+        if(is_empty()) return; // improve with exception handling
         Node temp = this.front;
         this.front = this.front.next; 
         temp = null;
@@ -88,6 +97,7 @@ class ForwardList <T>{
     }
 
     private void remove_back(Node prev){
+        if(is_empty()) return; // improve with exception handling
         Node temp = this.back;
         this.back = prev;
         temp = null;

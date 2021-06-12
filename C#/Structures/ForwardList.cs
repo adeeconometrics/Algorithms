@@ -3,51 +3,56 @@ using System;
 class ForwardList{
     public class Node{
         public int data;
-        public Node next;
+        public Node next = null;
         public Node(int data){
             this.data  = data;
-            this.next = null;
         }
     }
 
-    Node head;
+    private Node front = null;
+    private Node back = null;
     int m_size;
 
     public ForwardList(){
-        head = null;
-        m_size = 0;
+        this.m_size = 0;
     }
 
     public void add(int data){
         Node node  = new Node(data);
         if(is_empty()){
-            this.head = node;
-        }
-        else{
-            Node ptr = this.head;
-            while(ptr.next != null)
-                ptr = ptr.next;
-            
-            ptr.next = node;
+            this.front = node;
+            this.back = node;
+        }else{
+            this.back.next = node;
+            this.back = node;
         }
 
         ++ this.m_size;
     }
 
     public void add_front(int data){
-        Node node = new Node(data);
-        node.next = this.front;
-        this.front = node;
-
+        Node node  = new Node(data);
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }else{
+            node.next = this.front;
+            this.front = node;            
+        }
         ++this.m_size;
     }
 
     public void add_back(int data){
         Node node = new Node(data);
-        node.next = this.back;
-        this.back = node;
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }else{
+            this.back.next = node;
+            this.back = node;
+        }
 
-        ++this.m_size;
+        ++ this.m_size;
     }
 
     public void remove(int data){
@@ -80,6 +85,7 @@ class ForwardList{
     }
 
     private void remove_front(){
+        if is_empty() return; // improve with exceptions
         Node temp = this.front;
         this.front = this.front.next; 
         temp = null;
@@ -87,6 +93,7 @@ class ForwardList{
     }
 
     private void remove_back(Node prev){
+        if is_empty() return; // improve with exceptions
         Node temp = this.back;
         this.back = prev;
         temp = null;
@@ -95,14 +102,14 @@ class ForwardList{
     }
     
     public void display(){
-        Node ptr = this.head;
+        Node ptr = this.front;
         while(ptr.next != null){
             Console.Write(ptr.data + " ");
             ptr = ptr.next;
         }
     }
     
-    bool is_empty(){return this.head == null;}
+    bool is_empty(){return this.front == null;}
 
     public int size(){return this.m_size;}
 }

@@ -3,20 +3,17 @@ using System;
 class Queue{
     public class Node{
         public int data;
-        public Node next;
+        public Node next = null;
         public Node(int data){
             this.data = data;
-            this.next = null;
         }
     }
 
-    Node front;
-    Node rear;
-    int m_size;
+    private Node front = null;
+    private Node back = null;
+    private int m_size;
 
     public Queue(){
-        this.front = null;
-        this.rear = null;
         this.m_size = 0;
     }
 
@@ -24,11 +21,11 @@ class Queue{
         Node node = new Node(data);
         if(is_empty()){
             this.front = node;
-            this.rear = node;
+            this.back = node;
         }
         else{
-            node.next = this.rear;
-            this.rear = node;
+            node.next = this.back;
+            this.back = node;
         }
         ++ this.m_size;
     }
@@ -48,7 +45,7 @@ class Queue{
     }
 
     public void display(){
-        Node ptr = this.rear;
+        Node ptr = this.back;
         while(ptr.next != null){
             Console.Write(ptr.data + " ");
             ptr = ptr.next;
@@ -57,7 +54,7 @@ class Queue{
 
     public int size(){return this.m_size;}
     public int top(){return this.front.data; }
-    public int bottom(){return this.rear.data; }
+    public int bottom(){return this.back.data; }
     
     public bool is_empty(){
         if(this.front == null && this.m_size == 0)

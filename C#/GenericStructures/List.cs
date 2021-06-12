@@ -10,10 +10,10 @@ class List<T>{
         }
     }
 
-    Node head = null;
-    Node back = null;
+    private Node front = null;
+    private Node back = null;
+    private int m_size;
 
-    int m_size;
     public List(){
         m_size = 0;
     }
@@ -21,17 +21,12 @@ class List<T>{
     public void add(T data){
         Node node = new Node(data);
         if(is_empty()){
-            this.head = node;
+            this.front = node;
             this.back = node;
         }
         else{
-            Node ptr = this.head;
-
-            while(ptr.next != null)
-                ptr = ptr.next;
-            
-            ptr.next = node; 
-            node.prev = ptr;
+            this.back.next = node;
+            node.prev = this.back;
             this.back = node;
         }
         ++ this.m_size;
@@ -39,33 +34,44 @@ class List<T>{
 
     public void add_front(T data){
         Node node = new Node(data);
-        node.next = this.front;
-        this.front.prev = node;
-        this.front = node;
         
-        ++this.m_size;
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }else{
+            node.next = this.front;
+            this.front.prev = node;
+            this.front = node;
+        }
+        this.m_size += 1;
     }
 
     public void add_back(T data){
         Node node = new Node(data);
-        node.prev = this.back;
-        this.back.next = node;
-        this.back = node;
         
-        ++this.m_size;
+        if(is_empty()){
+            this.front = node;
+            this.back = node;
+        }else{
+            node.prev = this.back;
+            this.back.next = node;
+            this.back = node;            
+        }
+        this.m_size += 1;
     }
 
     public void remove(T data){
         if(is_empty()){
             // error
         }else{
-            Node ptr = this.head;
+            Node ptr = this.front;
 
             while(ptr.next != null){
                 if(ptr.data == data){
                     ptr.prev = ptr.prev.prev;
                     ptr.next = ptr.next.next;
-                    -- this.m_size;
+
+                    this.m_size -= 1;
                     return;
                 }
                 ptr = ptr.next;
@@ -79,6 +85,8 @@ class List<T>{
             Node temp = this.front; 
             this.front = front.next;
             temp = null;
+
+            this.m_size -= 1;
         }
         catch (System.Exception){
             throw; // handle exception
@@ -91,6 +99,8 @@ class List<T>{
             Node temp = this.back; 
             this.back = front.prev;
             temp = null;
+
+            this.m_size -= 1;
         }
         catch (System.Exception){
             throw; // handle exception
@@ -98,7 +108,7 @@ class List<T>{
     }
 
     public void display(){
-        Node ptr = this.head;
+        Node ptr = this.front;
         while(ptr.next != null){
             Console.Write(ptr.data + " ");
             ptr = ptr.next;
@@ -114,7 +124,7 @@ class List<T>{
     }
 
     public bool is_empty(){
-        return this.head == null && this.m_size == 0;
+        return this.front == null && this.back == 0;
     }
 }
 

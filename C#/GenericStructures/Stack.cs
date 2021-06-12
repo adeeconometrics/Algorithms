@@ -8,8 +8,10 @@ class Stack <T>{
             this.data = data;
         }
     }
-    Node top = null;
-    int m_size;
+
+    private Node front = null;
+    private Node back = null;
+    private int m_size;
 
     public Stack(){
         this.m_size = 0;
@@ -17,8 +19,12 @@ class Stack <T>{
 
     public void push(T data){
         Node node = new Node(data);
-        node.next = this.top;
-        this.top = node;
+        if(is_empty()){
+            this.back = node;
+        }
+        
+        node.next = this.front;
+        this.front = node;
 
         ++ this.m_size;
     }
@@ -28,24 +34,28 @@ class Stack <T>{
             //error
         }
         else
-            this.top = this.top.next;
+            this.front = this.front.next;
         -- this.m_size;
     }
 
     public void display(){
-        Node ptr = this.top;
+        Node ptr = this.front;
         while(ptr.next != null){
             Console.Write(ptr.data + " ");
             ptr = ptr.next;
         }
 
     }
-    public T top_value(){
-        return this.top.data;
+    public T top(){
+        return this.front.data;
+    }
+
+    public T bottom(){
+        return this.back.data;
     }
 
     public bool is_empty(){
-        return this.top == null && this.m_size == 0;
+        return this.front == null && this.m_size == 0;
     }
 
     public int size(){return this.m_size;}

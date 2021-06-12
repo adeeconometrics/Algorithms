@@ -9,9 +9,9 @@ class Queue<T>{
         }
     }
 
-    Node front = null;
-    Node back = null;
-    int m_size;
+    private Node front = null;
+    private Node back = null;
+    private int m_size;
 
     public Queue(){
         this.m_size = 0;
@@ -27,7 +27,7 @@ class Queue<T>{
             node.next = this.back;
             this.back = node;
         }
-        ++ this.m_size;
+        this.m_size += 1;
     }
 
     public void dequeue(){
@@ -40,7 +40,7 @@ class Queue<T>{
             this.front = this.front.next;
 
             temp = null;
-            -- this.m_size;
+            -- this.m_size -= 1;
         }
     }
 
