@@ -4,47 +4,81 @@ T = TypeVar("T")
 
 
 class Node(Generic[T]):
-    next: Node[T] = None
+    next: Node = None
 
-    def __init__(self, data=None) -> None:
+    def __init__(self, data: T = None) -> None:
         self.data = data
 
 
 class SinglyList(Generic[T]):
-    head: Node[T] = None
+    size: int = 0
 
-    def add(self, obj: int) -> None:
-        node = Node[T](obj)
+    def __init__(self) -> None:
+        self.front = None
+        self.back = None
+
+    def add_front(self, obj: int) -> None:
+        node = Node(obj)
         if self.is_empty():
-            node.next = self.head
-            self.head = node
+            self.front = node
+            self.back = node
         else:
-            ptr = self.head
-            while ptr.next != None:
-                ptr = ptr.next
+            node.next = self.front
+            self.front = node
 
-            ptr.next = node
+        self.size += 1
+
+    def add_back(self, obj: int) -> None:
+        node = Node(obj)
+        if self.is_empty():
+            self.front = node
+            self.back = node
+        else:
+            self.back.next = node
+            self.back = node
+
+        self.size += 1
 
     def display(self) -> None:
-        ptr = self.head
-        while ptr.next != None:
+        ptr = self.front
+        while ptr.next is not None:
             print(ptr.data)
             ptr = ptr.next
 
     def remove(self, data: int) -> None:
-        node = Node[T](data)
-        ptr = self.head
-        prev = ptr
-        while ptr.next != None:
+        node = Node(data)
+        ptr: Node = self.front
+        prev: Node = ptr
+
+        while ptr.next is not None:
             if ptr.data == data:
                 prev.next = ptr.next
+                self.size -= 1
                 break
             prev = ptr
             ptr = ptr.next
         raise Exception("{0} is not an element found in the list.".format(data))
 
+    def remove_back(self) -> None:
+        if self.is_empty():
+            return
+        else:
+            ptr: Node = self.front
+            while ptr.next is not self.back:
+                ptr = ptr.next
+
+            self.back = ptr
+            self.size -= 1
+
+    def remove_front(self) -> None:
+        if self.is_empty():
+            return
+        else:
+            self.front = self.front.next
+            self.size -= 1
+
     def is_empty(self) -> bool:
-        return self.head == None
+        return self.front == None
 
     def is_element(self) -> bool:
         pass

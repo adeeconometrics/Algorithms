@@ -16,16 +16,14 @@ class Queue(Generic[T]):
     back: Node[T] = None
 
     def enqueue(self, data: int) -> None:
-        node = Node[T](data)
+        node = Node(data)
 
         if self.is_empty():
             self.front = node
-            self.front = node
+            self.back = node
         else:
-            ptr = self.front
-            while ptr.next != None:
-                ptr = ptr.next
-            ptr.next = node
+            self.back.next = node
+            node.prev = self.back
             self.back = node
 
         self.size += 1

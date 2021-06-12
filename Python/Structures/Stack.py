@@ -5,9 +5,11 @@ class Node:
 
 
 class Stack:
+    size:int = 0
+    
     def __init__(self) -> None:
-        self.top = None
-        self.size = 0
+        self.top:None = None
+        self.bottom:Node = None
 
     def push(self, data: int) -> None:
         node = Node(data)

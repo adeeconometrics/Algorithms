@@ -15,18 +15,16 @@ class Queue:
 
         if self.is_empty():
             self.front = node
-            self.front = node
+            self.back = node
         else:
-            ptr = self.front
-            while ptr.next != None:
-                ptr = ptr.next
-            ptr.next = node
+            self.back.next = node
+            node.prev = self.back
             self.back = node
 
         self.size += 1
 
     def dequeue(self) -> None:
-        if self.front == None:
+        if self.front is None:
             raise Exception("Error: Queue is already empty.")
         self.front = self.front.next
         self.size -= 1
@@ -41,7 +39,7 @@ class Queue:
         return self.front == None and self.size == 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     q = Queue()
     for i in range(0, 9):
         q.enqueue(i)
