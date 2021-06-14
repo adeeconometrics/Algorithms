@@ -40,7 +40,7 @@ class Vector{
     }
 }
 
-class MainVector{
+class MainVectorConcrete{
     public static void Main(string [] args){
         Vector a = new Vector();
         for(int i = 0; i<10; ++i)

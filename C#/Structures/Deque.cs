@@ -86,7 +86,7 @@ class Deque{
     }
 }
 
-class MainDeque{
+class MainDequeConcete{
     public static void Main(string [] args){
         Deque dq = new Deque();
         

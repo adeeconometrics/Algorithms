@@ -56,8 +56,8 @@ class ForwardList{
     }
 
     public void remove(int data){
-        try{
-            if(is_empty()) throw System.Exception;
+        // try{
+        //     if(is_empty()) throw System.Exception;
 
             if(data == this.front.data) remove_front();
 
@@ -79,13 +79,13 @@ class ForwardList{
             }
             -- this.m_size;
 
-        }catch (System.Exception){
-            throw; // handle exception
-        }
+        // }catch (System.Exception){
+        //     throw; // handle exception
+        // }
     }
 
     private void remove_front(){
-        if is_empty() return; // improve with exceptions
+        if (this.is_empty()) return; // improve with exceptions
         Node temp = this.front;
         this.front = this.front.next; 
         temp = null;
@@ -93,7 +93,7 @@ class ForwardList{
     }
 
     private void remove_back(Node prev){
-        if is_empty() return; // improve with exceptions
+        if (this.is_empty()) return; // improve with exceptions
         Node temp = this.back;
         this.back = prev;
         temp = null;
@@ -114,7 +114,7 @@ class ForwardList{
     public int size(){return this.m_size;}
 }
 
-class MainList{
+class MainListConcrete{
     public static void Main(string [] args){
         ForwardList list = new ForwardList();
 

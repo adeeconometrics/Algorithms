@@ -2,7 +2,7 @@ using System;
 
 class Deque<T>{
     class Node{
-        public int data;
+        public T data;
         public Node next = null;
         public Node prev = null;
         public Node(T data){
@@ -10,7 +10,7 @@ class Deque<T>{
         }
     }
 
-    Node front = null
+    Node front = null;
     Node back = null;
     int m_size;
 

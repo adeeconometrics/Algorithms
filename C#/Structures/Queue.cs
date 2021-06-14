@@ -64,7 +64,7 @@ class Queue{
 
 }
 
-class MainQueue{
+class MainQueueConcrete{
     public static void Main(string[] args){
         Queue q = new Queue();
         for(int i = 0; i<10; ++i)

@@ -1,6 +1,6 @@
 using System;
 
-class ForwardList <T>{
+class ForwardList <T> where T : IComparable<T>{
     public class Node{
         public T data;
         public Node next = null;
@@ -61,16 +61,16 @@ class ForwardList <T>{
 
     public void remove(T data){
         try{
-            if(is_empty()) throw System.Exception;
+            // if(is_empty()) throw System.Exception;
 
-            if(data == this.front.data) remove_front();
+            if(data.CompareTo(this.front.data) == 0) remove_front();
 
             Node ptr = this.front;
             Node prev = ptr;
             
             while(ptr.next != null){
-                if(ptr.data == data){
-                    if(ptr.data == this.back.data) {
+                if(ptr.data.CompareTo(data) == 0){
+                    if(ptr.data.CompareTo(this.back.data) == 0) {
                         remove_back(prev);
                         return;
                     }

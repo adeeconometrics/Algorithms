@@ -40,7 +40,7 @@ class Queue<T>{
             this.front = this.front.next;
 
             temp = null;
-            -- this.m_size -= 1;
+            this.m_size -= 1;
         }
     }
 

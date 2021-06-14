@@ -3,17 +3,17 @@ using System;
 class Stack{
     public class Node{
         public int data;
-        public Node next;
+        public Node next = null;
         public Node(int data){
             this.data = data;
-            this.next = null;
         }
     }
-    Node top;
-    int m_size;
+
+    Node top = null;
+    Node bottom = null;
+    private int m_size;
 
     public Stack(){
-        this.top = null;
         this.m_size = 0;
     }
 
@@ -52,7 +52,7 @@ class Stack{
     public int size(){return this.m_size;}
 }
 
-public class MainStack{
+public class MainStackConcrete{
     public static void Main(string[] args){
         Stack s = new Stack();
         

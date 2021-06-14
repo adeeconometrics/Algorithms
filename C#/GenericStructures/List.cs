@@ -1,9 +1,9 @@
 using System;
 
-class List<T>{
+class List<T> where T: IComparable<T>{
     class Node{
         public T data;
-        public Node prev = null 
+        public Node prev = null; 
         public Node next = null;
         public Node(T data){
             this.data = data;
@@ -67,7 +67,7 @@ class List<T>{
             Node ptr = this.front;
 
             while(ptr.next != null){
-                if(ptr.data == data){
+                if(ptr.data.CompareTo(data) == 0){
                     ptr.prev = ptr.prev.prev;
                     ptr.next = ptr.next.next;
 
@@ -80,31 +80,31 @@ class List<T>{
     }
 
     private void remove_front(){
-        try{
-            if(is_empty()) throw System.Exception;
+        // try{
+            if(is_empty()) return;
             Node temp = this.front; 
             this.front = front.next;
             temp = null;
 
             this.m_size -= 1;
-        }
-        catch (System.Exception){
-            throw; // handle exception
-        }
+        // }
+        // catch (System.Exception){
+        //     throw; // handle exception
+        // }
     }
 
     private void remove_back(){
-        try{
-            if(is_empty()) throw System.Exception;
+        // try{
+            if(is_empty()) return;
             Node temp = this.back; 
             this.back = front.prev;
             temp = null;
 
             this.m_size -= 1;
-        }
-        catch (System.Exception){
-            throw; // handle exception
-        }
+        // }
+        // catch (System.Exception){
+        //     throw; // handle exception
+        // }
     }
 
     public void display(){
@@ -124,7 +124,7 @@ class List<T>{
     }
 
     public bool is_empty(){
-        return this.front == null && this.back == 0;
+        return this.front == null && this.back == null;
     }
 }
 

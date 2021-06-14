@@ -8,7 +8,8 @@ class Node {
 }
 
 class SinglyList {
-  Node? head = null;
+  Node? front = null;
+  Node? back = null;
   int size = 0;
 
   SinglyList() {}
@@ -16,19 +17,17 @@ class SinglyList {
   void add(int data) {
     Node node = new Node(data);
     if (isEmpty()) {
-      this.head = node;
-      ++this.size;
+      this.front = node;
+      this.back = node;
     } else {
-      Node? ptr = this.head;
-      while (ptr?.next != null) ptr = ptr?.next;
-
-      ptr?.next = node;
-      ++this.size;
+      this.back?.next = node;
+      this.back = node;
     }
+    ++this.size;
   }
 
   void remove(int data) {
-    Node? ptr = this.head;
+    Node? ptr = this.front;
     Node? prev = ptr;
 
     while (ptr?.next != null) {
@@ -43,7 +42,7 @@ class SinglyList {
   }
 
   void display() {
-    Node? ptr = this.head;
+    Node? ptr = this.front;
     while (ptr?.next != null) {
       print("${ptr?.data} ");
       ptr = ptr?.next;
@@ -51,7 +50,7 @@ class SinglyList {
   }
 
   bool isEmpty() {
-    return this.head == null;
+    return this.front == null;
   }
 }
 

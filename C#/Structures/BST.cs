@@ -4,7 +4,7 @@ class BST{
     class Node{
         public int data;
         public Node left = null;
-        public Node right--; = null;
+        public Node right = null;
         public Node(int data){
             this.data = data;
         }
@@ -21,7 +21,7 @@ class BST{
             this.m_root = node;
         } else{
             Node ptr = m_root;
-            while (ptr != nullptr) {
+            while (ptr != null) {
                 if (node.data < ptr.data)
                     ptr = ptr.left;
                 else if (node.data > ptr.data)

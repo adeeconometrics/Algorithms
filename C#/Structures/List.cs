@@ -80,27 +80,27 @@ class List{
     }
 
     private void remove_front(){
-        try{
-            if(is_empty()) throw System.Exception;
+        // try{
+        //     if(is_empty()) throw System.Exception;
             Node temp = this.front; 
             this.front = front.next;
             temp = null;
-        }
-        catch (System.Exception){
-            throw; // handle exception
-        }
+        // }
+        // catch (System.Exception){
+        //     throw; // handle exception
+        // }
     }
 
     private void remove_back(){
-        try{
-            if(is_empty()) throw System.Exception;
+        // try{
+            // if(is_empty()) throw System.Exception;
             Node temp = this.back; 
             this.back = front.prev;
             temp = null;
-        }
-        catch (System.Exception){
-            throw; // handle exception
-        }
+        // }
+        // catch (System.Exception){
+        //     throw; // handle exception
+        // }
     }
 
     public void display(){
@@ -124,7 +124,7 @@ class List{
     }
 }
 
-class MainDoubly{
+class MainDoublyConcete{
     public static void Main(string[] args){
         List dl = new List();
         for(int i = 0; i<10; ++i)
