@@ -1,9 +1,8 @@
 final class Node{
-    var data:Int;
+    var data:Int = 0;
     var next:Node? = nil;
 
     init(m_data:Int) {data = m_data;}
-    // init(){}
 }
 
 class Stack{
@@ -28,17 +27,17 @@ class Stack{
         if isEmpty(){
             return;
         }
-        self.front = self.front.next;
+        self.front = self.front?.next;
         self.m_size -= 1;
     }
 
     func display(){
         var ptr:Node? = self.front;
-        while(ptr.next != nil){
-            print(" \(ptr.data)");
-            ptr = ptr.next;
+        while(ptr?.next != nil){
+            print(" \(ptr!.data)");
+            ptr = ptr?.next;
         }
     }
 
-    func isEmpty()->Bool{return head == nil;}
+    func isEmpty()->Bool{return self.front == nil;}
 }

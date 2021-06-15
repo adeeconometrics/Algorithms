@@ -1,10 +1,9 @@
 final class Node{
-    var data:Int;
+    var data:Int = 0;
     var next:Node? = nil;
     var prev:Node? = nil;
 
     init(m_data:Int) {data = m_data;}
-    // init(){}
 }
 
 class List{
@@ -19,7 +18,7 @@ class List{
             self.back = node;
         }
         else{
-            self.back.next = node;
+            self.back?.next = node;
             node.prev = self.back;
             self.back = node;
         }
@@ -33,7 +32,7 @@ class List{
             self.back = node;
         }
         else{
-            self.back.next = node;
+            self.back?.next = node;
             node.prev = self.back;
             self.back = node;
         }
@@ -48,7 +47,7 @@ class List{
         }
         else{
             node.next = self.front;
-            self.front.prev = node;
+            self.front?.prev = node;
             self.front = node;
         }
         self.m_size += 1;
@@ -58,7 +57,7 @@ class List{
         if isEmpty(){
             return;
         }
-        self.front = self.front.next;
+        self.front = self.front?.next;
         self.m_size -= 1;
     }
 
@@ -66,7 +65,7 @@ class List{
         if isEmpty(){
             return;
         }
-        self.back = self.back.prev;
+        self.back = self.back?.prev;
         self.m_size -= 1;
     }
 
@@ -78,26 +77,27 @@ class List{
             var ptr:Node? = self.front;
             var prev:Node? = self.ptr;
 
-            while (ptr.next != nil){
-                if(ptr.data == data){
-                    prev.next = ptr.next;
-                    ptr.next.prev = prev;
+            while (ptr?.next != nil){
+                if(ptr!.data == data){
+                    prev?.next = ptr?.next;
+                    ptr?.next.prev = prev;
 
                     self.m_size -= 1;
                     return; 
                 }
                 prev = ptr;
-                ptr = ptr.next;
+                ptr = ptr?.next;
             }
         }
     }
+
     func display(){
         var ptr:Node? = self.front;
-        while(ptr.next != nil){
-            print(" \(ptr.data)");
-            ptr = ptr.next;
+        while(ptr?.next != nil){
+            print(" \(ptr!.data)");
+            ptr = ptr?.next;
         }
     }
 
-    func isEmpty()->Bool{return head == nil;}
+    func isEmpty()->Bool{return self.front == nil;}
 }

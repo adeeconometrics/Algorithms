@@ -1,9 +1,8 @@
-final class Node{
-    var data:Int;
+class Node{
+    var data:Int = 0;
     var next:Node? = nil;
 
     init(m_data:Int) {data = m_data;}
-    // init(){}
 }
 
 class ForwardList{
@@ -18,20 +17,20 @@ class ForwardList{
             self.back = node;
         }
         else{
-            self.back.next = node;
+            self.back?.next = node;
             self.back = node;
         }
         self.m_size += 1;
     }
 
     func add_back(data:Int){
-        var node:Node = Node(data);
+        let node:Node = Node(m_data:data);
         if isEmpty(){
             self.front = node;
             self.back = node;
         }
         else{
-            self.back.next = node;
+            self.back?.next = node;
             self.back = node;
         }
         self.m_size += 1;
@@ -44,7 +43,7 @@ class ForwardList{
             self.back = node;
         }
         else{
-            node.next = self.front;
+            node?.next = self.front;
             self.front = node;
         }
         self.m_size += 1;
@@ -54,7 +53,7 @@ class ForwardList{
         if isEmpty(){
             return;
         }
-        self.front = self.front.next;
+        self.front = self.front!.next;
         self.m_size -= 1;
     }
 
@@ -72,28 +71,39 @@ class ForwardList{
         }
         else{
             var ptr:Node? = self.front;
-            var prev:Node? = self.ptr;
+            var prev:Node? = ptr;
 
-            while (ptr.next != nil){
-                if(ptr.data == data){
-                    prev.next = ptr.next;
+            while (ptr?.next != nil){
+                if(ptr!.data == data){
+                    prev?.next = ptr?.next;
 
                     self.m_size -= 1;
                     return; 
                 }
                 prev = ptr;
-                ptr = ptr.next;
+                ptr = ptr?.next;
             }
         }
     }
 
     func display(){
         var ptr:Node? = self.front;
-        while(ptr.next != nil){
-            print(" \(ptr.data)");
-            ptr = ptr.next;
+        while(ptr?.next != nil){
+            print(" \(ptr!.data)");
+            ptr = ptr?.next;
         }
     }
 
-    func isEmpty()->Bool{return head == nil;}
+    func isEmpty()->Bool{return self.front == nil;}
 }
+
+var l = ForwardList();
+
+var i:Int = 10;
+
+while (i > 0){
+    l.add_back(data:i);
+    i -= 1;
+}
+
+l.display();
