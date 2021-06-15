@@ -19,17 +19,21 @@ class Stack{
 
     public void push(int data){
         Node node = new Node(data);
-        node.next = this.top;
-        this.top = node;
+        if(this.is_empty()){
+            this.top = node;
+            this.bottom = node;
+        }
+        else{
+            node.next = this.top;
+            this.top = node;
+        }
+
         ++ this.m_size;
     }
 
     public void pop(){
-        if(is_empty()){
-            //error
-        }
-        else
-            this.top = this.top.next;
+        if(is_empty()) return;
+        this.top = this.top.next;
         -- this.m_size;
     }
 

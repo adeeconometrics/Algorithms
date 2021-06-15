@@ -7,7 +7,7 @@ final class Node{
     // init(){}
 }
 
-class List{
+class Deque{
     private var front:Node? = nil;
     private var back:Node? = nil;
     private var m_size:Int = 0;
@@ -70,27 +70,6 @@ class List{
         self.m_size -= 1;
     }
 
-    func remove(data:Int){
-        if isEmpty(){
-            return;
-        }
-        else{
-            var ptr:Node? = self.front;
-            var prev:Node? = self.ptr;
-
-            while (ptr.next != nil){
-                if(ptr.data == data){
-                    prev.next = ptr.next;
-                    ptr.next.prev = prev;
-
-                    self.m_size -= 1;
-                    return; 
-                }
-                prev = ptr;
-                ptr = ptr.next;
-            }
-        }
-    }
     func display(){
         var ptr:Node? = self.front;
         while(ptr.next != nil){

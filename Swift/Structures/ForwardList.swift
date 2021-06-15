@@ -1,13 +1,12 @@
 final class Node{
     var data:Int;
     var next:Node? = nil;
-    var prev:Node? = nil;
 
     init(m_data:Int) {data = m_data;}
     // init(){}
 }
 
-class List{
+class ForwardList{
     private var front:Node? = nil;
     private var back:Node? = nil;
     private var m_size:Int = 0;
@@ -20,7 +19,6 @@ class List{
         }
         else{
             self.back.next = node;
-            node.prev = self.back;
             self.back = node;
         }
         self.m_size += 1;
@@ -34,7 +32,6 @@ class List{
         }
         else{
             self.back.next = node;
-            node.prev = self.back;
             self.back = node;
         }
         self.m_size += 1;
@@ -48,7 +45,6 @@ class List{
         }
         else{
             node.next = self.front;
-            self.front.prev = node;
             self.front = node;
         }
         self.m_size += 1;
@@ -62,13 +58,13 @@ class List{
         self.m_size -= 1;
     }
 
-    func remove_back(){
-        if isEmpty(){
-            return;
-        }
-        self.back = self.back.prev;
-        self.m_size -= 1;
-    }
+    // func remove_back(){
+    //     if isEmpty(){
+    //         return;
+    //     }
+    //     self.back = self.back.prev;
+    //     self.m_size -= 1;
+    // }
 
     func remove(data:Int){
         if isEmpty(){
@@ -81,7 +77,6 @@ class List{
             while (ptr.next != nil){
                 if(ptr.data == data){
                     prev.next = ptr.next;
-                    ptr.next.prev = prev;
 
                     self.m_size -= 1;
                     return; 
@@ -91,6 +86,7 @@ class List{
             }
         }
     }
+
     func display(){
         var ptr:Node? = self.front;
         while(ptr.next != nil){
