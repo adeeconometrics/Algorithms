@@ -1,16 +1,16 @@
-final class Node{
-    var data:Int = 0;
+final class Node<T>{
+    lazy var data:T;
     var next:Node? = nil;
 
     init(m_data:Int) {data = m_data;}
 }
 
-class Queue{
+class Queue<T>{
     private var front:Node? = nil;
     private var back:Node? = nil;
     private var m_size:Int = 0;
 
-    func enqueue(data:Int){
+    func enqueue(data:T){
         var node:Node = Node(data);
         if isEmpty(){
             self.front = node;
