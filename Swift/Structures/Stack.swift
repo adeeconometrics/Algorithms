@@ -40,4 +40,6 @@ class Stack{
     }
 
     func isEmpty()->Bool{return self.front == nil;}
+
+    func size()->Int{return self.m_size; }
 }
