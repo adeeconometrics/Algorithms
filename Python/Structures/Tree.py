@@ -71,8 +71,8 @@ class Tree:
             print(node.data)
 
     def delete_element(self, node: Node, data: int) -> None:
-        if node is not None:
-            return node
+        if node is None:
+            return  # is this right?
         elif data < node.data:
             node.left = self.delete_element(node.left, data)
         elif data > node.data:
