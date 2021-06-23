@@ -29,6 +29,6 @@ void merge_sort(int *a, const int &l, const int &r) {
   // sort each halve separately
 
   // merge the sorted halves into one sorted array
-}
+} 
 
 int main() {}

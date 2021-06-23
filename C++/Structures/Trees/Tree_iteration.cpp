@@ -1,8 +1,9 @@
 #include <initializer_list>
 #include <iostream>
+#include <queue>
+#include <stack>
 #include <stdexcept>
 #include <type_traits>
-// #include <stack>
 
 struct Node {
   Node *left{nullptr};
@@ -89,25 +90,67 @@ public:
   }
 
   void traverse_inorder(Node *node) {
+    if (node == nullptr)
+      return;
+
     if (node != nullptr) {
       traverse_inorder(node->left);
       std::cout << node->data << " ";
       traverse_inorder(node->right);
     }
   }
+
   void traverse_preorder(Node *node) {
-    if (node != nullptr) {
-      std::cout << node->data << " ";
-      traverse_preorder(node->left);
-      traverse_preorder(node->right);
+    if (node == nullptr)
+      return;
+
+    std::stack<Node *> n_stack;
+    n_stack.push(node);
+
+    Node *ptr = nullptr;
+    while (!n_stack.empty()) {
+      ptr = n_stack.top();
+      n_stack.pop();
+      std::cout << ptr->data << " ";
+
+      if (ptr->left) {
+        n_stack.push(ptr->left);
+      }
+      if (ptr->right) {
+        n_stack.push(ptr->right);
+      }
     }
   }
 
   void traverse_postorder(Node *node) {
-    if (node != nullptr) {
-      traverse_postorder(node->left);
-      traverse_postorder(node->right);
-      std::cout << node->data << " ";
+    if (node == nullptr)
+      return;
+
+    std::stack<Node *> n_stack;
+    std::queue<Node *> n_queue;
+
+    n_stack.push(node);
+
+    Node *ptr = nullptr;
+
+    ptr = n_stack.top();
+    n_queue.push(ptr);
+    n_stack.pop();
+    std::cout << ptr->data << " ";
+    while (!n_stack.empty()) {
+      if (ptr->left) {
+        n_stack.push(ptr->left);
+      }
+      if (ptr->right) {
+        n_stack.push(ptr->right);
+      }
+
+      ptr = n_stack.top();
+      n_queue.push(ptr);
+      n_stack.pop();
+
+      std::cout << n_queue.front()->data << " ";
+      n_queue.pop();
     }
   }
 
