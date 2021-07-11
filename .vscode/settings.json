@@ -60,5 +60,13 @@
     "java.project.sourcePaths": [
         "Java"
     ],
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\amianadave\\Downloads\\jlatexmath-1.0.7.jar",
+        "c:\\Users\\amianadave\\Downloads\\jlatexmath-font-cyrillic-1.0.7.jar",
+        "c:\\Users\\amianadave\\Downloads\\jlatexmath-font-greek-1.0.7.jar",
+        "c:\\Users\\amianadave\\Downloads\\scirenderer-1.1.0.jar",
+        "c:\\Users\\amianadave\\Downloads\\LaTeX\\jlatexmath-example\\jar\\jlatexmath-0.9.6.jar"
+    ]
 }
