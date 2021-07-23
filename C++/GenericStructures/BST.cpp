@@ -7,6 +7,7 @@ template <typename T> class Node final {
 public:
   Node *left{nullptr};
   Node *right{nullptr};
+  Node *parent{nullptr};
   T data;
 
   Node(const T &data) : data(data) {}
@@ -14,6 +15,187 @@ public:
   ~Node() = default;
 };
 
+/**
+ * @brief responsible for motion along the structure of the tree: up (--x, x--),
+ * down-left (++x), down-right (x++) semantics.
+ *
+ * requirement: constant runtime.
+ *
+ * technical reference for implementing BST Navigators:
+ * http://www.cs.fsu.edu/~lacher/courses/COP4530/lectures/binary_search_trees3/script.html
+ *
+ * changes:
+ *  0 := nullptr
+ *  this_node := currNode_
+ *  left := rchild_
+ *  right :=  lchild_
+ *  parent := parent_
+ */
+template <typename T, typename P> class BinaryTreeNavigator {
+private:
+  typename Tree<T>::Node *this_node{nullptr};
+
+  friend class Tree<T>;
+
+  T &Retrieve() const {
+    if (!is_valid()) {
+      std::cerr << "** BinaryTreeNavigator<T,P>::Retrieve() error: invalid "
+                   "dereference\n";
+      exit(EXIT_FAILURE);
+    }
+    return this_node->value_;
+  }
+
+public:
+  typedef T value_type;
+  typedef BinaryTreeNavigator<T, P> Navigator;
+
+  Navigator() {}
+
+  Navigator(typename Tree<T>::Node *ptr) { this_node = ptr; }
+
+  Navigator(const Navigator &n) : this_node(n.this_node) {}
+
+  virtual ~Navigator() {}
+
+  Navigator &operator=(const Navigator &n) {
+    this_node = n.this_node;
+    return *this;
+  }
+
+  // checkers
+  bool is_valid() const { return this_node != false; }
+
+  bool has_parent() const {
+    if (this_node != nullptr && this_node->parent != nullptr)
+      return true;
+    return false;
+  }
+
+  bool has_left_child() const {
+    if (this_node != nullptr && this_node->left != nullptr)
+      return true;
+    return false;
+  }
+
+  bool has_right_child() const {
+    if (this_node != nullptr && this_node->right != nullptr)
+      return true;
+    return false;
+  }
+
+  bool is_left_child() const {
+    if (this_node != nullptr && this_node->parent != nullptr &&
+        this_node == this_node->parent->left)
+      return true;
+    return false;
+  }
+
+  bool is_right_child() const {
+    if (this_node != nullptr && this_node->parent != nullptr &&
+        this_node == this_node->parent->right)
+      return true;
+    return false;
+  }
+
+  bool is_red() const {
+    if (this_node == nullptr)
+      return false; // null is not read
+    return this_node->is_red();
+  }
+
+  bool is_dead() const {
+    if (this_node == nullptr)
+      return false; // null is not dead
+    return this_node->is_dead();
+  }
+
+  // flags - TreeType = Red Black Tree, Height Balanced Tree, AVL Tree
+  char get_flags() const {
+    if (this_node)
+      return this_node->flags_; // find out what this means
+    return false;
+  }
+
+  Navigator get_parent() const {
+    Navigator n{nullptr}; // check if this is correct: it says default is null
+    if (this_node)
+      n.this_node = this_node->parent;
+    return n;
+  }
+
+  Navigator get_left_child() const {
+    Navigator n; // default is null
+    if (this_node)
+      n.this_node = this_node->left;
+    return n;
+  }
+
+  Navigator get_right_child() const {
+    Navigator n; // default is null
+    if (this_node)
+      n.this_node = this_node->right;
+    return n;
+  }
+
+  void set_flags(uint8_t flags);
+
+  bool operator==(const Navigator &n2) const {
+    return (this_node == n2.this_node);
+  }
+
+  bool operator!=(const Navigator &n2) const {
+    return (this_node != n2.this_node);
+  }
+
+  T &operator*() { return Retrieve(); }
+
+  const T &operator*() const { return Retrieve(); }
+
+  // navigation operators: these do NOT conform to standard iterator semantics
+
+  Navigator &operator++() {
+    if (this_node != 0) {
+      this_node = this_node->left;
+    }
+    return *this;
+  }
+
+  Navigator &operator++(int) {
+    if (this_node != 0) {
+      this_node = this_node->right;
+    }
+    return *this;
+  }
+
+  Navigator &operator--() {
+    if (this_node != 0) {
+      this_node = this_node->parent;
+    }
+    return *this;
+  }
+
+  Navigator &operator--(int) {
+    if (this_node != 0) {
+      this_node = this_node->parent;
+    }
+    return *this;
+  }
+
+  // structural output
+  void Dump(std::ostream &os) const;
+};
+
+/**
+ * Requirements:
+ * - has_parent()
+ * - has_child()
+ * - child_of()
+ * - parentof()
+ * - height()
+ * - level
+ * - iterator {navigator}
+ */
 // std::enable_if<is_base_of<Comparable>::value>
 template <typename T, typename Node = Node<T>> class Tree {
 private:
@@ -43,6 +225,8 @@ public:
         else
           return;
       }
+
+      node.parent(ptr);
       if (node->data < ptr->data)
         ptr->left = node;
       if (node->data > ptr->data)
@@ -156,7 +340,7 @@ private:
   // enable find max, find min values
   // void print_tree
   // const Node* child_of
-  // const Node* parent_of
+  // const Node* parentof
   // size_t height
   // size_t level
   // exceptions
