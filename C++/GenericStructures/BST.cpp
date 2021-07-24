@@ -125,14 +125,14 @@ public:
   }
 
   Navigator get_left_child() const {
-    Navigator n; // default is null
+    Navigator n{nullptr}; // default is null
     if (this_node)
       n.this_node = this_node->left;
     return n;
   }
 
   Navigator get_right_child() const {
-    Navigator n; // default is null
+    Navigator n{nullptr}; // default is null
     if (this_node)
       n.this_node = this_node->right;
     return n;

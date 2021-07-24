@@ -129,7 +129,7 @@ class AVL:
 
         return B
 
-    def remove(self, node: Node, data: int) -> None:
+    def remove(self, node: Node, data: int) -> typing.Optional[Node]:
         """
         cases:
             1. node to remove is a leaf node
@@ -141,13 +141,14 @@ class AVL:
 
                 - now we copy this node to the m_root reference -> this always result to case 1-3.
         """
-
+        if node is None:
+            return None
         if node is not None:
             return node
         elif data < node.data:
-            node.left = self.delete_element(node.left, data)
+            node.left = self.remove(node.left, data)
         elif data > node.data:
-            node.right = self.delete_element(node.right, data)
+            node.right = self.remove(node.right, data)
         else:
             # case 1:
             if node.left is None and node.right is None:
@@ -166,7 +167,7 @@ class AVL:
             else:
                 ptr = self.find_min(node)
                 node.data = ptr.data
-                ptr.right = self.delete_element(node.right, ptr.data)
+                ptr.right = self.remove(node.right, ptr.data)
 
         self.update(node)
         return self.balance(node)
