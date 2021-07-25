@@ -46,19 +46,6 @@ class RedBlackTree {
       left = i_left;
       right = i_right;
     }
-
-    // helper function -- do you really need the getters?
-    bool get_color() const { return color; }
-    int get_value() const { return value; }
-    Node *get_left() const { return left; }
-    Node *get_right() const { return right; }
-    Node *get_parent() const { return parent; }
-
-    void set_value(int i_value) { value = i_value; }
-    void set_color(bool i_color) { color = i_color; }
-    void set_left(Node *i_left) { left = i_left; }
-    void set_right(Node *i_right) { right = i_right; }
-    void set_parent(Node *i_parent) { parent = i_parent; }
   };
 
   Node *m_root = nullptr;
@@ -141,29 +128,29 @@ public:
       return false;
 
     bool y_original_color = y->color;
-    if (z->get_left() == NIL) {
-      x = z->get_right();
-      transplant(z, z->get_right());
-    } else if (z->get_right() == NIL) {
-      x = z->get_left();
-      transplant(z, z->get_left());
+    if (z->left == NIL) {
+      x = z->right;
+      transplant(z, z->right);
+    } else if (z->right == NIL) {
+      x = z->left;
+      transplant(z, z->left);
     } else {
-      y = successor(z->get_right());
-      y_original_color = y->get_color();
-      x = y->get_right();
+      y = successor(z->right);
+      y_original_color = y->color;
+      x = y->right;
 
-      if (y->get_parent() == z)
-        x->set_parent(y);
+      if (y->parent == z)
+        x->parent = y;
       else {
-        transplant(y, y->get_right());
-        y->set_right(z->get_right());
-        y->get_right()->set_parent(y);
+        transplant(y, y->right);
+        y->right = z->right;
+        y->right->parent = y;
       }
       transplant(z, y);
 
-      y->set_left(z->get_left());
-      y->get_right()->set_parent(y);
-      y->set_color(z->get_color());
+      y->left = z->left;
+      y->right->parent = y;
+      y->color = z->color;
     }
 
     if (y_original_color == black)
@@ -173,6 +160,20 @@ public:
   }
 
   size_t height() { return height(m_root); }
+
+  Node *find_min(Node *node) const {
+    while (node->left != NIL)
+      node = node->left;
+    return node;
+  }
+
+  Node *find_max(Node *node) const {
+    while (node->right != NIL)
+      node = node->right;
+    return node;
+  }
+
+  Node *root() const { return m_root; }
 
 private:
   // helper functions
@@ -214,29 +215,29 @@ private:
         }
       }
     }
-    m_root->set_color(black);
-    NIL->set_parent(nullptr);
+    m_root->color = black;
+    NIL->parent = nullptr;
   }
 
   void left_rotate(Node *node) {
     Node *y = node->right;
-    node->set_right(y->get_left());
+    node->right = y->left;
 
-    if (y->get_left() != NIL)
-      y->get_left()->set_parent(node);
+    if (y->left != NIL)
+      y->left->parent = node;
 
-    y->set_parent(node->get_parent());
+    y->parent = node->parent;
 
-    if (node->get_parent() == NIL)
+    if (node->parent == NIL)
       m_root = y;
 
-    if (node == node->get_parent()->get_left())
-      node->get_parent()->set_left(y);
+    if (node == node->parent->left)
+      node->parent->left = y;
     else
-      node->get_parent()->set_right(y);
+      node->parent->right = y;
 
-    y->set_left(node);
-    node->set_parent(y);
+    y->left = node;
+    node->parent = y;
   }
 
   void right_rotate(Node *node) {
@@ -368,17 +369,5 @@ private:
       else
         parent->right = new_child;
     }
-  }
-
-  Node *find_min(Node *node) const {
-    while (node->left != NIL)
-      node = node->left;
-    return node;
-  }
-
-  Node *find_max(Node *node) const {
-    while (node->right != NIL)
-      node = node->right;
-    return node;
   }
 };

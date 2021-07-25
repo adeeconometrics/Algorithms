@@ -70,12 +70,12 @@ class Tree:
             self.traverse_postorder(node.right)
             print(node.data)
 
-    def traverse_levelorder(self, node:Node) -> None:
+    def traverse_levelorder(self, node: Node) -> None:
         pass
-        
+
     def delete_element(self, node: Node, data: int) -> typing.Optional[Node]:
         if node is None:
-            return  # is this right?
+            return None
         elif data < node.data:
             node.left = self.delete_element(node.left, data)
         elif data > node.data:

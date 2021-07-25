@@ -46,8 +46,9 @@ public:
     add_node(node);
   }
 
-  void remove_element(const int &data) {}
-  void remove_node(const Node &node) {}
+  void remove_element(const int &data) { remove(m_root, data); }
+
+  void remove_node(Node &node) { remove(m_root, node.data); }
 
   void traverse_inorder(Node *node) {
     if (node != nullptr) {
@@ -73,12 +74,9 @@ public:
   }
 
   int height(const Node *ptr) const;
+
   int size() const { return m_size; }
 
-  Node *find_min(const Node *node);
-  const Node *root() { return m_root; }
-
-private:
   Node *find_max(Node *ptr) const {
     while (ptr->right != nullptr)
       ptr = ptr->left;
@@ -89,6 +87,58 @@ private:
     while (ptr->left != nullptr)
       ptr = ptr->left;
     return ptr;
+  }
+
+  bool has_element(Node *root, const int &value) const {
+    if (root == nullptr)
+      return false;
+    if (root->data < value)
+      return has_element(root->left, value);
+    if (root->data > value)
+      return has_element(root->right, value);
+
+    return true;
+  }
+
+  bool is_empty() const { return m_root == nullptr; }
+
+  const Node *root() const { return m_root; }
+
+private:
+  Node *remove(Node *ptr, const int &data) {
+    if (ptr == nullptr)
+      return ptr;
+    else if (data < ptr->data)
+      ptr->left = remove(ptr->left, data);
+    else if (data > ptr->data)
+      ptr->right = remove(ptr->right, data);
+    else {
+      // case 1: leaf node
+      if (ptr->left == nullptr && ptr->right == nullptr) {
+        delete ptr;
+        ptr = nullptr;
+      }
+      // case 2: one child
+      else if (ptr->left == nullptr) {
+        Node *temp = ptr;
+        ptr = ptr->right;
+        delete temp;
+      } else if (ptr->right == nullptr) {
+        Node *temp = ptr;
+        ptr = ptr->left;
+        delete temp;
+      }
+      // case 3: 2 child
+      else {
+        Node *temp = find_min(ptr->right);
+        ptr->data = temp->data;
+        ptr->right = remove(ptr->right, temp->data);
+      }
+
+      update(ptr);
+      balance(ptr);
+      return ptr;
+    }
   }
 
   Node *left_rotation(Node *A) {
@@ -162,17 +212,4 @@ private:
     else
       return node;
   }
-
-  bool contains(Node *ptr, const int &value) {
-    if (ptr == nullptr)
-      return false;
-    if (ptr->data < value)
-      return contains(ptr->left, value);
-    if (ptr->data > value)
-      return contains(ptr->right, value);
-
-    return true;
-  }
-
-  bool is_empty() { return m_root == nullptr; }
 };

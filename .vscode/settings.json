@@ -60,7 +60,7 @@
     "java.project.sourcePaths": [
         "Java"
     ],
-    "python.formatting.provider": "black",
+    "python.formatting.provider": "autopep8",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "c:\\Users\\amianadave\\Downloads\\jlatexmath-1.0.7.jar",

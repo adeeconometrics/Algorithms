@@ -143,8 +143,6 @@ class AVL:
         """
         if node is None:
             return None
-        if node is not None:
-            return node
         elif data < node.data:
             node.left = self.remove(node.left, data)
         elif data > node.data:
