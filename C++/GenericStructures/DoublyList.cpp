@@ -141,7 +141,7 @@ public:
 public:
   explicit DoublyList() { front = back = m_ptr = new Node<T>(); }
 
-  explicit DoublyList(std::initializer_DoublyList<T> _DoublyList) {
+  explicit DoublyList(std::initializer_list<T> _DoublyList) {
     for (auto i : _DoublyList) {
       add(i);
       m_size += 1;
