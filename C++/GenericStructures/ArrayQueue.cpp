@@ -2,33 +2,33 @@
 #include <iostream>
 #include <stdexcept>
 
-template <typename T> class squeue_iterator {
+template <typename T> class ArrayQueue_Iterator {
 public:
   typedef typename T::value_type value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  constexpr squeue_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr ArrayQueue_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  squeue_iterator &operator++() {
+  ArrayQueue_Iterator &operator++() {
     m_ptr++;
     return *this;
   }
 
-  squeue_iterator operator++(int) {
-    squeue_iterator iterator = *this;
+  ArrayQueue_Iterator operator++(int) {
+    ArrayQueue_Iterator iterator = *this;
     ++(*this);
     return iterator;
   }
 
-  squeue_iterator &operator--() {
+  ArrayQueue_Iterator &operator--() {
     m_ptr--;
     return *this;
   }
 
-  squeue_iterator operator--(int) {
-    squeue_iterator iterator = *this;
+  ArrayQueue_Iterator operator--(int) {
+    ArrayQueue_Iterator iterator = *this;
     --(*this);
     return iterator;
   }
@@ -37,11 +37,11 @@ public:
 
   pointer_type operator->() { return m_ptr; }
 
-  bool operator==(const squeue_iterator &other) const {
+  bool operator==(const ArrayQueue_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const squeue_iterator &other) const {
+  bool operator!=(const ArrayQueue_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -49,33 +49,33 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
-template <typename T> class csqueue_iterator {
+template <typename T> class cArrayQueue_Iterator {
 public:
   typedef typename T::value_type value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  explicit csqueue_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  explicit cArrayQueue_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  csqueue_iterator &operator++() {
+  cArrayQueue_Iterator &operator++() {
     m_ptr++;
     return *this;
   }
 
-  csqueue_iterator operator++(int) {
-    csqueue_iterator iterator = *this;
+  cArrayQueue_Iterator operator++(int) {
+    cArrayQueue_Iterator iterator = *this;
     ++(*this);
     return iterator;
   }
 
-  csqueue_iterator &operator--() {
+  cArrayQueue_Iterator &operator--() {
     m_ptr--;
     return *this;
   }
 
-  csqueue_iterator operator--(int) {
-    csqueue_iterator iterator = *this;
+  cArrayQueue_Iterator operator--(int) {
+    cArrayQueue_Iterator iterator = *this;
     --(*this);
     return iterator;
   }
@@ -84,11 +84,11 @@ public:
 
   const pointer_type operator->() const { return m_ptr; }
 
-  bool operator==(const csqueue_iterator &other) const {
+  bool operator==(const cArrayQueue_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const csqueue_iterator &other) const {
+  bool operator!=(const cArrayQueue_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -97,7 +97,7 @@ private:
 };
 
 /**
- * Summary of complexity on SQueue:
+ * Summary of complexity on ArrayQueue:
  * - void enqueue(const T& data) = O(1)
  * - void push(const T& data) = O(1)
  * - void dequeue() = O(1)
@@ -115,27 +115,27 @@ private:
  * - const_iterator cbegin() = O(1)
  * - const_iterator cend() = O(1)
  */
-template <typename T, size_t Size> class SQueue {
+template <typename T, size_t Size> class ArrayQueue {
 
 public:
   typedef T value_type;
-  typedef squeue_iterator<SQueue<T, Size>> iterator;
-  typedef csqueue_iterator<SQueue<T, Size>> const_iterator;
+  typedef ArrayQueue_Iterator<ArrayQueue<T, Size>> iterator;
+  typedef cArrayQueue_Iterator<ArrayQueue<T, Size>> const_iterator;
 
 private:
-  friend squeue_iterator<T>;
-  friend csqueue_iterator<T>;
+  friend ArrayQueue_Iterator<T>;
+  friend cArrayQueue_Iterator<T>;
 
   T *m_ptr{nullptr};
   size_t m_index{0};
 
 public:
-  explicit SQueue() {
+  explicit ArrayQueue() {
     m_ptr = new T[Size];
     initialize();
   }
 
-  // explicit SQueue(std::initalizer_list<T> list) {
+  // explicit ArrayQueue(std::initalizer_list<T> list) {
   // for (size_t i = 0; i < Size; ++i)
   //   m_ptr[i] = 0;
   //   try {
@@ -151,7 +151,7 @@ public:
   //   }
   // }
 
-  ~SQueue() {
+  ~ArrayQueue() {
     if (!is_empty())
       clear();
   }
@@ -262,12 +262,12 @@ public:
 };
 
 int main() {
-  SQueue<int, 3> s;
+  ArrayQueue<int, 3> s;
   s.push(1);
   s.enqueue(2);
   s.push(3);
   s.pop();
-  for (SQueue<int, 3>::iterator it = s.begin(); it != s.end(); ++it)
+  for (ArrayQueue<int, 3>::iterator it = s.begin(); it != s.end(); ++it)
     std::cout << *it << " ";
 
   std::cout << "\n";

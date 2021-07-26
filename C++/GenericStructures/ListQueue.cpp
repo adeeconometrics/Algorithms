@@ -1,4 +1,4 @@
-#include <initalizer_list>
+#include <initializer_list>
 #include <iostream>
 #include <stdexcept>
 
@@ -9,7 +9,7 @@ template <typename T> struct Node final {
   explicit Node(const T &_data) : data(_data) {}
 };
 
-template <typename T> class queue_iterator {
+template <typename T> class ListQueue_Iterator {
 private:
   pointer_type m_ptr;
 
@@ -19,15 +19,15 @@ public:
   typedef value_type &reference_type;
 
 public:
-  constexpr queue_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr ListQueue_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  queue_iterator &operator++() {
+  ListQueue_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return m_ptr;
   }
 
-  queue_iterator operator++(int) {
-    queue_iterator temp = *this;
+  ListQueue_Iterator operator++(int) {
+    ListQueue_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
@@ -36,14 +36,16 @@ public:
 
   pointer_type operator->() { return mm_ptr; }
 
-  bool operator==(const queue_iterator &other) { return m_ptr == other.m_ptr; }
+  bool operator==(const ListQueue_Iterator &other) {
+    return m_ptr == other.m_ptr;
+  }
 
-  bool operator!=(const queue_iterator &other) {
+  bool operator!=(const ListQueue_Iterator &other) {
     return !(m_ptr == other.m_ptr);
   }
 };
 
-template <typename T> class cqueue_iterator {
+template <typename T> class cListQueue_Iterator {
 private:
   pointer_type m_ptr;
 
@@ -53,15 +55,15 @@ public:
   typedef value_type &reference_type;
 
 public:
-  constexpr cqueue_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr cListQueue_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  cqueue_iterator &operator++() {
+  cListQueue_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return m_ptr;
   }
 
-  cqueue_iterator operator++(int) {
-    cqueue_iterator temp = *this;
+  cListQueue_Iterator operator++(int) {
+    cListQueue_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
@@ -70,9 +72,11 @@ public:
 
   const pointer_type operator->() const { return mm_ptr; }
 
-  bool operator==(const cqueue_iterator &other) { return m_ptr == other.m_ptr; }
+  bool operator==(const cListQueue_Iterator &other) {
+    return m_ptr == other.m_ptr;
+  }
 
-  bool operator!=(const cqueue_iterator &other) {
+  bool operator!=(const cListQueue_Iterator &other) {
     return !(m_ptr == other.m_ptr);
   }
 };
@@ -93,28 +97,28 @@ public:
  * - const_iterator cbegin() = O(1)
  * - const_iterator cend() = O(1)
  */
-template <typename T> class Queue {
+template <typename T> class ListQueue {
 private:
-  friend queue_iterator<T>;
-  friend cqueue_iterator<T>;
+  friend ListQueue_Iterator<T>;
+  friend cListQueue_Iterator<T>;
 
   Node<T> *front{nullptr}, *back{nullptr}, *m_ptr{nullptr};
   size_t m_size{0};
 
 public:
-  typedef queue_iterator<T> iterator;
-  typedef cqueue_iterator<T> const_iterator;
+  typedef ListQueue_Iterator<T> iterator;
+  typedef cListQueue_Iterator<T> const_iterator;
 
 public:
-  explicit Queue() {}
+  explicit ListQueue() {}
 
-  explicit Queue(std::initializer_list<T> list) {
+  explicit ListQueue(std::initializer_list<T> list) {
     for (std::initializer_list<T>::iterator it = list.begin(); it != list.end();
          ++it)
       enqueue(*it);
   }
 
-  ~Queue() {
+  ~ListQueue() {
     if (!is_empty())
       clear();
   }
@@ -226,9 +230,9 @@ public:
 
   T bottom() const { return back->data; }
 
-  iterator begin() { return queue_iterator(front); }
+  iterator begin() { return ListQueue_Iterator(front); }
 
-  iterator end() { return queue_iterator(back); }
+  iterator end() { return ListQueue_Iterator(back); }
 
   const_iterator cbegin() { return const_iterator(front); }
 

@@ -10,33 +10,33 @@ template <typename T> struct Node final {
   Node() = default;
 };
 
-template <typename T> class list_iterator {
+template <typename T> class List_Iterator {
 public:
   typedef Node<T> value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  constexpr list_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr List_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  list_iterator &operator++() {
+  List_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return *this;
   }
 
-  list_iterator &operator++(int) {
-    list_iterator temp = *this;
+  List_Iterator &operator++(int) {
+    List_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
 
-  list_iterator &operator--() {
+  List_Iterator &operator--() {
     m_ptr = m_ptr->prev;
     return *this;
   }
 
-  list_iterator &operator--(int) {
-    list_iterator temp = *this;
+  List_Iterator &operator--(int) {
+    List_Iterator temp = *this;
     m_ptr = m_ptr->prev;
     return temp;
   }
@@ -45,11 +45,11 @@ public:
 
   pointer_type operator->() { return m_ptr; }
 
-  bool operator==(const list_iterator &other) const {
+  bool operator==(const List_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const list_iterator &other) const {
+  bool operator!=(const List_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -57,33 +57,33 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
-template <typename T> class clist_iterator {
+template <typename T> class cList_Iterator {
 public:
   typedef Node<T> value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  constexpr clist_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr cList_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  clist_iterator &operator++() {
+  cList_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return *this;
   }
 
-  clist_iterator &operator++(int) {
-    clist_iterator temp = *this;
+  cList_Iterator &operator++(int) {
+    cList_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
 
-  clist_iterator &operator--() {
+  cList_Iterator &operator--() {
     m_ptr = m_ptr->prev;
     return *this;
   }
 
-  clist_iterator &operator--(int) {
-    clist_iterator temp = *this;
+  cList_Iterator &operator--(int) {
+    cList_Iterator temp = *this;
     m_ptr = m_ptr->prev;
     return temp;
   }
@@ -92,11 +92,11 @@ public:
 
   const pointer_type operator->() const { return m_ptr; }
 
-  bool operator==(const clist_iterator &other) const {
+  bool operator==(const cList_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const clist_iterator &other) const {
+  bool operator!=(const cList_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -104,10 +104,10 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
-template <typename T> class Circular_List {
+template <typename T> class CircularList {
 private:
-  friend list_iterator<T>;
-  friend clist_iterator<T>;
+  friend List_Iterator<T>;
+  friend cList_Iterator<T>;
 
   typedef Node<T> Node;
 
@@ -117,12 +117,12 @@ private:
   size_t m_size{0};
 
 public:
-  typedef clist_iterator<T> const_iterator;
-  typedef list_iterator<T> iterator;
+  typedef cList_Iterator<T> const_iterator;
+  typedef List_Iterator<T> iterator;
 
 public:
-  Circular_List() = default;
-  ~Circular_List() {
+  CircularList() = default;
+  ~CircularList() {
     if (!is_empty())
       clear();
   }
@@ -217,7 +217,7 @@ public:
 };
 
 int main() {
-  Circular_List<int> cl;
+  CircularList<int> cl;
   for (size_t i = 0; i < 10; ++i)
     cl.add(i);
   std::cout << "\nsize: " << cl.size();

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <list>
 
-template <typename Array> class array_iterator {
+template <typename Array> class Array_Iterator {
 
 public:
   typedef typename Array::value_type value_type;
@@ -10,26 +10,26 @@ public:
   typedef value_type &reference_type;
 
 public:
-  array_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  Array_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  array_iterator &operator++() {
+  Array_Iterator &operator++() {
     m_ptr++;
     return *this;
   }
 
-  array_iterator &operator++(int) {
-    array_iterator temp = *this;
+  Array_Iterator &operator++(int) {
+    Array_Iterator temp = *this;
     ++(*this);
     return temp;
   }
 
-  array_iterator &operator--() {
+  Array_Iterator &operator--() {
     m_ptr--;
     return *this;
   }
 
-  array_iterator &operator--(int) {
-    array_iterator temp = *this;
+  Array_Iterator &operator--(int) {
+    Array_Iterator temp = *this;
     --(*this);
     return temp;
   }
@@ -40,11 +40,11 @@ public:
 
   pointer_type operator->() { return m_ptr; }
 
-  bool operator==(const array_iterator &other) const {
+  bool operator==(const Array_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const array_iterator &other) const {
+  bool operator!=(const Array_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -52,7 +52,7 @@ private:
   pointer_type m_ptr;
 };
 
-template <typename Array> class carray_iterator {
+template <typename Array> class cArray_Iterator {
 
 public:
   typedef typename Array::value_type value_type;
@@ -60,26 +60,26 @@ public:
   typedef value_type &reference_type;
 
 public:
-  carray_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  cArray_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  carray_iterator &operator++() {
+  cArray_Iterator &operator++() {
     m_ptr++;
     return *this;
   }
 
-  carray_iterator &operator++(int) {
-    array_iterator temp = *this;
+  cArray_Iterator &operator++(int) {
+    Array_Iterator temp = *this;
     ++(*this);
     return temp;
   }
 
-  carray_iterator &operator--() {
+  cArray_Iterator &operator--() {
     m_ptr--;
     return *this;
   }
 
-  carray_iterator &operator--(int) {
-    carray_iterator temp = *this;
+  cArray_Iterator &operator--(int) {
+    cArray_Iterator temp = *this;
     --(*this);
     return temp;
   }
@@ -90,11 +90,11 @@ public:
 
   const pointer_type operator->() const { return m_ptr; }
 
-  bool operator==(const carray_iterator &other) const {
+  bool operator==(const cArray_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const carray_iterator &other) const {
+  bool operator!=(const cArray_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -116,8 +116,8 @@ private:
 template <typename T, size_t Size> class Array {
 public:
   typedef m_ptr value_type;
-  typedef array_iterator<Array<T, Size>> iterator;
-  typedef carray_iterator<Array<T, Size>> const_iterator;
+  typedef Array_Iterator<Array<T, Size>> iterator;
+  typedef cArray_Iterator<Array<T, Size>> const_iterator;
 
 private:
   T *m_ptr{nullptr};
@@ -250,9 +250,9 @@ public:
 
   size_t size() { return Size; }
 
-  iterator begin() { return array_iterator(m_ptr); }
+  iterator begin() { return Array_Iterator(m_ptr); }
 
-  iterator end() { return array_iterator(m_ptr + Size); }
+  iterator end() { return Array_Iterator(m_ptr + Size); }
 
   const_iterator cbegin() { return const_iterator(m + ptr); }
 

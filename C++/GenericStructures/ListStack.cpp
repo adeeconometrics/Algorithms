@@ -10,22 +10,22 @@ template <typename T> class Node final {
   explicit Node(const T &_data) : data(_data) {}
 };
 
-template <typename T> class stack_iterator {
+template <typename T> class ListStack_Iterator {
 public:
   typedef Node<T> value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  constexpr stack_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr ListStack_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  stack_iterator &operator++() {
+  ListStack_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return *this;
   }
 
-  stack_iterator &operator++(int) {
-    stack_iterator temp = *this;
+  ListStack_Iterator &operator++(int) {
+    ListStack_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
@@ -34,11 +34,11 @@ public:
 
   pointer_type operator->() { return m_ptr; }
 
-  bool operator==(const stack_iterator &other) const {
+  bool operator==(const ListStack_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const stack_iterator &other) const {
+  bool operator!=(const ListStack_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -46,22 +46,22 @@ private:
   pointer_type m_ptr;
 };
 
-template <typename T> class cstack_iterator {
+template <typename T> class cListStack_Iterator {
 public:
   typedef Node<T> value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  constexpr cstack_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr cListStack_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  cstack_iterator &operator++() {
+  cListStack_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return *this;
   }
 
-  cstack_iterator &operator++(int) {
-    cstack_iterator temp = *this;
+  cListStack_Iterator &operator++(int) {
+    cListStack_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
@@ -70,11 +70,11 @@ public:
 
   const pointer_type operator->() const { return m_ptr; }
 
-  bool operator==(const cstack_iterator &other) const {
+  bool operator==(const cListStack_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const cstack_iterator &other) const {
+  bool operator!=(const cListStack_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -83,7 +83,7 @@ private:
 };
 
 /**
- * Summary of complexity on Stack:
+ * Summary of complexity on ListStack:
  * - void push(const T& data) = O(1)
  * - void pop() = O(1)
  * - void display() = O(n)
@@ -96,27 +96,27 @@ private:
  * - const_iterator cbegin() = O(1)
  * - const_iterator cend() = O(1)
  */
-template <typename T> class Stack {
+template <typename T> class ListStack {
 private:
-  friend stack_iterator<T>;
-  friend cstack_iterator<T>;
+  friend ListStack_Iterator<T>;
+  friend cListStack_Iterator<T>;
 
   Node<T> *front{nullptr}, *back{nullptr};
   size_t m_size{0};
 
 public:
-  typedef stack_iterator<T> iterator;
-  typedef stack_iterator<T> const_iterator;
+  typedef ListStack_Iterator<T> iterator;
+  typedef cListStack_Iterator<T> const_iterator;
 
 public:
-  explicit Stack(){};
+  explicit ListStack(){};
 
-  explicit Stack(std::initializer_list<T> list) {
+  explicit ListStack(std::initializer_list<T> list) {
     for (auto i : list)
       push(i);
   };
 
-  ~Stack() {
+  ~ListStack() {
     if (!is_empty())
       clear();
   };

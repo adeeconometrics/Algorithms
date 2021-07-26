@@ -6,7 +6,7 @@
 template <typename T, typename = typename std::enable_if<
                           std::is_base_of<Comparable<T>, T>::value ||
                           std::is_integral<T>::value>>
-class ordered_list {
+class OrderedList {
 private:
   struct Node {
     Node *next{nullptr};
@@ -21,13 +21,13 @@ private:
   size_t m_size{0};
 
 public:
-  ordered_list() = default;
-  ordered_list(const std::initializer_list<T> &_list) {
+  OrderedList() = default;
+  OrderedList(const std::initializer_list<T> &_list) {
     for (auto i : _list)
       add(i);
   }
 
-  ~ordered_list() {
+  ~OrderedList() {
     if (!is_empty())
       clear();
   }

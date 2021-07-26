@@ -2,22 +2,22 @@
 #include <iostream>
 #include <stdexcept>
 
-template <typename T> class sstack_iterator {
+template <typename T> class ArrayStack_Iterator {
 public:
   typedef typename T::value_type value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  constexpr sstack_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr ArrayStack_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  sstack_iterator &operator++() {
+  ArrayStack_Iterator &operator++() {
     m_ptr++;
     return *this;
   }
 
-  sstack_iterator operator++(int) {
-    sstack_iterator iterator = *this;
+  ArrayStack_Iterator operator++(int) {
+    ArrayStack_Iterator iterator = *this;
     ++(*this);
     return iterator;
   }
@@ -26,11 +26,11 @@ public:
 
   pointer_type operator->() { return m_ptr; }
 
-  bool operator==(const sstack_iterator &other) const {
+  bool operator==(const ArrayStack_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const sstack_iterator &other) const {
+  bool operator!=(const ArrayStack_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -38,22 +38,22 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
-template <typename T> class csstack_iterator {
+template <typename T> class cArrayStack_Iterator {
 public:
   typedef typename T::value_type value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  constexpr csstack_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr cArrayStack_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  csstack_iterator &operator++() {
+  cArrayStack_Iterator &operator++() {
     m_ptr++;
     return *this;
   }
 
-  csstack_iterator operator++(int) {
-    sstack_iterator iterator = *this;
+  cArrayStack_Iterator operator++(int) {
+    ArrayStack_Iterator iterator = *this;
     ++(*this);
     return iterator;
   }
@@ -62,11 +62,11 @@ public:
 
   const pointer_type operator->() const { return m_ptr; }
 
-  bool operator==(const csstack_iterator &other) const {
+  bool operator==(const cArrayStack_Iterator &other) const {
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const csstack_iterator &other) const {
+  bool operator!=(const cArrayStack_Iterator &other) const {
     return !(*this == other);
   }
 
@@ -75,7 +75,7 @@ private:
 };
 
 /**
- * Summary of complexity on SStack:
+ * Summary of complexity on ArrayStack:
  * - void push(const T& data) = O(1)
  * - void pop() = O(1)
  * - void initialize() = O(n)
@@ -91,21 +91,21 @@ private:
  * - const_iterator cbegin() = O(1)
  * - const_iterator cend() = O(1)
  */
-template <typename T, size_t Size> class SStack {
+template <typename T, size_t Size> class ArrayStack {
 public:
   typedef T value_type;
-  typedef sstack_iterator<SStack<T, Size>> iterator;
-  typedef csstack_iterator<SStack<T, Size>> const_iterator;
+  typedef ArrayStack_Iterator<ArrayStack<T, Size>> iterator;
+  typedef cArrayStack_Iterator<ArrayStack<T, Size>> const_iterator;
 
 private:
-  friend sstack_iterator<T>;
-  friend csstack_iterator<T>;
+  friend ArrayStack_Iterator<T>;
+  friend cArrayStack_Iterator<T>;
 
   T *m_ptr{nullptr};
   size_t m_index{0};
 
 public:
-  SStack() {
+  ArrayStack() {
     try {
       if (Size < 0)
         throw std::bad_alloc;
@@ -117,7 +117,7 @@ public:
     }
   }
 
-  SStack(std::initializer_list<T> list) {
+  ArrayStack(std::initializer_list<T> list) {
     try {
       if (Size < 0)
         throw std::bad_alloc();
@@ -137,7 +137,7 @@ public:
     }
   }
 
-  ~SStack() {
+  ~ArrayStack() {
     if (!is_empty())
       clear();
   }

@@ -1,7 +1,7 @@
-#include <initalizer_list>
+#include <initializer_list>
 #include <iostream>
 
-template <typaname T> struct Node final {
+template <typename T> struct Node final {
   T data;
   Node *next{nullptr}, *prev{nullptr};
 
@@ -9,7 +9,7 @@ template <typaname T> struct Node final {
   explicit Node(const T &_data) : data(_data) {}
 };
 
-template <typename Deque> class deque_iterator {
+template <typename ListDeque> class ListDeque_Iterator {
 
 public:
   typedef Node<T> value_type;
@@ -17,26 +17,26 @@ public:
   typedef value_type &reference_type;
 
 public:
-  constexpr deque_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr ListDeque_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  deque_iterator &operator++() {
+  ListDeque_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return *this;
   }
 
-  deque_iterator &operator++(int) {
-    deque_iterator temp = *this;
+  ListDeque_Iterator &operator++(int) {
+    ListDeque_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
 
-  deque_iterator &operator--() {
+  ListDeque_Iterator &operator--() {
     m_ptr = m_ptr->prev;
     return *this;
   }
 
-  deque_iterator &operator--(int) {
-    deque_iterator temp = *this;
+  ListDeque_Iterator &operator--(int) {
+    ListDeque_Iterator temp = *this;
     m_ptr = m_ptr->prev;
     return temp;
   }
@@ -45,15 +45,15 @@ public:
 
   pointer_type operator->() { return m_ptr; }
 
-  bool operator==(const deque_iterator &rhs) { return m_ptr == rhs.m_ptr; }
+  bool operator==(const ListDeque_Iterator &rhs) { return m_ptr == rhs.m_ptr; }
 
-  bool operator!=(const deque_iterator &rhs) { return !(*this == rhs); }
+  bool operator!=(const ListDeque_Iterator &rhs) { return !(*this == rhs); }
 
 private:
   pointer_type m_ptr;
 };
 
-template <typename Deque> class cdeque_iterator {
+template <typename ListDeque> class cListDeque_Iterator {
 
 public:
   typedef Node<T> value_type;
@@ -61,26 +61,26 @@ public:
   typedef value_type &reference_type;
 
 public:
-  constexpr cdeque_iterator(pointer_type ptr) : m_ptr(ptr) {}
+  constexpr cListDeque_Iterator(pointer_type ptr) : m_ptr(ptr) {}
 
-  cdeque_iterator &operator++() {
+  cListDeque_Iterator &operator++() {
     m_ptr = m_ptr->next;
     return *this;
   }
 
-  cdeque_iterator &operator++(int) {
-    cdeque_iterator temp = *this;
+  cListDeque_Iterator &operator++(int) {
+    cListDeque_Iterator temp = *this;
     m_ptr = m_ptr->next;
     return temp;
   }
 
-  cdeque_iterator &operator--() {
+  cListDeque_Iterator &operator--() {
     m_ptr = m_ptr->prev;
     return *this;
   }
 
-  cdeque_iterator &operator--(int) {
-    cdeque_iterator temp = *this;
+  cListDeque_Iterator &operator--(int) {
+    cListDeque_Iterator temp = *this;
     m_ptr = m_ptr->prev;
     return temp;
   }
@@ -89,16 +89,16 @@ public:
 
   const pointer_type operator->() const { return m_ptr; }
 
-  bool operator==(const cdeque_iterator &rhs) { return m_ptr == rhs.m_ptr; }
+  bool operator==(const cListDeque_Iterator &rhs) { return m_ptr == rhs.m_ptr; }
 
-  bool operator!=(const cdeque_iterator &rhs) { return !(*this == rhs); }
+  bool operator!=(const cListDeque_Iterator &rhs) { return !(*this == rhs); }
 
 private:
   pointer_type m_ptr;
 };
 
 /**
- * Summary of complexity on Deque:
+ * Summary of complexity on ListDeque:
  * - void push_front(const T& data) = O(1)
  * - void push_back(const T& data) = O(1)
  * - void pop_front() = O(1)
@@ -112,28 +112,28 @@ private:
  * - const_iterator cbegin() = O(1)
  * - const_iterator cend() = O(1)
  */
-template <typename T> class Deque {
+template <typename T> class ListDeque {
 private:
-  friend deque_iterator<T>;
-  friend cdeque_iterator<T>;
+  friend ListDeque_Iterator<T>;
+  friend cListDeque_Iterator<T>;
 
   Node<T> *front{nullptr}, *back{nullptr};
   size_t m_size{0};
 
 public:
-  typedef deque_iterator<T> iterator;
-  typedef cdeque_iterator<T> const_iterator;
+  typedef ListDeque_Iterator<T> iterator;
+  typedef cListDeque_Iterator<T> const_iterator;
 
 public:
-  explicit Deque() {}
+  explicit ListDeque() {}
 
-  explicit Deque(std::initializer_list<T> _list) {
+  explicit ListDeque(std::initializer_list<T> _list) {
     // stacked
     for (auto i : list)
       push_front(i);
   }
 
-  ~Deque() {
+  ~ListDeque() {
     if (!is_empty())
       clear();
   }
