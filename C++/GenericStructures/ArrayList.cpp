@@ -2,62 +2,66 @@
  * @file ArrayList.cpp
  * @author ddamiana
  * @brief  Randomizeable list
- * @version 0.2 -- with list iterator
+ * @version 0.3 -- with array iterator
  * @date 2021-07-27
  *
  * @copyright Copyright (c) 2021
  *
  */
 
-// ragged matrix
 #include <iostream>
 
-template <typename T> struct Node {
-  Node *next{nullptr};
-  T value;
-
-  Node(T i_value) : value(i_value) {}
-  Node() = default;
-};
-
-template <typename T> class ArrayList_Iterator {
+template <typename Node> class ArrayList_Iterator {
 
 public:
-  typedef Node<T> *value_type;
+  typedef Node value_type;
   typedef value_type *pointer_type;
   typedef value_type &reference_type;
 
 public:
-  ArrayList_Iterator(pointer_type ptr) : m_ptr(ptr) {}
+  ArrayList_Iterator(pointer_type front, size_t size) {
+    m_array = new value_type *[size];
+    for (size_t i = 0, m_ptr = front; i < size; ++i) {
+      m_array[i] = m_ptr;
+      m_ptr = m_ptr->next;
+    }
+  }
+
+  ~ArrayList_Iterator() {
+    delete[] m_array;
+    m_array = nullptr;
+  }
 
   ArrayList_Iterator &operator++() {
-    m_ptr = m_ptr->next;
+    m_array++;
     return *this;
   }
 
   ArrayList_Iterator &operator++(int) {
-    ArrayList_Iterator temp = *this;
-    m_ptr = m_ptr->next;
+    value_type temp = m_array;
+    ++m_array;
     return temp;
   }
 
-  //   ArrayList_Iterator &operator--() {
-  //     m_ptr = m_ptr->prev;
-  //     return *this;
-  //   }
+  ArrayList_Iterator &operator--() {
+    m_array--;
+    return *this;
+  }
 
-  //   ArrayList_Iterator &operator--(int) {
-  //     ArrayList_Iterator temp = *this;
-  //     m_ptr = m_ptr->prev;
-  //     return temp;
-  //   }
+  ArrayList_Iterator &operator--(int) {
+    value_type temp = m_array;
+    --m_array;
+    return temp;
+  }
 
-  reference_type operator*() { return &m_ptr->next->value; }
+  reference_type operator[](int index) { return *&m_array[index]->value; }
 
-  pointer_type operator->() { return m_ptr; }
+  reference_type operator*() { return *m_array; }
+
+  pointer_type operator->() { return m_array; }
 
   bool operator==(const ArrayList_Iterator &other) const {
-    return m_ptr == other.m_ptr;
+    return m_array == other.m_array;
   }
 
   bool operator!=(const ArrayList_Iterator &other) const {
@@ -65,15 +69,23 @@ public:
   }
 
 private:
+  pointer_type m_array;
   pointer_type m_ptr;
 };
 
 template <typename T> class ArrayList {
 public:
-  typedef Node<T> Node;
-  typedef ArrayList_Iterator<T> iterator;
+  typedef ArrayList_Iterator<Node> iterator;
 
 private:
+  struct Node {
+    Node *next{nullptr};
+    T value;
+
+    Node(T i_value) : value(i_value) {}
+    Node() = default;
+  };
+  friend ArrayList_Iterator<Node>;
   Node *m_front{nullptr}, *m_back{nullptr};
   Node **m_array{nullptr};
 
@@ -206,8 +218,8 @@ int main() {
     if (list[i] % 2 == 0)
       list[i] = 0;
   }
-  for (auto i : list)
-    std::cout << i << " ";
+  // for (auto i : list)
+  //   std::cout << i << " ";
 
   list.release();
 }
