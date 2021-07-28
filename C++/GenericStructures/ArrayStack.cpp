@@ -1,3 +1,14 @@
+/**
+ * @file ArrayStack.cpp
+ * @author ddamiana
+ * @brief Array-based Implementation of Stack.
+ * @version 1.1
+ * @date 2021-07-29
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
@@ -105,7 +116,7 @@ private:
   size_t m_index{0};
 
 public:
-  ArrayStack() {
+  explicit ArrayStack() {
     try {
       if (Size < 0)
         throw std::bad_alloc;
@@ -117,7 +128,7 @@ public:
     }
   }
 
-  ArrayStack(std::initializer_list<T> list) {
+  explicit ArrayStack(std::initializer_list<T, Size> list) {
     try {
       if (Size < 0)
         throw std::bad_alloc();
@@ -135,6 +146,25 @@ public:
       std::cerr << e.what << '\n';
       exit(1);
     }
+  }
+
+  explicit ArrayStack(ArrayStack<T, Size> &&other) noexcept {
+    other.swap(*this);
+  }
+
+  explicit ArrayStack(const ArrayStack<T, Size> &other) {
+    m_ptr = new T[Size];
+    std::copy(other.begin(), other.end(), m_ptr);
+  }
+
+  ArrayStack<T, Size> &operator=(const ArrayStack<T, Size> &other) {
+    Array<T, Size> copy(other).swap(other);
+    return *this;
+  }
+
+  ArrayStack<T, Size> &operator=(ArrayStack<T, Size> &&other) {
+    other.swap(*this);
+    return *this;
   }
 
   ~ArrayStack() {
@@ -189,15 +219,21 @@ public:
 
   T bottom() const { return m_ptr[0]; }
 
-  // iterator begin() { return iterator(m_ptr); }
+  iterator begin() { return iterator(m_ptr); }
 
-  // iterator end() { return iterator(m_ptr + Size); }
+  iterator end() { return iterator(m_ptr + Size); }
 
-  // const_iterator cbegin() { return const_iterator(m_ptr); }
+  const_iterator cbegin() const { return const_iterator(m_ptr); }
 
-  // const_iterator cend() { return const_iterator(m_ptr + Size); }
+  const_iterator cend() const { return const_iterator(m_ptr + Size); }
 
   bool is_full() const { return Size == m_index; }
 
   bool is_empty() const { return m_ptr == nullptr; }
+
+private:
+  void swap(ArrayStack<T, Size> &other) {
+    std::swap(m_ptr, other.m_ptr);
+    std::swap(m_index, other.m_index);
+  }
 };

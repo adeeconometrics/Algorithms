@@ -10,6 +10,7 @@
  */
 
 #include <iostream>
+#include <vector>
 /**
  * todo
  * - make ArrayList copy_constructible

@@ -1,6 +1,16 @@
+/**
+ * @file Array.cpp
+ * @author ddamiana
+ * @brief Array implementation with move semantics.
+ * @version 1.1
+ * @date 2021-07-29
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
-#include <list>
 
 template <typename Array> class Array_Iterator {
 
@@ -142,13 +152,13 @@ public:
     }
   }
 
-  explicit Array(const Array<T> &rhs) {
-    m_ptr = new T[rhs.size()];
-    m_size = rhs.size();
-    std::copy(rhs.begin(), rhs.end(), m_ptr);
+  explicit Array(const Array<T> &other) {
+    m_ptr = new T[other.size()];
+    m_size = other.size();
+    std::copy(other.begin(), other.end(), m_ptr);
   }
 
-  explicit Array(Array &&rhs);
+  explicit Array(Array &&other) noexcept { other.swap(*this); }
 
   explicit Array(std::initializer_list<T> list) {
     try {
@@ -171,6 +181,16 @@ public:
     }
   }
 
+  Array &operator=(const Array &other) {
+    Array<T> copy(other).swap(other);
+    return *this;
+  }
+
+  Array &operator=(Array &&other) {
+    other.swap(*this);
+    return *this;
+  }
+
   ~Array() {
     delete[] m_ptr;
     m_ptr = nullptr;
@@ -184,14 +204,6 @@ public:
          ++it)
       add(*it);
   }
-
-  Array &operator=(const Array &rhs) {
-    Array<T> copy(rhs);
-    copy.swap(rhs);
-    return *this;
-  }
-
-  Array &operator=(Array &&rhs);
 
   void operator++() { m_ptr[++index]; }
 
@@ -258,6 +270,12 @@ public:
 
   const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
-private:
   bool is_empty() const { return m_ptr == nullptr && size == 0; }
+
+private:
+  void swap(Array<T> &other) {
+    std::swap(m_ptr, other.m_ptr);
+    std::swap(m_size, other.m_size);
+    std::swap(index, other.index);
+  }
 };

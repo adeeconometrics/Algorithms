@@ -1,8 +1,19 @@
+/**
+ * @file ArrayQueue.cpp
+ * @author ddamiana
+ * @brief Array-based implementation of Queue.
+ * @version 1.1
+ * @date 2021-07-29
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
 
-template <typename T> class ArrayQueue_Iterator {
+template <typename T, size_t Size> class ArrayQueue_Iterator {
 public:
   typedef typename T::value_type value_type;
   typedef value_type *pointer_type;
@@ -49,7 +60,7 @@ private:
   pointer_type m_ptr{nullptr};
 };
 
-template <typename T> class cArrayQueue_Iterator {
+template <typename T, size_t Size> class cArrayQueue_Iterator {
 public:
   typedef typename T::value_type value_type;
   typedef value_type *pointer_type;
@@ -123,8 +134,8 @@ public:
   typedef cArrayQueue_Iterator<ArrayQueue<T, Size>> const_iterator;
 
 private:
-  friend ArrayQueue_Iterator<T>;
-  friend cArrayQueue_Iterator<T>;
+  friend ArrayQueue_Iterator<T, Size>;
+  friend cArrayQueue_Iterator<T, Size>;
 
   T *m_ptr{nullptr};
   size_t m_index{0};
@@ -135,7 +146,7 @@ public:
     initialize();
   }
 
-  // explicit ArrayQueue(std::initalizer_list<T> list) {
+  // explicit ArrayQueue(std::initalizer_list<T, Size> list) {
   // for (size_t i = 0; i < Size; ++i)
   //   m_ptr[i] = 0;
   //   try {
@@ -150,6 +161,25 @@ public:
   //     exit(1);
   //   }
   // }
+
+  explicit ArrayQueue(ArrayQueue<T, Size> &&other) noexcept {
+    other.swap(*this);
+  }
+
+  explicit ArrayQueue(const ArrayQueue<T, Size> &other) {
+    m_ptr = new T[Size];
+    std::copy(other.begin(), other.end(), m_ptr);
+  }
+
+  ArrayQueue<T, Size> &operator=(const ArrayQueue<T, Size> &other) {
+    Array<T, Size> copy(other).swap(other);
+    return *this;
+  }
+
+  ArrayQueue<T, Size> &operator=(ArrayQueue<T, Size> &&other) {
+    other.swap(*this);
+    return *this;
+  }
 
   ~ArrayQueue() {
     if (!is_empty())
@@ -259,6 +289,13 @@ public:
   }
 
   bool is_full() const { return m_index == Size; }
+
+private:
+  void swap(ArrayQueue<T, Size> &other) {
+    std::swap(m_ptr, other.m_ptr);
+    std::swap(m_size, other.m_size);
+    std::swap(index, other.index);
+  }
 };
 
 int main() {

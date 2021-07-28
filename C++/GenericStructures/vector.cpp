@@ -1,6 +1,16 @@
+/**
+ * @file Vector.cpp
+ * @author ddamiana
+ * @brief Implementation of Vector with move and copy semantics.
+ * @version 1.1
+ * @date 2021-07-29
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
-// #include <iterator> // look at const and non const iterator
 
 template <typename Vector> class vector_iterator {
 public:
@@ -124,6 +134,24 @@ public:
     m_size = list.size();
     for (auto i : list)
       push_back(i);
+  }
+
+  explicit Vector(Vector<T> &&other) noexcept { other.swap(*this); }
+
+  explicit Vector(const Vector<T> &other) {
+    m_ptr = new T[other.size()];
+    m_size = other.size();
+    std::copy(other.begin(), other.end(), m_ptr);
+  }
+
+  Vector<T> &operator=(Vector<T> &&other) {
+    other.swap(*this);
+    return *this;
+  }
+
+  Vector<T> &operator=(const Vector<T> &other) {
+    Vector<T>(other).swap(*this);
+    return *this;
   }
 
   ~Vector() {
@@ -263,6 +291,12 @@ private:
     m_ptr = nullptr;
     m_ptr = temp;
     m_size = t_size;
+  }
+
+  void swap(Vector<T> &other) {
+    std::swap(m_ptr, other.m_ptr);
+    std::swap(m_size, other.m_size);
+    std::swap(m_index, other.m_index);
   }
 };
 
