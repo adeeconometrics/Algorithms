@@ -10,21 +10,44 @@
  */
 
 #include <iostream>
+/**
+ * todo
+ * - make ArrayList copy_constructible
+ * - make ArrayList move_constructible
+ * - make ArrayList copy_assignable
+ * - make ArrayList move_assignable
+ * - make iterator work!
+ * - proper overloads
+ */
+
+template <typename T> struct Node final {
+  Node *next{nullptr};
+  T value;
+
+  Node(T i_value) : value(i_value) {}
+  Node() = default;
+};
 
 template <typename Node> class ArrayList_Iterator {
 
 public:
   typedef Node value_type;
   typedef value_type *pointer_type;
-  typedef value_type &reference_type;
+  typedef value_type *&reference_type;
 
 public:
-  ArrayList_Iterator(pointer_type front, size_t size) {
-    m_array = new value_type *[size];
-    for (size_t i = 0, m_ptr = front; i < size; ++i) {
-      m_array[i] = m_ptr;
-      m_ptr = m_ptr->next;
+  ArrayList_Iterator(Node *entry_point, size_t size, bool is_back = false) {
+    if (is_back) {
+      if (m_captured)
+        m_array = m_array + size;
     }
+    m_array = new value_type *[size];
+    pointer_type ptr = entry_point;
+    for (size_t i = 0; i < size; ++i) {
+      m_array[i] = ptr;
+      ptr = ptr->next;
+    }
+    m_captured = true;
   }
 
   ~ArrayList_Iterator() {
@@ -32,31 +55,24 @@ public:
     m_array = nullptr;
   }
 
-  ArrayList_Iterator &operator++() {
-    m_array++;
-    return *this;
-  }
+  reference_type operator++() { return *m_array++; }
 
-  ArrayList_Iterator &operator++(int) {
-    value_type temp = m_array;
-    ++m_array;
-    return temp;
-  }
+  reference_type operator++(int) { return *++m_array; }
 
-  ArrayList_Iterator &operator--() {
-    m_array--;
-    return *this;
-  }
+  //  ArrayList_Iterator &operator--() {
+  //    m_array--;
+  //    return *this;
+  //  }
+  //
+  //  ArrayList_Iterator &operator--(int) {
+  //    value_type temp = m_array;
+  //    --m_array;
+  //    return temp;
+  //  }
 
-  ArrayList_Iterator &operator--(int) {
-    value_type temp = m_array;
-    --m_array;
-    return temp;
-  }
+  reference_type operator[](int index) { return *m_array[index]->value; }
 
-  reference_type operator[](int index) { return *&m_array[index]->value; }
-
-  reference_type operator*() { return *m_array; }
+  pointer_type *operator*() { return *&m_array; }
 
   pointer_type operator->() { return m_array; }
 
@@ -69,22 +85,16 @@ public:
   }
 
 private:
-  pointer_type m_array;
-  pointer_type m_ptr;
+  pointer_type *m_array{nullptr};
+  bool m_captured{false};
 };
 
 template <typename T> class ArrayList {
 public:
-  typedef ArrayList_Iterator<Node> iterator;
+  typedef ArrayList_Iterator<Node<T>> iterator;
+  typedef Node<T> Node;
 
 private:
-  struct Node {
-    Node *next{nullptr};
-    T value;
-
-    Node(T i_value) : value(i_value) {}
-    Node() = default;
-  };
   friend ArrayList_Iterator<Node>;
   Node *m_front{nullptr}, *m_back{nullptr};
   Node **m_array{nullptr};
@@ -178,10 +188,42 @@ public:
   }
 
   int &operator[](size_t index) {
-    if (m_captured == false) {
+    if (m_captured == false)
       capture();
-    }
+
     return *&m_array[index]->value;
+  }
+
+  void operator++() {
+    if (m_captured == false)
+      capture();
+
+    m_array++;
+    return;
+  }
+
+  void operator++(int) {
+    if (m_captured == false)
+      capture();
+
+    ++m_array;
+    return;
+  }
+
+  void operator--() {
+    if (m_captured == false)
+      capture();
+
+    m_array--;
+    return;
+  }
+
+  void operator--(int) {
+    if (m_captured == false)
+      capture();
+
+    --m_array;
+    return;
   }
 
   void display() const {
@@ -191,17 +233,10 @@ public:
   }
 
   size_t size() const { return m_size; }
-  iterator begin() {
-    if (m_captured == false)
-      capture();
-    return iterator(m_array);
-  }
 
-  iterator end() {
-    if (m_captured == false)
-      capture();
-    return iterator(m_array);
-  }
+  iterator begin() { return iterator(m_front, m_size); }
+
+  iterator end() { return iterator(m_back, m_size, true); }
 
   bool is_empty() const { return m_front == nullptr; }
 };
@@ -218,8 +253,12 @@ int main() {
     if (list[i] % 2 == 0)
       list[i] = 0;
   }
-  // for (auto i : list)
-  //   std::cout << i << " ";
-
+  //  for (ArrayList<int>::iterator it = list.begin(); it != list.end(); ++it) {
+  //     std::cout << *it << " ";
+  //  }
+  std::cout << "begin: " << &list[0] << '\n';
+  std::cout << *list.begin() << '\n';
+  std::cout << "end: " << &list[list.size() - 1] << '\n';
+  std::cout << *list.end() << '\n';
   list.release();
 }

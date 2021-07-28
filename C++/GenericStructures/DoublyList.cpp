@@ -131,7 +131,7 @@ private:
   friend DoublyList_Iterator<T>;
   friend cDoublyList_Iterator<T>;
 
-  Node<T> *front{nullptr}, *back{nullptr}, *m_ptr{nullptr};
+  Node<T> *front{nullptr}, *m_back{nullptr}, *m_ptr{nullptr};
   size_t m_size{0};
 
 public:
@@ -139,7 +139,7 @@ public:
   typedef DoublyList_Iterator<T> iterator;
 
 public:
-  explicit DoublyList() { front = back = m_ptr = new Node<T>(); }
+  explicit DoublyList() { m_front = m_back = m_ptr = new Node<T>(); }
 
   explicit DoublyList(std::initializer_list<T> _DoublyList) {
     for (auto i : _DoublyList) {
@@ -148,9 +148,17 @@ public:
     }
   }
   // move constructor
-  DoublyList(DoublyList<T> &&other) = delete;
+  DoublyList(DoublyList<T> &&other) {
+    m_size = other.size();
+    m_front = other.m_front;
+    m_back = other.m_back;
+  }
   // copy constructor
-  DoublyList(const DoublyList<T> &other) = delete;
+  DoublyList(const DoublyList<T> &other) {
+    m_size = other.size();
+    m_front = other.m_front;
+    m_back = other.m_back;
+  };
   // move assignment
   DoublyList<T> &operator=(DoublyList<T> &&other) = delete;
   // copy assignment
@@ -164,30 +172,30 @@ public:
   void add(const T &data) {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
-      front = node;
+      m_front = node;
       m_ptr = node;
     } else {
-      node->prev = back;
-      back->next = node;
-      back = node;
+      node->prev = m_back;
+      m_back->next = node;
+      m_back = node;
     }
     ++m_size;
   }
 
   void add_front(const T &data) {
     Node<T> *node = new Node<T>(data);
-    front->prev = node;
-    node->next = front;
-    front = node;
+    m_front->prev = node;
+    node->next = m_front;
+    m_front = node;
 
     ++m_size;
   }
 
   void add_back(const T &data) {
     Node<T> *node = new Node<T>(data);
-    back->next = node;
-    node->prev = back;
-    back = node;
+    m_back->next = node;
+    node->prev = m_back;
+    m_back = node;
 
     ++m_size;
   }
@@ -200,11 +208,11 @@ public:
       else if (front->data == data) {
         remove_front();
         return;
-      } else if (back->data == data) {
+      } else if (m_back->data == data) {
         remove_back();
         return;
       } else {
-        Node<T> *ptr = front;
+        Node<T> *ptr = m_front;
         Node<T> *prev = ptr;
         while (ptr->next != nullptr) {
           if (ptr->data == data) {
@@ -229,7 +237,7 @@ public:
   }
 
   void display() const {
-    Node<T> *ptr = front;
+    Node<T> *ptr = m_front;
     while (ptr->next != nullptr) {
       std::cout << ptr->data << " \n";
       ptr = ptr->next;
@@ -239,7 +247,7 @@ public:
   void clear() {
     if (is_empty())
       return;
-    Node<T> *ptr = front;
+    Node<T> *ptr = m_front;
     Node<T> *temp = ptr;
 
     while (ptr->next != nullptr) {
@@ -256,24 +264,24 @@ public:
 
   size_t size() const { return m_size; }
 
-  const T top() const { return front->data; }
+  const T top() const { return m_front->data; }
 
-  const T bottom() const { return back->data; }
+  const T bottom() const { return m_back->data; }
 
-  iterator begin() { return iterator(front); }
+  iterator begin() { return iterator(m_front); }
 
-  iterator end() { return iterator(back); }
+  iterator end() { return iterator(m_back); }
 
-  const_iterator cbegin() { return const_iterator(front); }
+  const_iterator cbegin() { return const_iterator(m_front); }
 
-  const_iterator cend() { return const_iterator(back); }
+  const_iterator cend() { return const_iterator(m_back); }
 
-  bool is_empty() const { return front == nullptr && m_size == 0; }
+  bool is_empty() const { return m_front == nullptr && m_size == 0; }
 
 private:
   void remove_front() {
-    Node<T> *ptr = front;
-    front = front->next;
+    Node<T> *ptr = m_front;
+    m_front = m_front->next;
 
     delete ptr;
     ptr = nullptr;
@@ -281,8 +289,8 @@ private:
   }
 
   void remove_back() {
-    Node<T> *ptr = back;
-    back = back->prev;
+    Node<T> *ptr = m_back;
+    m_back = m_back->prev;
 
     delete ptr;
     ptr = nullptr;
