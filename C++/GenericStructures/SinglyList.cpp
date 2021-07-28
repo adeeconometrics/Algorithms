@@ -1,3 +1,14 @@
+/**
+ * @file SinglyList.cpp
+ * @author ddamiana
+ * @brief Singly Linked List
+ * @version 1.1
+ * @date 2021-07-28
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
 
@@ -107,7 +118,7 @@ private:
   friend SinglyList_Iterator<T>;
   friend cSinglyList_Iterator<T>;
 
-  Node<T> *front{nullptr}, *back{nullptr}, *m_ptr{nullptr};
+  Node<T> *m_front{nullptr}, *m_back{nullptr};
   size_t m_size{0};
 
 public:
@@ -115,7 +126,7 @@ public:
   typedef SinglyList_Iterator<T> iterator;
 
 public:
-  explicit SinglyList() { front = back = m_ptr = new Node<T>(); }
+  explicit SinglyList() { m_front = m_back = new Node<T>(); }
 
   explicit SinglyList(std::initializer_list<T> _list) {
     for (auto i : _list) {
@@ -123,14 +134,29 @@ public:
       m_size += 1;
     }
   }
+
   // move constructor
-  SinglyList(SinglyList<T> &&other) = delete;
+  SinglyList(SinglyList<T> &&other) noexcept { other.swap(*this); }
   // copy constructor
-  SinglyList(const SinglyList<T> &other) = delete;
+  SinglyList(const SinglyList<T> &other) {
+    Node<T> *ptr = other.m_front;
+    while (ptr != nullptr) {
+      add(ptr->data);
+      ptr = ptr->next;
+    }
+  }
   // move assignment
-  SinglyList &operator=(SinglyList<T> &&other) = delete;
+  SinglyList &operator=(SinglyList<T> &&other) {
+    other.swap(*this);
+    return *this;
+  }
   // copy assignment
-  SinglyList &operator=(const SinglyList<T> &other) = delete;
+  SinglyList &operator=(const SinglyList<T> &other) {
+    if (&other != this)
+      SinglyList<T>(other).swap(*this);
+
+    return *this;
+  }
 
   ~SinglyList() {
     if (!is_empty())
@@ -140,32 +166,36 @@ public:
   void add(const T &data) {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
-      front = node;
-      m_ptr = node;
+      m_front = node;
+      m_back = node;
     } else {
-      Node<T> *ptr = front;
-      while (ptr->next != nullptr)
-        ptr = ptr->next;
-
-      ptr->next = node;
-      back = node;
+      m_back->next = node;
+      m_back = node;
     }
     ++m_size;
   }
 
   void add_front(const T &data) {
     Node<T> *node = new Node<T>(data);
-    node->next = front;
-    front = node;
-
+    if (is_empty()) {
+      m_front = node;
+      m_back = node;
+    } else {
+      node->next = m_front;
+      m_front = node;
+    }
     ++m_size;
   }
 
   void add_back(const T &data) {
     Node<T> *node = new Node<T>(data);
-    back->next = node;
-    back = node;
-
+    if (is_empty()) {
+      m_front = node;
+      m_back = node;
+    } else {
+      m_back->next = node;
+      m_back = node;
+    }
     ++m_size;
   }
 
@@ -174,14 +204,14 @@ public:
       if (is_empty())
         throw "Error: list is already empty.";
 
-      if (front->data == data)
+      if (m_front->data == data)
         remove_front();
 
-      Node<T> *ptr = front;
+      Node<T> *ptr = m_front;
       Node<T> *prev = ptr;
       while (ptr->next != nullptr) {
         if (ptr->data == data) {
-          if (ptr->data == back->data) {
+          if (ptr->data == m_back->data) {
             remove_back(prev);
             return;
           }
@@ -205,8 +235,8 @@ public:
   }
 
   void display() const {
-    Node<T> *ptr = front;
-    while (ptr->next != nullptr) {
+    Node<T> *ptr = m_front;
+    while (ptr != nullptr) {
       std::cout << ptr->data << " \n";
       ptr = ptr->next;
     }
@@ -215,7 +245,7 @@ public:
   void clear() {
     if (is_empty())
       return;
-    Node<T> *ptr = front;
+    Node<T> *ptr = m_front;
     Node<T> *temp = ptr;
 
     while (ptr->next != nullptr) {
@@ -232,37 +262,43 @@ public:
 
   size_t size() const { return m_size; }
 
-  T top() const { return front->data; }
+  T top() const { return m_front->data; }
 
-  T bottom() const { return back->data; }
+  T bottom() const { return m_back->data; }
 
-  iterator begin() { return iterator(front); }
+  iterator begin() { return iterator(m_front); }
 
-  iterator end() { return iterator(back); }
+  iterator end() { return iterator(m_back); }
 
-  const_iterator cbegin() { return const_iterator(front); }
+  const_iterator cbegin() { return const_iterator(m_front); }
 
-  const_iterator cend() { return const_iterator(back); }
+  const_iterator cend() { return const_iterator(m_back); }
 
-  bool is_empty() const { return front == nullptr && m_size == 0; }
+  bool is_empty() const { return m_front == nullptr && m_size == 0; }
 
 private:
   void remove_back(Node<T> *prev) {
-    Node<T> *temp = back;
-    back = prev;
+    Node<T> *temp = m_back;
+    m_back = prev;
     delete temp;
     temp = nullptr;
   }
 
   void remove_front() {
-    Node<T> *ptr = front;
-    front = front->next;
+    Node<T> *ptr = m_front;
+    m_front = m_front->next;
 
     delete ptr;
     ptr = nullptr;
     m_size -= 1;
 
     return;
+  }
+
+  void swap(SinglyList<T> &other) {
+    std::swap(m_size, other.size);
+    std::swap(m_front, other.m_front);
+    std::swap(m_back, other.m_back);
   }
 };
 

@@ -1,3 +1,14 @@
+/**
+ * @file ListQueue.cpp
+ * @author ddamiana
+ * @brief List implementation of Queue
+ * @version 1.1
+ * @date 2021-07-29
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
@@ -102,7 +113,7 @@ private:
   friend ListQueue_Iterator<T>;
   friend cListQueue_Iterator<T>;
 
-  Node<T> *front{nullptr}, *back{nullptr}, *m_ptr{nullptr};
+  Node<T> *m_front{nullptr}, *m_back{nullptr}, *m_ptr{nullptr};
   size_t m_size{0};
 
 public:
@@ -110,12 +121,33 @@ public:
   typedef cListQueue_Iterator<T> const_iterator;
 
 public:
-  explicit ListQueue() {}
+  explicit ListQueue() { m_front = m_back = new Node<T>(); }
+  explicit ListQueue(ListQueue<T> &&other) noexcept { other.swap(*this); }
+
+  explicit ListQueue(const ListQueue<T> &other) {
+    Node<T> *ptr = other.m_front;
+    while (ptr != nullptr) {
+      add(ptr->data);
+      ptr = ptr->next;
+    }
+  }
 
   explicit ListQueue(std::initializer_list<T> list) {
     for (std::initializer_list<T>::iterator it = list.begin(); it != list.end();
          ++it)
       enqueue(*it);
+  }
+
+  ListQueue<T> &operator=(ListQueue<T> &&other) {
+    other.swap(*this);
+    return *this;
+  }
+
+  ListQueue<T> &operator=(const ListQueue<T> &other) {
+    if (&other != this)
+      SinglyList<T>(other).swap(*this);
+
+    return *this;
   }
 
   ~ListQueue() {
@@ -127,11 +159,11 @@ public:
     Node *node = new Node(element);
     if (is_empty()) {
       m_ptr = node;
-      front = node;
-      back = node;
+      m_front = node;
+      m_back = node;
     } else {
-      node->next = back;
-      back = node;
+      node->next = m_back;
+      m_back = node;
     }
     m_size += 1;
   }
@@ -140,11 +172,11 @@ public:
     Node *node = new Node(element);
     if (is_empty()) {
       m_ptr = node;
-      front = node;
-      back = node;
+      m_front = node;
+      m_back = node;
     } else {
-      node->next = back;
-      back = node;
+      node->next = m_back;
+      m_back = node;
     }
     m_size += 1;
   }
@@ -153,11 +185,11 @@ public:
     Node *node = new Node(element);
     if (is_empty()) {
       m_ptr = node;
-      front = node;
-      back = node;
+      m_front = node;
+      m_back = node;
     } else {
-      node->next = back;
-      back = node;
+      node->next = m_back;
+      m_back = node;
     }
     m_size += 1;
   }
@@ -167,8 +199,8 @@ public:
       if (is_empty())
         throw std::exception();
 
-      Node *temp = front;
-      front = front->next;
+      Node *temp = m_front;
+      m_front = m_front->next;
       delete temp;
       temp = nullptr;
 
@@ -185,8 +217,8 @@ public:
       if (is_empty())
         throw std::exception;
 
-      Node *temp = front;
-      front = front->next;
+      Node *temp = m_front;
+      m_front = m_front->next;
       delete temp;
       temp = nullptr;
 
@@ -199,9 +231,9 @@ public:
   }
 
   void display() const {
-    Node *ptr = front;
+    Node *ptr = m_front;
     std::cout << "[ ";
-    while (ptr->next != nullptr) {
+    while (ptr != nullptr) {
       std::cout << ptr->data << ", ";
       ptr = ptr->next;
     }
@@ -209,7 +241,7 @@ public:
   }
 
   void clear() {
-    Node *ptr = front;
+    Node *ptr = m_front;
     Node *temp = ptr;
 
     while (ptr->next != nullptr) {
@@ -219,25 +251,31 @@ public:
       ptr = ptr->next;
     }
 
-    back = nullptr;
+    m_back = nullptr;
     m_ptr = nullptr;
     m_size = 0;
   }
 
   size_t size() const { return m_size; }
 
-  T top() const { return front->data; }
+  T top() const { return m_front->data; }
 
-  T bottom() const { return back->data; }
+  T bottom() const { return m_back->data; }
 
-  iterator begin() { return ListQueue_Iterator(front); }
+  iterator begin() { return ListQueue_Iterator(m_front); }
 
-  iterator end() { return ListQueue_Iterator(back); }
+  iterator end() { return ListQueue_Iterator(m_back); }
 
-  const_iterator cbegin() { return const_iterator(front); }
+  const_iterator cbegin() { return const_iterator(m_front); }
 
-  const_iterator back() { return const_iterator(back); }
+  const_iterator cend() { return const_iterator(m_back); }
+
+  bool is_empty() const { return m_front == nullptr && m_size == 0; }
 
 private:
-  bool is_empty() const { return front == nullptr && m_size == 0; }
+  void swap(ListQueue<T> &other) {
+    std::swap(m_size, other.m_size);
+    std::swap(m_front, other.m_front);
+    std::swap(m_back, other.m_back);
+  }
 };

@@ -1,6 +1,23 @@
+/**
+ * @file CircularList.cpp
+ * @author ddamiana
+ * @brief CircularList
+ * @version 1.1
+ * @date 2021-07-28
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
+
+/**
+ * todo:
+ * - make CirularList an initializer_list constructor
+ * - make CircularList asignable to initializer_list
+ */
 
 template <typename T> struct Node final {
   T data;
@@ -121,7 +138,30 @@ public:
   typedef List_Iterator<T> iterator;
 
 public:
-  CircularList() = default;
+  CircularList() { m_front = m_back = new Node<T>(); }
+
+  CircularList(CircularList<T> &&other) noexcept { other.swap(*this); }
+
+  CircularList(const CircularList<T> &other) {
+    Node<T> *ptr = other.m_front;
+    while (ptr != nullptr) {
+      add(ptr->data);
+      ptr = ptr->next;
+    }
+  }
+
+  CircularList &operator=(CircularList<T> &&other) {
+    other.swap(*this);
+    return *this;
+  }
+
+  CircularList &operator=(const CircularList<T> &other) {
+    if (&other != this)
+      CircularList<T>(other).swap(*this);
+
+    return *this;
+  }
+
   ~CircularList() {
     if (!is_empty())
       clear();
@@ -214,6 +254,13 @@ public:
   const_iterator cend() { return const_iterator(back); }
 
   bool is_empty() const { return m_front == nullptr; }
+
+private:
+  void swap(CircularList<T> &other) {
+    std::swap(m_size, other.m_size);
+    std::swap(m_front, other.m_front);
+    std::swap(m_back, other.m_back);
+  }
 };
 
 int main() {

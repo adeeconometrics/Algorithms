@@ -1,3 +1,15 @@
+/**
+ * @file ListDeque.cpp
+ * @author ddamiana
+ * @brief List implementation of Deque. Note that constructors are default to
+ * stack.
+ * @version 1.1
+ * @date 2021-07-28
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
 
@@ -117,7 +129,7 @@ private:
   friend ListDeque_Iterator<T>;
   friend cListDeque_Iterator<T>;
 
-  Node<T> *front{nullptr}, *back{nullptr};
+  Node<T> *m_front{nullptr}, *m_back{nullptr};
   size_t m_size{0};
 
 public:
@@ -125,12 +137,33 @@ public:
   typedef cListDeque_Iterator<T> const_iterator;
 
 public:
-  explicit ListDeque() {}
+  explicit ListDeque() { m_front = m_back = new Node<T>(); }
 
   explicit ListDeque(std::initializer_list<T> _list) {
-    // stacked
     for (auto i : list)
       push_front(i);
+  }
+
+  ListDeque(ListDeque<T> &&other) noexcept { other.swap(*this); }
+
+  ListDeque(const ListDeque<T> &other) {
+    Node<T> *ptr = other.m_front;
+    while (ptr != nullptr) {
+      push_front(ptr->data);
+      ptr = ptr->next;
+    }
+  }
+
+  ListDeque<T> &operator=(ListDeque<T> &&other) {
+    other.swap(*this);
+    return *this;
+  }
+
+  ListDeque<T> &operator=(const ListDeque<T> &other) {
+    if (&other != this)
+      ListDeque<T>(other).swap(*this);
+
+    return *this;
   }
 
   ~ListDeque() {
@@ -141,12 +174,12 @@ public:
   void push_front(const T &data) {
     Node<T> *node = new Node(data);
     if (is_empty()) {
-      front = node;
-      back = node;
+      m_front = node;
+      m_back = node;
     } else {
-      node->next = front;
-      node->prev = front->prev;
-      front = node;
+      node->next = m_front;
+      node->prev = m_front->prev;
+      m_front = node;
     }
     ++m_size;
   }
@@ -154,12 +187,12 @@ public:
   void push_back(const T &data) {
     Node<T> *node = new Node(data);
     if (is_empty()) {
-      front = node;
-      back = node;
+      m_front = node;
+      m_back = node;
     } else {
-      back->next = node;
-      node->prev = back;
-      back = node;
+      m_back->next = node;
+      node->prev = m_back;
+      m_back = node;
     }
     ++m_size;
   }
@@ -169,8 +202,8 @@ public:
       if (is_empty())
         throw std::exception(); // null value exception
 
-      Node<T> *ptr = front;
-      front = front->next;
+      Node<T> *ptr = m_front;
+      m_front = m_front->next;
 
       delete ptr;
       ptr = nullptr;
@@ -186,8 +219,8 @@ public:
       if (is_empty())
         throw std::exception();
 
-      Node<T> *ptr = back;
-      back = back->prev;
+      Node<T> *ptr = m_back;
+      m_back = m_back->prev;
       delete ptr;
       ptr = nullptr;
 
@@ -199,15 +232,15 @@ public:
   }
 
   void display() const {
-    Node<T> *ptr = front;
-    while (ptr->next != nullptr) {
+    Node<T> *ptr = m_front;
+    while (ptr != nullptr) {
       std::cout << ptr->data << std::endl;
       ptr = ptr->next;
     }
   }
 
   void display_reverse() const {
-    Node<T> *ptr = back;
+    Node<T> *ptr = m_back;
     while (ptr->prev != nullptr) {
       ptr = ptr->prev;
       std::cout << ptr->data << std::endl;
@@ -215,7 +248,7 @@ public:
   }
 
   void clear() {
-    Node<T> *ptr = front;
+    Node<T> *ptr = m_front;
     Node<T> *temp = ptr;
     while (ptr->next != nullptr) {
       temp = ptr;
@@ -229,16 +262,22 @@ public:
 
   size_t size() const { return m_size; }
 
-  iterator begin() { return iterator(front); }
+  iterator begin() { return iterator(m_front); }
 
-  iterator end() { return iterator(back); }
+  iterator end() { return iterator(m_back); }
 
   const_iterator cbegin() { return const_iterator(begin); }
 
   const_iterator cend() { return const_iterator(end); }
 
+  bool is_empty() const { return m_front = nullptr && m_back == nullptr; }
+
 private:
-  bool is_empty() const { return front = nullptr && back == nullptr; }
+  void swap(ListDeque<T> &other) {
+    std::swap(m_size, other.m_size);
+    std::swap(m_front, other.m_front);
+    std::swap(m_back, other.m_back);
+  }
 };
 
 int main() {}

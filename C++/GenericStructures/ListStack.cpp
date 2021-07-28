@@ -1,3 +1,14 @@
+/**
+ * @file ListStack.cpp
+ * @author ddamiana
+ * @brief List implementation of Stack.
+ * @version 1.1
+ * @date 2021-07-29
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
@@ -101,7 +112,7 @@ private:
   friend ListStack_Iterator<T>;
   friend cListStack_Iterator<T>;
 
-  Node<T> *front{nullptr}, *back{nullptr};
+  Node<T> *m_front{nullptr}, *m_back{nullptr};
   size_t m_size{0};
 
 public:
@@ -116,6 +127,28 @@ public:
       push(i);
   };
 
+  ListStack(ListStack<T> &&other) noexcept { other.swap(*this); }
+
+  ListStack(const ListStack<T> &other) {
+    Node<T> *ptr = other.m_front;
+    while (ptr != nullptr) {
+      push(ptr->data);
+      ptr = ptr->next;
+    }
+  }
+
+  ListStack &operator=(ListStack &&other) {
+    other.swap(*this);
+    return *this;
+  }
+
+  ListStack &operator=(const List &other) {
+    if (&other != this)
+      ListStack<T>(other).swap(*this);
+
+    return *this;
+  }
+
   ~ListStack() {
     if (!is_empty())
       clear();
@@ -124,11 +157,11 @@ public:
   void push(const T &data) {
     Node<T> *node = new Node(data);
     if (is_empty()) {
-      front = node;
-      back = node;
+      m_front = node;
+      m_back = node;
     } else {
-      node->next = front;
-      front = node;
+      node->next = m_front;
+      m_front = node;
     }
     ++m_size;
   }
@@ -137,13 +170,13 @@ public:
     if (is_empty()) {
       throw std::exception();
     } else {
-      front = front->next;
+      m_front = m_front->next;
       --m_size;
     }
   }
 
   void clear() {
-    Node<T> *ptr = front;
+    Node<T> *ptr = m_front;
     Node<T> *temp = ptr;
     while (ptr->next != nullptr) {
       temp = ptr;
@@ -156,7 +189,7 @@ public:
   }
 
   void display() const {
-    Node<T> *ptr = front;
+    Node<T> *ptr = m_front;
     while (ptr->next != nullptr) {
       std::cout << ptr->data << std::endl;
       ptr = ptr->next;
@@ -165,18 +198,24 @@ public:
 
   size_t size() { return m_size; }
 
-  T top() const { return front->data; }
+  T top() const { return m_front->data; }
 
-  T bottom() const { return back->data; }
+  T bottom() const { return m_back->data; }
 
-  iterator begin() { return iterator(front); }
+  iterator begin() { return iterator(m_front); }
 
-  iterator end() { return iterator(back); }
+  iterator end() { return iterator(m_back); }
 
-  const_iterator cbegin() { return const_iterator(front); }
+  const_iterator cbegin() { return const_iterator(m_front); }
 
-  const_iterator cend() { return const_iterator(back); }
+  const_iterator cend() { return const_iterator(m_back); }
+
+  bool is_empty() const { return m_front == nullptr && m_back == nullptr; }
 
 private:
-  bool is_empty() const { return front == nullptr && back == nullptr; }
+  void swap(ListStack<T> &other) {
+    std::swap(m_size, other.m_size);
+    std::swap(m_front, other.m_front);
+    std::swap(m_back, other.m_back);
+  }
 };

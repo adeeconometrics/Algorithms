@@ -1,12 +1,16 @@
+/**
+ * @file DoublyList.cpp
+ * @author ddamiana
+ * @brief Doubly Linked List
+ * @version 1.1
+ * @date 2021-07-28
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
 #include <initializer_list>
 #include <iostream>
-/**
- * featues to implement
- * - move semantics
- * - emplace feature
- * - proper implementation of destructors
- * - insert method
- */
 
 template <typename T> struct Node final {
   T data;
@@ -131,7 +135,7 @@ private:
   friend DoublyList_Iterator<T>;
   friend cDoublyList_Iterator<T>;
 
-  Node<T> *front{nullptr}, *m_back{nullptr}, *m_ptr{nullptr};
+  Node<T> *m_front{nullptr}, *m_back{nullptr};
   size_t m_size{0};
 
 public:
@@ -139,7 +143,7 @@ public:
   typedef DoublyList_Iterator<T> iterator;
 
 public:
-  explicit DoublyList() { m_front = m_back = m_ptr = new Node<T>(); }
+  explicit DoublyList() { m_front = m_back = new Node<T>(); }
 
   explicit DoublyList(std::initializer_list<T> _DoublyList) {
     for (auto i : _DoublyList) {
@@ -147,22 +151,28 @@ public:
       m_size += 1;
     }
   }
-  // move constructor
-  DoublyList(DoublyList<T> &&other) {
-    m_size = other.size();
-    m_front = other.m_front;
-    m_back = other.m_back;
-  }
-  // copy constructor
+
+  DoublyList(DoublyList<T> &&other) noexcept { other.swap(*this); }
+
   DoublyList(const DoublyList<T> &other) {
-    m_size = other.size();
-    m_front = other.m_front;
-    m_back = other.m_back;
-  };
-  // move assignment
-  DoublyList<T> &operator=(DoublyList<T> &&other) = delete;
-  // copy assignment
-  DoublyList<T> &operator=(const DoublyList<T> &other) = delete;
+    Node<T> *ptr = other.m_front;
+    while (ptr != nullptr) {
+      add(ptr->data);
+      ptr = ptr->next;
+    }
+  }
+
+  DoublyList<T> &operator=(DoublyList<T> &&other) {
+    other.swap(*this);
+    return *this;
+  }
+
+  DoublyList<T> &operator=(const DoublyList<T> &other) {
+    if (&other != this)
+      DoublyList<T>(other).swap(*this);
+
+    return *this;
+  }
 
   ~DoublyList() {
     if (!is_empty())
@@ -173,7 +183,7 @@ public:
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
       m_front = node;
-      m_ptr = node;
+      m_back = node;
     } else {
       node->prev = m_back;
       m_back->next = node;
@@ -184,19 +194,27 @@ public:
 
   void add_front(const T &data) {
     Node<T> *node = new Node<T>(data);
-    m_front->prev = node;
-    node->next = m_front;
-    m_front = node;
-
+    if (is_empty()) {
+      m_front = node;
+      m_back = node;
+    } else {
+      m_front->prev = node;
+      node->next = m_front;
+      m_front = node;
+    }
     ++m_size;
   }
 
   void add_back(const T &data) {
     Node<T> *node = new Node<T>(data);
-    m_back->next = node;
-    node->prev = m_back;
-    m_back = node;
-
+    if (is_empty()) {
+      m_front = node;
+      m_back = node;
+    } else {
+      m_back->next = node;
+      node->prev = m_back;
+      m_back = node;
+    }
     ++m_size;
   }
 
@@ -205,7 +223,7 @@ public:
       if (is_empty())
         throw "Error: DoublyList is already empty.";
 
-      else if (front->data == data) {
+      else if (m_front->data == data) {
         remove_front();
         return;
       } else if (m_back->data == data) {
@@ -238,9 +256,9 @@ public:
 
   void display() const {
     Node<T> *ptr = m_front;
-    while (ptr->next != nullptr) {
-      std::cout << ptr->data << " \n";
+    while (ptr != nullptr) {
       ptr = ptr->next;
+      std::cout << ptr->data << " \n";
     }
   }
 
@@ -296,41 +314,26 @@ private:
     ptr = nullptr;
     m_size -= 1;
   }
+
+  void swap(DoublyList<T> &other) {
+    std::swap(m_size, other.m_size);
+    std::swap(m_front, other.m_front);
+    std::swap(m_back, other.m_back);
+  }
 };
-
-class A {
-  int a, b;
-
-public:
-  A(const int &_a, const int &_b) : a(_a), b(_b) {}
-
-  A() : a(0), b(0) {}
-
-  ~A() {}
-
-  friend std::ostream &operator<<(std::ostream &ss, const A &obj);
-};
-
-std::ostream &operator<<(std::ostream &ss, const A &obj) {
-  ss << obj.a << ", " << obj.b;
-  return ss;
-}
 
 int main() {
-  DoublyList<A> v;
+  DoublyList<int> v;
   int x{0};
 
-  for (size_t i = 0; i < 5; i++)
-    v.add(A(i + 1, i * 2));
-
-  //   v.display();
-  //   std::cout << "top: " << v.top() << std::endl;
-  //   std::cout << "bottom: "<< v.bottom() << std::endl;
-  for (DoublyList<A>::iterator it = v.begin(); it != v.end(); ++it) {
-    std::cout << x << "\n";
-    x += 1;
+  for (size_t i = 0; i < 5; i++) {
+    v.add(i);
+    std::cout << "added: " << i << '\n';
   }
 
-  // std::cout << v.begin() << ", end: " << v.end() << "\n";
-  v.display();
+  DoublyList<int> mv(v);
+  mv.display();
+  //   std::cout << mv.size();
+  //   std::cout << v.is_empty();
+  //   v.display();
 }
