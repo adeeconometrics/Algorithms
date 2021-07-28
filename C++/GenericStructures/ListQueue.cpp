@@ -122,6 +122,7 @@ public:
 
 public:
   explicit ListQueue() { m_front = m_back = new Node<T>(); }
+
   explicit ListQueue(ListQueue<T> &&other) noexcept { other.swap(*this); }
 
   explicit ListQueue(const ListQueue<T> &other) {

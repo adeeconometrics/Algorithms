@@ -144,9 +144,9 @@ public:
       push_front(i);
   }
 
-  ListDeque(ListDeque<T> &&other) noexcept { other.swap(*this); }
+  explicit ListDeque(ListDeque<T> &&other) noexcept { other.swap(*this); }
 
-  ListDeque(const ListDeque<T> &other) {
+  explicit ListDeque(const ListDeque<T> &other) {
     Node<T> *ptr = other.m_front;
     while (ptr != nullptr) {
       push_front(ptr->data);

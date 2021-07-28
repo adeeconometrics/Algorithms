@@ -138,11 +138,11 @@ public:
   typedef List_Iterator<T> iterator;
 
 public:
-  CircularList() { m_front = m_back = new Node<T>(); }
+  explicit CircularList() { m_front = m_back = new Node<T>(); }
 
-  CircularList(CircularList<T> &&other) noexcept { other.swap(*this); }
+  explicit CircularList(CircularList<T> &&other) noexcept { other.swap(*this); }
 
-  CircularList(const CircularList<T> &other) {
+  explicit CircularList(const CircularList<T> &other) {
     Node<T> *ptr = other.m_front;
     while (ptr != nullptr) {
       add(ptr->data);

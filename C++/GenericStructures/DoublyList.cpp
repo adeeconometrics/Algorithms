@@ -152,9 +152,9 @@ public:
     }
   }
 
-  DoublyList(DoublyList<T> &&other) noexcept { other.swap(*this); }
+  explicit DoublyList(DoublyList<T> &&other) noexcept { other.swap(*this); }
 
-  DoublyList(const DoublyList<T> &other) {
+  explicit DoublyList(const DoublyList<T> &other) {
     Node<T> *ptr = other.m_front;
     while (ptr != nullptr) {
       add(ptr->data);

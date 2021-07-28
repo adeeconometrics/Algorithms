@@ -127,9 +127,9 @@ public:
       push(i);
   };
 
-  ListStack(ListStack<T> &&other) noexcept { other.swap(*this); }
+  explicit ListStack(ListStack<T> &&other) noexcept { other.swap(*this); }
 
-  ListStack(const ListStack<T> &other) {
+  explicit ListStack(const ListStack<T> &other) {
     Node<T> *ptr = other.m_front;
     while (ptr != nullptr) {
       push(ptr->data);

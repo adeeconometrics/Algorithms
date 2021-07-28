@@ -136,9 +136,9 @@ public:
   }
 
   // move constructor
-  SinglyList(SinglyList<T> &&other) noexcept { other.swap(*this); }
+  explicit SinglyList(SinglyList<T> &&other) noexcept { other.swap(*this); }
   // copy constructor
-  SinglyList(const SinglyList<T> &other) {
+  explicit SinglyList(const SinglyList<T> &other) {
     Node<T> *ptr = other.m_front;
     while (ptr != nullptr) {
       add(ptr->data);
