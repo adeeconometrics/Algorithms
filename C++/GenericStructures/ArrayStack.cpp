@@ -162,7 +162,7 @@ public:
     return *this;
   }
 
-  ArrayStack<T, Size> &operator=(ArrayStack<T, Size> &&other) {
+  ArrayStack<T, Size> &operator=(ArrayStack<T, Size> &&other) noexcept {
     other.swap(*this);
     return *this;
   }
@@ -215,9 +215,9 @@ public:
     m_ptr = nullptr;
   }
 
-  T top() const { return m_ptr[m_index]; }
+  inline T top() const { return m_ptr[m_index]; }
 
-  T bottom() const { return m_ptr[0]; }
+  inline T bottom() const { return m_ptr[0]; }
 
   iterator begin() { return iterator(m_ptr); }
 
@@ -227,12 +227,12 @@ public:
 
   const_iterator cend() const { return const_iterator(m_ptr + Size); }
 
-  bool is_full() const { return Size == m_index; }
+  inline bool is_full() const noexcept { return Size == m_index; }
 
-  bool is_empty() const { return m_ptr == nullptr; }
+  inline bool is_empty() const noexcept { return m_ptr == nullptr; }
 
 private:
-  void swap(ArrayStack<T, Size> &other) {
+  inline void swap(ArrayStack<T, Size> &other) noexcept {
     std::swap(m_ptr, other.m_ptr);
     std::swap(m_index, other.m_index);
   }

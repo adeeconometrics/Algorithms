@@ -155,7 +155,7 @@ public:
     return *this;
   }
 
-  CircularList &operator=(const CircularList<T> &other) {
+  CircularList &operator=(const CircularList<T> &other) noexcept {
     if (&other != this)
       CircularList<T>(other).swap(*this);
 
@@ -239,11 +239,11 @@ public:
     m_front = nullptr;
   }
 
-  size_t size() const { return m_size; }
+  inline size_t size() const noexcept { return m_size; }
 
-  const T top() const { return m_front->data; }
+  const T top() const noexcept { return m_front->data; }
 
-  const T bottom() const { return m_back->data; }
+  const T bottom() const noexcept { return m_back->data; }
 
   iterator begin() { return iterator(front); }
 
@@ -253,10 +253,10 @@ public:
 
   const_iterator cend() { return const_iterator(back); }
 
-  bool is_empty() const { return m_front == nullptr; }
+  inline bool is_empty() const noexcept { return m_front == nullptr; }
 
 private:
-  void swap(CircularList<T> &other) {
+  inline void swap(CircularList<T> &other) noexcept {
     std::swap(m_size, other.m_size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

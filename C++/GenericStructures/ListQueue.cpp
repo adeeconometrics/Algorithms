@@ -139,7 +139,7 @@ public:
       enqueue(*it);
   }
 
-  ListQueue<T> &operator=(ListQueue<T> &&other) {
+  ListQueue<T> &operator=(ListQueue<T> &&other) noexcept {
     other.swap(*this);
     return *this;
   }
@@ -257,11 +257,11 @@ public:
     m_size = 0;
   }
 
-  size_t size() const { return m_size; }
+  inline size_t size() const noexcept { return m_size; }
 
-  T top() const { return m_front->data; }
+  T top() const noexcept { return m_front->data; }
 
-  T bottom() const { return m_back->data; }
+  T bottom() const noexcept { return m_back->data; }
 
   iterator begin() { return ListQueue_Iterator(m_front); }
 
@@ -271,10 +271,12 @@ public:
 
   const_iterator cend() { return const_iterator(m_back); }
 
-  bool is_empty() const { return m_front == nullptr && m_size == 0; }
+  inline bool is_empty() const noexcept {
+    return m_front == nullptr && m_size == 0;
+  }
 
 private:
-  void swap(ListQueue<T> &other) {
+  inline void swap(ListQueue<T> &other) noexcept {
     std::swap(m_size, other.m_size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

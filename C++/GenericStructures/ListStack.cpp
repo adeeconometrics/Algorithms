@@ -137,7 +137,7 @@ public:
     }
   }
 
-  ListStack &operator=(ListStack &&other) {
+  ListStack &operator=(ListStack &&other) noexcept {
     other.swap(*this);
     return *this;
   }
@@ -196,11 +196,11 @@ public:
     }
   }
 
-  size_t size() { return m_size; }
+  inline size_t size() const noexcept { return m_size; }
 
-  T top() const { return m_front->data; }
+  T top() const noexcept { return m_front->data; }
 
-  T bottom() const { return m_back->data; }
+  T bottom() const noexcept { return m_back->data; }
 
   iterator begin() { return iterator(m_front); }
 
@@ -210,10 +210,12 @@ public:
 
   const_iterator cend() { return const_iterator(m_back); }
 
-  bool is_empty() const { return m_front == nullptr && m_back == nullptr; }
+  inline bool is_empty() const noexcept {
+    return m_front == nullptr && m_back == nullptr;
+  }
 
 private:
-  void swap(ListStack<T> &other) {
+  inline void swap(ListStack<T> &other) noexcept {
     std::swap(m_size, other.m_size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

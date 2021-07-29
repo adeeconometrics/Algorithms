@@ -144,7 +144,7 @@ public:
     std::copy(other.begin(), other.end(), m_ptr);
   }
 
-  Vector<T> &operator=(Vector<T> &&other) {
+  Vector<T> &operator=(Vector<T> &&other) noexcept {
     other.swap(*this);
     return *this;
   }
@@ -247,9 +247,8 @@ public:
       std::cout << "a[" << i << "]: " << m_ptr[i] << std::endl;
   }
 
-  iterator begin() {
-    return iterator(m_ptr); // return iterator at a particular offset
-  }
+  // return iterator at a particular offset
+  iterator begin() { return iterator(m_ptr); }
 
   iterator end() { return iterator(m_ptr + m_size); }
 
@@ -257,7 +256,7 @@ public:
 
   const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
-  size_t size() { return m_size; }
+  inline size_t size() noexcept { return m_size; }
 
   void fit() {
     size_t t_size = m_size * 2;
@@ -293,7 +292,7 @@ private:
     m_size = t_size;
   }
 
-  void swap(Vector<T> &other) {
+  inline void swap(Vector<T> &other) noexcept {
     std::swap(m_ptr, other.m_ptr);
     std::swap(m_size, other.m_size);
     std::swap(m_index, other.m_index);

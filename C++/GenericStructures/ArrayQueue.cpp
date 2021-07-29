@@ -176,7 +176,7 @@ public:
     return *this;
   }
 
-  ArrayQueue<T, Size> &operator=(ArrayQueue<T, Size> &&other) {
+  ArrayQueue<T, Size> &operator=(ArrayQueue<T, Size> &&other) noexcept {
     other.swap(*this);
     return *this;
   }
@@ -280,7 +280,7 @@ public:
 
   const_iterator cend() { return const_iterator(m_ptr + Size); }
 
-  bool is_empty() const {
+  inline bool is_empty() const noexcept {
     for (size_t i = 0; i < Size; ++i) {
       if (m_ptr[i] != 0)
         return false;
@@ -288,10 +288,10 @@ public:
     return true;
   }
 
-  bool is_full() const { return m_index == Size; }
+  inline bool is_full() const noexcept { return m_index == Size; }
 
 private:
-  void swap(ArrayQueue<T, Size> &other) {
+  inline void swap(ArrayQueue<T, Size> &other) noexcept {
     std::swap(m_ptr, other.m_ptr);
     std::swap(m_size, other.m_size);
     std::swap(index, other.index);
