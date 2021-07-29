@@ -280,7 +280,7 @@ public:
 
   const_iterator cend() { return const_iterator(m_ptr + Size); }
 
-  inline bool is_empty() const noexcept {
+  bool is_empty() const noexcept {
     for (size_t i = 0; i < Size; ++i) {
       if (m_ptr[i] != 0)
         return false;
@@ -288,10 +288,10 @@ public:
     return true;
   }
 
-  inline bool is_full() const noexcept { return m_index == Size; }
+  bool is_full() const noexcept { return m_index == Size; }
 
 private:
-  inline void swap(ArrayQueue<T, Size> &other) noexcept {
+  void swap(ArrayQueue<T, Size> &other) noexcept {
     std::swap(m_ptr, other.m_ptr);
     std::swap(m_size, other.m_size);
     std::swap(index, other.index);

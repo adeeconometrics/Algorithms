@@ -257,7 +257,7 @@ public:
     m_size = 0;
   }
 
-  inline size_t size() const noexcept { return m_size; }
+  size_t size() const noexcept { return m_size; }
 
   T top() const noexcept { return m_front->data; }
 
@@ -271,12 +271,10 @@ public:
 
   const_iterator cend() { return const_iterator(m_back); }
 
-  inline bool is_empty() const noexcept {
-    return m_front == nullptr && m_size == 0;
-  }
+  bool is_empty() const noexcept { return m_front == nullptr && m_size == 0; }
 
 private:
-  inline void swap(ListQueue<T> &other) noexcept {
+  void swap(ListQueue<T> &other) noexcept {
     std::swap(m_size, other.m_size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

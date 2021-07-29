@@ -256,7 +256,7 @@ public:
 
   const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
-  inline size_t size() noexcept { return m_size; }
+  size_t size() noexcept { return m_size; }
 
   void fit() {
     size_t t_size = m_size * 2;
@@ -292,7 +292,7 @@ private:
     m_size = t_size;
   }
 
-  inline void swap(Vector<T> &other) noexcept {
+  void swap(Vector<T> &other) noexcept {
     std::swap(m_ptr, other.m_ptr);
     std::swap(m_size, other.m_size);
     std::swap(m_index, other.m_index);

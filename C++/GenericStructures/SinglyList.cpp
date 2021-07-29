@@ -260,7 +260,7 @@ public:
     m_size = 0;
   }
 
-  inline size_t size() const noexcept { return m_size; }
+  size_t size() const noexcept { return m_size; }
 
   T top() const noexcept { return m_front->data; }
 
@@ -274,12 +274,12 @@ public:
 
   const_iterator cend() { return const_iterator(m_back); }
 
-  inline bool is_empty() const noexcept {
+  bool is_empty() const noexcept {
     return m_front == nullptr && m_size == 0;
   }
 
 private:
-  inline void remove_back(Node<T> *prev) noexcept {
+  void remove_back(Node<T> *prev){
     Node<T> *temp = m_back;
     m_back = prev;
     delete temp;
@@ -297,7 +297,7 @@ private:
     return;
   }
 
-  void swap(SinglyList<T> &other) {
+  void swap(SinglyList<T> &other) noexcept{
     std::swap(m_size, other.size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

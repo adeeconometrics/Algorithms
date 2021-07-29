@@ -239,7 +239,7 @@ public:
     m_front = nullptr;
   }
 
-  inline size_t size() const noexcept { return m_size; }
+  size_t size() const noexcept { return m_size; }
 
   const T top() const noexcept { return m_front->data; }
 
@@ -253,10 +253,10 @@ public:
 
   const_iterator cend() { return const_iterator(back); }
 
-  inline bool is_empty() const noexcept { return m_front == nullptr; }
+  bool is_empty() const noexcept { return m_front == nullptr; }
 
 private:
-  inline void swap(CircularList<T> &other) noexcept {
+  void swap(CircularList<T> &other) noexcept {
     std::swap(m_size, other.m_size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

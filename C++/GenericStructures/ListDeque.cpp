@@ -260,7 +260,7 @@ public:
     m_size = 0;
   }
 
-  inline size_t size() const noexcept { return m_size; }
+  size_t size() const noexcept { return m_size; }
 
   iterator begin() { return iterator(m_front); }
 
@@ -270,12 +270,12 @@ public:
 
   const_iterator cend() { return const_iterator(end); }
 
-  inline bool is_empty() const noexcept {
+  bool is_empty() const noexcept {
     return m_front = nullptr && m_back == nullptr;
   }
 
 private:
-  inline void swap(ListDeque<T> &other) noexcept {
+  void swap(ListDeque<T> &other) noexcept {
     std::swap(m_size, other.m_size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

@@ -186,7 +186,7 @@ public:
     return *this;
   }
 
-  Array &operator=(Array &&other) noexcept{
+  Array &operator=(Array &&other) noexcept {
     other.swap(*this);
     return *this;
   }
@@ -255,7 +255,7 @@ public:
       std::cout << "a[" << i << "] " << m_ptr[i] << "\n";
   }
 
-  inline size_t size() noexcept{ return Size; }
+  size_t size() noexcept { return Size; }
 
   iterator begin() { return Array_Iterator(m_ptr); }
 
@@ -265,10 +265,10 @@ public:
 
   const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
-  inline bool is_empty() const noexcept{ return m_ptr == nullptr && size == 0; }
+  bool is_empty() const noexcept { return m_ptr == nullptr && size == 0; }
 
 private:
-  inline void swap(Array<T> &other) noexcept{
+  void swap(Array<T> &other) noexcept {
     std::swap(m_ptr, other.m_ptr);
     std::swap(m_size, other.m_size);
     std::swap(index, other.index);
