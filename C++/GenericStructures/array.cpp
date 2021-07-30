@@ -11,6 +11,7 @@
 
 #include <initializer_list>
 #include <iostream>
+#include <stdexcept>
 
 template <typename Array> class Array_Iterator {
 
@@ -174,9 +175,9 @@ public:
            it != list.end(); ++it)
         add(*it);
 
-    } catch (const std::bad_alloc &e) {
-      std::cerr << "Allocation failed: " << e.what()
-                << ". Input size goes beyond array size." << std::endl;
+    } catch (const std::bad_alloc &be) {
+      std::cerr << "Allocation failed: " << be.what()
+                << ". Input size goes beyond array size." << '\n';
       exit(1);
     }
   }
@@ -216,11 +217,11 @@ public:
   const T &operator[](size_t idx) const {
     try {
       if (idx < 0 || idx < size)
-        throw std::exception();
+        throw std::domain_error("Array index out of bound");
 
       return m_ptr[idx];
-    } catch (const std::exception &e) {
-      std::cerr << str << std::endl;
+    } catch (const std::domain_error &de) {
+      std::cerr << de.what() << '\n';
       exit(1);
     }
   }
@@ -228,11 +229,11 @@ public:
   T &operator[](size_t idx) {
     try {
       if (idx < 0 || idx < size)
-        throw std::exception();
+        throw std::domain_error("Array index out of bound");
 
       return m_ptr[idx];
-    } catch (const std::exception &e) {
-      std::cerr << str << std::endl;
+    } catch (const std::domain_error &de) {
+      std::cerr << de.what() << '\n';
       exit(1);
     }
   }

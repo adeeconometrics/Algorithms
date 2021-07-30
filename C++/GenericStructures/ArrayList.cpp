@@ -10,6 +10,7 @@
  */
 
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 /**
  * todo
@@ -90,7 +91,7 @@ private:
   bool m_captured{false};
 };
 
-template <typename T> class ArrayList {
+template <typename T, size_t Block_Size = 1> class ArrayList {
 public:
   typedef ArrayList_Iterator<Node<T>> iterator;
   typedef Node<T> Node;
@@ -124,7 +125,7 @@ public:
   void remove(int value) {
     try {
       if (is_empty())
-        throw std::exception();
+        throw std::out_of_range("Cannot proceed request: Out of range.");
 
       Node *ptr{nullptr};
       if (m_front->value == value) {
@@ -149,10 +150,12 @@ public:
           }
         }
       }
-      std::cerr << "value is not found ";
-    } catch (const std::exception &except) {
-      std::cerr << "list is already empty.";
+      throw std::invalid_argument("Value is not found in the list.");
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
       exit(1);
+    } catch (const std::invalid_argument &ie) {
+      std::cerr << ie.what() << '\n';
     }
   }
 

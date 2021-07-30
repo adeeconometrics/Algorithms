@@ -25,7 +25,7 @@ template<typename T, typename Node = Node<T>> class List{
 
         virtual void add(const T& data) = 0;
         virtual void remove(const T& data) = 0;
-        virtual void display() const = 0;
+        virtual void display() const = 0; // will operator<< be a good idea here?
 
         virtual bool is_element(const T& data) const = 0;
         virtual bool is_empty() const = 0;

@@ -11,6 +11,7 @@
 
 #include <initializer_list>
 #include <iostream>
+#include <stdexcept>
 
 template <typename Vector> class vector_iterator {
 public:
@@ -168,32 +169,32 @@ public:
 
   void operator--(int) { m_index--; }
 
-  const T &operator[](size_t idx) const { // only returns elements
+  const T &operator[](size_t idx) const {
     try {
-      if (idx < 0)
-        throw "Error.";
+      if (m_size < idx)
+        throw std::domain_error("Vector index out of bound.");
 
       if (idx >= m_size)
         grow();
 
       return m_ptr[idx];
-    } catch (const char *str) {
-      std::cerr << str << std::endl;
+    } catch (const std::domain_error &de) {
+      std::cerr << de.what();
       exit(1);
     }
   }
 
-  T &operator[](size_t idx) { // allows user to modify elements
+  T &operator[](size_t idx) {
     try {
-      if (idx < 0)
-        throw "Error.";
+      if (m_size < idx)
+        throw std::domain_error("Vector index out of bound.");
 
       if (idx >= m_size)
         grow();
 
       return m_ptr[idx];
-    } catch (const char *str) {
-      std::cerr << str << std::endl;
+    } catch (const std::domain_error &de) {
+      std::cerr << de.what();
       exit(1);
     }
   }
@@ -237,12 +238,12 @@ public:
     m_size = 0;
   }
 
-  void display() const {
+  void display() const noexcept {
     for (size_t i = 0; i < m_index; ++i)
       std::cout << "a[" << i << "]: " << m_ptr[i] << std::endl;
   }
 
-  void peek() const {
+  void peek() const noexcept {
     for (size_t i = 0; i < m_size; ++i)
       std::cout << "a[" << i << "]: " << m_ptr[i] << std::endl;
   }

@@ -188,12 +188,12 @@ public:
 
   const T &operator[](size_t idx) const {
     try {
-      if (idx < 0)
-        throw "Error.";
+      if (Size < idx)
+        throw std::domain_error("Queue index out of bound.");
 
       return m_ptr[idx];
-    } catch (const char *str) {
-      std::cerr << str << std::endl;
+    } catch (const std::domain_error &de) {
+      std::cerr << de.what() << '\n';
       exit(1);
     }
   }
@@ -201,14 +201,14 @@ public:
   void push(const T &element) {
     try {
       if (is_full())
-        throw std::length_error();
+        throw std::length_error("Queue is already full.");
 
       if (m_index < Size) {
         m_ptr[m_index] = element;
         ++m_index;
       }
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
+    } catch (const std::lenght_error &le) {
+      std::cerr << le.what() << '\n';
       exit(1);
     }
   }
@@ -216,14 +216,14 @@ public:
   void enqueue(const T &element) {
     try {
       if (is_full())
-        throw std::length_error();
+        throw std::length_error("Queue is already full.");
 
       if (m_index < Size) {
         m_ptr[m_index] = element;
         ++m_index;
       }
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
+    } catch (const std::lenght_error &le) {
+      std::cerr << le.what() << '\n';
       exit(1);
     }
   }
@@ -231,11 +231,11 @@ public:
   void dequeue() {
     try {
       if (is_empty())
-        throw std::exception();
+        throw std::out_of_range("Cannot proceed to request: Out of range.");
       m_ptr[m_index - 1] = 0;
       --m_index;
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
       exit(1);
     }
   }
@@ -243,21 +243,21 @@ public:
   void pop() {
     try {
       if (is_empty())
-        throw std::exception();
+        throw std::out_of_range("Cannot proceed to request: Out of range.");
       m_ptr[m_index - 1] = 0;
       --m_index;
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
       exit(1);
     }
   }
 
-  void initialize() {
+  void initialize() noexcept {
     for (size_t i = 0; i < Size; ++i)
       m_ptr[i] = 0;
   }
 
-  void display() const {
+  void display() const noexcept {
     T *ptr = m_ptr[0];
     for (size_t i = 0; i < Size; ++i)
       std::cout << ptr[i] << '\n';
@@ -268,9 +268,9 @@ public:
     m_ptr = nullptr;
   }
 
-  T top() const { return m_ptr[0]; }
+  T top() const noexcept { return m_ptr[0]; }
 
-  T bottom() const { return m_ptr[Size - 1]; }
+  T bottom() const noexcept { return m_ptr[Size - 1]; }
 
   iterator begin() { return iterator(m_ptr); }
 

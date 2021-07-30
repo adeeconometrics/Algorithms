@@ -188,7 +188,7 @@ public:
   void pop() {
     try {
       if (is_empty())
-        throw std::bad_exception();
+        throw std::out_of_range("Cannot proceed request: Out of range.");
 
       m_ptr[m_index] = 0;
       m_index -= 1;
@@ -199,12 +199,12 @@ public:
     }
   }
 
-  void initialize() {
+  void initialize() noexcept {
     for (size_t i = 0; i < Size; ++i)
       m_ptr[i] = 0;
   }
 
-  void display() const {
+  void display() const noexcept {
     T *ptr = m_ptr[0];
     for (size_t i = 0; i < Size; ++i)
       std::cout << ptr[i] << '\n';
