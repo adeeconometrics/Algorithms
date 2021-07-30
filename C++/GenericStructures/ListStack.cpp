@@ -154,7 +154,7 @@ public:
       clear();
   };
 
-  void push(const T &data) {
+  void push(const T &data) noexcept {
     Node<T> *node = new Node(data);
     if (is_empty()) {
       m_front = node;
@@ -167,11 +167,14 @@ public:
   }
 
   void pop() {
-    if (is_empty()) {
-      throw std::exception();
-    } else {
+    try {
+      if (is_empty())
+        throw std::out_of_range("Cannot proceed request: Out of range");
       m_front = m_front->next;
       --m_size;
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
+      exit(1);
     }
   }
 
@@ -188,7 +191,7 @@ public:
     m_size = 0;
   }
 
-  void display() const {
+  void display() const noexcept {
     Node<T> *ptr = m_front;
     while (ptr->next != nullptr) {
       std::cout << ptr->data << std::endl;

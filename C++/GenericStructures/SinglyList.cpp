@@ -163,7 +163,7 @@ public:
       clear();
   }
 
-  void add(const T &data) {
+  void add(const T &data) noexcept {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
       m_front = node;
@@ -175,7 +175,7 @@ public:
     ++m_size;
   }
 
-  void add_front(const T &data) {
+  void add_front(const T &data) noexcept {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
       m_front = node;
@@ -187,7 +187,7 @@ public:
     ++m_size;
   }
 
-  void add_back(const T &data) {
+  void add_back(const T &data) noexcept {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
       m_front = node;
@@ -202,7 +202,7 @@ public:
   void remove(const T &data) {
     try {
       if (is_empty())
-        throw "Error: list is already empty.";
+        throw std::out_of_range("Error: list is already empty.");
 
       if (m_front->data == data)
         remove_front();
@@ -226,15 +226,15 @@ public:
         prev = ptr;
         ptr = ptr->next;
       }
-      throw "Error: element not found";
+      throw std::out_of_range("Error: element not found");
 
-    } catch (const char *error_msg) {
-      std::cerr << error_msg << std::endl;
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
       exit(1);
     }
   }
 
-  void display() const {
+  void display() const noexcept {
     Node<T> *ptr = m_front;
     while (ptr != nullptr) {
       std::cout << ptr->data << " \n";
@@ -274,12 +274,10 @@ public:
 
   const_iterator cend() { return const_iterator(m_back); }
 
-  bool is_empty() const noexcept {
-    return m_front == nullptr && m_size == 0;
-  }
+  bool is_empty() const noexcept { return m_front == nullptr && m_size == 0; }
 
 private:
-  void remove_back(Node<T> *prev){
+  void remove_back(Node<T> *prev) {
     Node<T> *temp = m_back;
     m_back = prev;
     delete temp;
@@ -297,7 +295,7 @@ private:
     return;
   }
 
-  void swap(SinglyList<T> &other) noexcept{
+  void swap(SinglyList<T> &other) noexcept {
     std::swap(m_size, other.size);
     std::swap(m_front, other.m_front);
     std::swap(m_back, other.m_back);

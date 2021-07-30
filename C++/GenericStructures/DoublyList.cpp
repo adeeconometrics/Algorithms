@@ -179,7 +179,7 @@ public:
       clear();
   }
 
-  void add(const T &data) {
+  void add(const T &data) noexcept {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
       m_front = node;
@@ -192,7 +192,7 @@ public:
     ++m_size;
   }
 
-  void add_front(const T &data) {
+  void add_front(const T &data) noexcept {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
       m_front = node;
@@ -205,7 +205,7 @@ public:
     ++m_size;
   }
 
-  void add_back(const T &data) {
+  void add_back(const T &data) noexcept {
     Node<T> *node = new Node<T>(data);
     if (is_empty()) {
       m_front = node;
@@ -221,7 +221,7 @@ public:
   void remove(const T &data) {
     try {
       if (is_empty())
-        throw "Error: DoublyList is already empty.";
+        throw std::out_of_range("Error: DoublyList is already empty.");
 
       else if (m_front->data == data) {
         remove_front();
@@ -245,16 +245,16 @@ public:
           prev = ptr;
           ptr = ptr->next;
         }
-        throw "Error: element not found";
+        throw std::out_of_range("Error: element not found");
       }
 
-    } catch (const char *error_msg) {
-      std::cerr << error_msg << std::endl;
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
       exit(1);
     }
   }
 
-  void display() const {
+  void display() const noexcept {
     Node<T> *ptr = m_front;
     while (ptr != nullptr) {
       ptr = ptr->next;

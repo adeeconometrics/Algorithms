@@ -12,6 +12,7 @@
 
 #include <initializer_list>
 #include <iostream>
+#include <stdexcept>
 
 template <typename T> struct Node final {
   T data;
@@ -171,7 +172,7 @@ public:
       clear();
   }
 
-  void push_front(const T &data) {
+  void push_front(const T &data) noexcept {
     Node<T> *node = new Node(data);
     if (is_empty()) {
       m_front = node;
@@ -184,7 +185,7 @@ public:
     ++m_size;
   }
 
-  void push_back(const T &data) {
+  void push_back(const T &data) noexcept {
     Node<T> *node = new Node(data);
     if (is_empty()) {
       m_front = node;
@@ -200,7 +201,7 @@ public:
   void pop_front() {
     try {
       if (is_empty())
-        throw std::exception(); // null value exception
+        throw std::out_of_range("Cannot proceed request: Out of range.");
 
       Node<T> *ptr = m_front;
       m_front = m_front->next;
@@ -208,8 +209,8 @@ public:
       delete ptr;
       ptr = nullptr;
       --m_size;
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
       exit(1);
     }
   }
@@ -217,7 +218,7 @@ public:
   void pop_back() {
     try {
       if (is_empty())
-        throw std::exception();
+        throw std::out_of_range("Cannot proceed request: Out of range.");
 
       Node<T> *ptr = m_back;
       m_back = m_back->prev;
@@ -225,13 +226,13 @@ public:
       ptr = nullptr;
 
       --m_size;
-    } catch (const std::exception &e) {
-      std::cerr << e.what() << '\n';
+    } catch (const std::out_of_range &ore) {
+      std::cerr << ore.what() << '\n';
       exit(1);
     }
   }
 
-  void display() const {
+  void display() const noexcept {
     Node<T> *ptr = m_front;
     while (ptr != nullptr) {
       std::cout << ptr->data << std::endl;
@@ -239,7 +240,7 @@ public:
     }
   }
 
-  void display_reverse() const {
+  void display_reverse() const noexcept {
     Node<T> *ptr = m_back;
     while (ptr->prev != nullptr) {
       ptr = ptr->prev;

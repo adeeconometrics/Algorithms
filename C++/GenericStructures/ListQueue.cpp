@@ -156,7 +156,7 @@ public:
       clear();
   }
 
-  void equeue(const T &element) {
+  void equeue(const T &element) noexcept {
     Node *node = new Node(element);
     if (is_empty()) {
       m_ptr = node;
@@ -169,7 +169,7 @@ public:
     m_size += 1;
   }
 
-  void push(const T &element) {
+  void push(const T &element) noexcept {
     Node *node = new Node(element);
     if (is_empty()) {
       m_ptr = node;
@@ -182,7 +182,7 @@ public:
     m_size += 1;
   }
 
-  void add(const T &element) {
+  void add(const T &element) noexcept {
     Node *node = new Node(element);
     if (is_empty()) {
       m_ptr = node;
@@ -198,7 +198,7 @@ public:
   void pop() {
     try {
       if (is_empty())
-        throw std::exception();
+        throw std::out_of_range();
 
       Node *temp = m_front;
       m_front = m_front->next;
@@ -207,8 +207,8 @@ public:
 
       m_size -= 1;
 
-    } catch (const std::exception &e) {
-      std::cout << "Error: " << e.what() << std::endl;
+    } catch (const std::out_of_range &ore) {
+      std::cout << ore.what() << '\n';
       exit(1);
     }
   }
@@ -216,7 +216,7 @@ public:
   void dequeue() {
     try {
       if (is_empty())
-        throw std::exception;
+        throw std::out_of_range;
 
       Node *temp = m_front;
       m_front = m_front->next;
@@ -225,13 +225,13 @@ public:
 
       m_size -= 1;
 
-    } catch (const std::exception &e) {
-      std::cout << "Error: " << e.what() << std::endl;
+    } catch (const std::out_of_range &ore) {
+      std::cout << ore.what() << '\n';
       exit(1);
     }
   }
 
-  void display() const {
+  void display() const noexcept {
     Node *ptr = m_front;
     std::cout << "[ ";
     while (ptr != nullptr) {

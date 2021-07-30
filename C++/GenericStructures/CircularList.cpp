@@ -167,7 +167,7 @@ public:
       clear();
   }
 
-  void add(const T &data) {
+  void add(const T &data) noexcept {
     Node *node = new Node(data);
     if (is_empty()) {
       m_front = node;
@@ -209,7 +209,7 @@ public:
     }
   }
 
-  void display() const {
+  void display() const noexcept {
     Node *ptr = m_front;
     while (ptr != m_back) {
       std::cout << ptr->data << " ";
@@ -218,7 +218,7 @@ public:
     std::cout << m_back->data;
   }
 
-  void display_reverse() const {
+  void display_reverse() const noexcept {
     Node *ptr = m_back;
     while (ptr != m_front) {
       std::cout << ptr->data << " ";
