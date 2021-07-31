@@ -114,6 +114,11 @@ private:
 template <typename T> class Vector {
 public:
   typedef T value_type;
+  typedef T &reference;
+  typedef const T &const_reference;
+  typedef const T *const_pointer;
+  typedef T *pointer;
+  typedef size_t size_type;
   typedef vector_iterator<Vector<T>> iterator;
   typedef cvector_iterator<Vector<T>> const_iterator;
 
@@ -123,8 +128,8 @@ private:
   T *m_ptr{nullptr};
 
 public:
-  explicit Vector(const size_t &_m_size) {
-    m_size = _m_size;
+  explicit Vector(size_type i_size) {
+    m_size = i_size;
     m_ptr = new T[m_size];
   }
 
@@ -169,7 +174,7 @@ public:
 
   void operator--(int) { m_index--; }
 
-  const T &operator[](size_t idx) const {
+  const_reference operator[](size_t idx) const {
     try {
       if (m_size < idx)
         throw std::domain_error("Vector index out of bound.");
@@ -184,7 +189,7 @@ public:
     }
   }
 
-  T &operator[](size_t idx) {
+  reference operator[](size_t idx) {
     try {
       if (m_size < idx)
         throw std::domain_error("Vector index out of bound.");
@@ -257,7 +262,7 @@ public:
 
   const_iterator cend() { return const_iterator(m + ptr + m_size); }
 
-  size_t size() noexcept { return m_size; }
+  size_type size() noexcept { return m_size; }
 
   void fit() {
     size_t t_size = m_size * 2;

@@ -41,7 +41,7 @@ private:
     if (!is_valid()) {
       std::cerr << "** BinaryTreeNavigator<T,P>::Retrieve() error: invalid "
                    "dereference\n";
-      exit(EXIT_FAILURE);
+      exit(1);
     }
     return this_node->value_;
   }
@@ -50,7 +50,7 @@ public:
   typedef T value_type;
   typedef BinaryTreeNavigator<T, P> Navigator;
 
-  Navigator() {}
+  Navigator() = default;
 
   Navigator(typename Tree<T>::Node *ptr) { this_node = ptr; }
 
@@ -64,74 +64,64 @@ public:
   }
 
   // checkers
-  bool is_valid() const { return this_node != false; }
+  bool is_valid() const noexcept { return this_node != false; }
 
-  bool has_parent() const {
-    if (this_node != nullptr && this_node->parent != nullptr)
-      return true;
-    return false;
+  bool has_parent() const noexcept {
+    return this_node != nullptr && this_node->parent != nullptr;
   }
 
-  bool has_left_child() const {
-    if (this_node != nullptr && this_node->left != nullptr)
-      return true;
-    return false;
+  bool has_left_child() const noexcept {
+    return this_node != nullptr && this_node->left != nullptr;
   }
 
-  bool has_right_child() const {
-    if (this_node != nullptr && this_node->right != nullptr)
-      return true;
-    return false;
+  bool has_right_child() const noexcept {
+    return this_node != nullptr && this_node->right != nullptr;
   }
 
-  bool is_left_child() const {
-    if (this_node != nullptr && this_node->parent != nullptr &&
-        this_node == this_node->parent->left)
-      return true;
-    return false;
+  bool is_left_child() const noexcept {
+    return this_node != nullptr && this_node->parent != nullptr &&
+           this_node == this_node->parent->left;
   }
 
-  bool is_right_child() const {
-    if (this_node != nullptr && this_node->parent != nullptr &&
-        this_node == this_node->parent->right)
-      return true;
-    return false;
+  bool is_right_child() const noexcept {
+    return this_node != nullptr && this_node->parent != nullptr &&
+           this_node == this_node->parent->right;
   }
 
-  bool is_red() const {
+  bool is_red() const noexcept {
     if (this_node == nullptr)
       return false; // null is not read
     return this_node->is_red();
   }
 
-  bool is_dead() const {
+  bool is_dead() const noexcept {
     if (this_node == nullptr)
       return false; // null is not dead
     return this_node->is_dead();
   }
 
   // flags - TreeType = Red Black Tree, Height Balanced Tree, AVL Tree
-  char get_flags() const {
+  char get_flags() const noexcept {
     if (this_node)
       return this_node->flags_; // find out what this means
     return false;
   }
 
-  Navigator get_parent() const {
+  Navigator get_parent() const noexcept {
     Navigator n{nullptr}; // check if this is correct: it says default is null
     if (this_node)
       n.this_node = this_node->parent;
     return n;
   }
 
-  Navigator get_left_child() const {
+  Navigator get_left_child() const noexcept {
     Navigator n{nullptr}; // default is null
     if (this_node)
       n.this_node = this_node->left;
     return n;
   }
 
-  Navigator get_right_child() const {
+  Navigator get_right_child() const noexcept {
     Navigator n{nullptr}; // default is null
     if (this_node)
       n.this_node = this_node->right;
@@ -271,37 +261,37 @@ public:
     }
   }
 
-  Node *find_max(const Node *ptr) const {
+  Node *find_max(const Node *ptr) const noexcept {
     while (ptr->right != nullptr)
       ptr = ptr->left;
     return ptr;
   }
 
-  Node *find_min(const Node *ptr) const {
+  Node *find_min(const Node *ptr) const noexcept {
     while (ptr->left != nullptr)
       ptr = ptr->left;
     return ptr;
   }
 
-  T &min(const Node *ptr) const {
+  T &min(const Node *ptr) const noexcept {
     Node *min_val = find_min(ptr);
     return min_val->data;
   }
 
-  T &min(const Node *ptr) const {
+  T &min(const Node *ptr) const noexcept {
     Node *max_val = find_max(ptr);
     return max_val->data;
   }
 
-  const Node *root() const { return m_root; }
+  const Node *root() const noexcept { return m_root; }
 
-  const T &root_val() const { return m_root->data; }
+  const T &root_val() const noexcept { return m_root->data; }
 
   bool is_element(const int &data) const;
 
-  bool is_empty() const { return m_root == nullptr; }
+  bool is_empty() const noexcept { return m_root == nullptr; }
 
-  size_t size() const { return m_size; }
+  size_t size() const noexcept { return m_size; }
 
 private:
   Node *delete_element(Node *ptr, const T &data) { // minus m_size
