@@ -13,7 +13,6 @@
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
-
 template <typename T> struct Node final {
   T data;
   Node *next{nullptr}, *prev{nullptr};

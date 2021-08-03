@@ -142,7 +142,7 @@ public:
     return *this;
   }
 
-  ListStack &operator=(const List &other) {
+  ListStack &operator=(const ListStack &other) {
     if (&other != this)
       ListStack<T>(other).swap(*this);
 
