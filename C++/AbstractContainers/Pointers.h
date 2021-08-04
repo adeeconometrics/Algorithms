@@ -53,8 +53,8 @@ template <typename T> class shared_pointer {
   T *m_ptr{nullptr};
 
 public:
-  explicit shared_pointer() = default;
-  explicit shared_pointer(T *i_ptr) : m_counter(1), m_ptr(i_ptr) {}
+  shared_pointer() = default;
+  shared_pointer(T *i_ptr) : m_counter(1), m_ptr(i_ptr) {}
 
   shared_pointer(const T &) = delete;
   shared_pointer(T &&) = delete;
@@ -76,6 +76,9 @@ public:
   T &operator*(void) { return *(this->m_ptr); }
   T *operator->(void) { return this->m_ptr; }
   T &operator&(shared_pointer<T> &other) { return other.m_ptr; }
+  T *get(void) { return this->m_ptr; }
+
+  int virtual count() const { return m_counter; }
 };
 
 template <typename T> class shared_pointer<T[]> {
@@ -83,8 +86,8 @@ template <typename T> class shared_pointer<T[]> {
   T *m_ptr{nullptr};
 
 public:
-  explicit shared_pointer() = default;
-  explicit shared_pointer(T *i_ptr) : m_counter(1), m_ptr(i_ptr) {}
+  shared_pointer() = default;
+  shared_pointer(T *i_ptr) : m_counter(1), m_ptr(i_ptr) {}
 
   shared_pointer(const T &) = delete;
   shared_pointer(T &&) = delete;
@@ -107,14 +110,17 @@ public:
   T *operator->(void) { return this->m_ptr; }
   T &operator&(shared_pointer<T> &other) { return other.m_ptr; }
   T &operator[](size_t idx) { return this->m_ptr[idx]; }
+
+  T &get(void) { return *(this->m_ptr); }
 };
 
-template <typename T> class weak_pointer {
+template <typename T> class weak_pointer : public shared_pointer<T> {
   T *m_ptr{nullptr};
 
 public:
-  explicit weak_pointer(T *i_ptr) : m_ptr(i_ptr) {}
+  explicit weak_pointer(shared_pointer<T> &i_ptr) : m_ptr(i_ptr.get()) {}
 
+  weak_pointer() = delete;
   weak_pointer(const T &) = delete;
   weak_pointer(T &&) = delete;
   weak_pointer &operator=(T &&) = delete;
@@ -124,22 +130,9 @@ public:
   T &operator*(void) { return *(this->m_ptr); }
   T *operator->(void) { return this->m_ptr; }
   T &operator&(weak_pointer<T> &other) { return other.m_ptr; }
-  T &operator[](size_t idx) { return this->m_ptr[idx]; }
-};
 
-template <typename T> class weak_pointer<T[]> {
-  T *m_ptr{nullptr};
+  T &get(void) { return *(this->m_ptr); }
 
-public:
-  explicit weak_pointer(T *i_ptr) : m_ptr(i_ptr) {}
-
-  weak_pointer(const T &) = delete;
-  weak_pointer(T &&) = delete;
-  weak_pointer &operator=(T &&) = delete;
-  weak_pointer &operator=(const T &Type) = delete;
-  ~weak_pointer() { m_ptr = nullptr; };
-
-  T &operator*(void) { return *(this->m_ptr); }
-  T *operator->(void) { return this->m_ptr; }
-  T &operator&(weak_pointer<T> &other) { return other.m_ptr; }
+  void release(void) noexcept { m_ptr = nullptr; }
+  bool is_expired(void) noexcept { return m_ptr == nullptr; }
 };
