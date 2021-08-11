@@ -2,7 +2,7 @@
 
 #include <cstddef>
 #include <stdexcept>
-
+#include <type_traits>
 template <typename T> class Nullable final {
 public:
   Nullable() {}
@@ -179,4 +179,14 @@ public:
 
 public:
   NullableValue Value;
+};
+
+template<typename T, typename = std::enable_if<std::is_pointer<T>::value>>
+class not_null final{
+  public:
+    not_null() = delete;
+    not_null(const T& t) {
+        if(t == nullptr) throw new std::invalid_argument("T must not be nullable.");
+    }
+    ~not_null() = default;
 };
