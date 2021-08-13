@@ -55,7 +55,10 @@
         "iterator": "cpp",
         "array": "cpp",
         "chrono": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "stdbool.h": "c",
+        "stdlib.h": "c",
+        "errno.h": "c"
     },
     "java.project.sourcePaths": [
         "Java"
