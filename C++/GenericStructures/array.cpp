@@ -147,8 +147,8 @@ public:
       initialize();
 
     } catch (const std::bad_alloc &e) {
-      std::cerr << "Allocation failed: " << e.what
-                << ". Size must be positive." std::endl;
+      std::cerr << "Allocation failed: " << e.what << ". Size must be positive."
+                << std::endl;
       exit(1);
     }
   }

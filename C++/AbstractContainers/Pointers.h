@@ -1,4 +1,7 @@
 #pragma
+#include <initialzier_list>
+#include <stdexcept>
+
 /**
  * @file Pointers.h
  * @author ddamiana
@@ -11,9 +14,9 @@
  */
 
 template <typename T> class unique_reference {
+  T *m_ptr{nullptr};
 
 public:
-  T *m_ptr{nullptr};
   explicit unique_reference() = default;
   explicit unique_reference(const unique_reference<T> &Type) = delete;
 
@@ -44,28 +47,38 @@ private:
   }
 };
 
-template <typename T> class unique_reference<T[]> {
-  T *m_ptr{nullptr};
-  size_t m_size{0};
+template <typename T, size_t Size> class unique_reference {
+  T *m_ptr{new T[Size]};
+  size_t m_index{0};
 
 public:
   explicit unique_reference() = default;
-  explicit unique_reference(const unique_reference<T> &other) = delete;
+  explicit unique_reference(const unique_reference<T, Size> &) = delete;
 
-  explicit unique_reference(T *Type, size_t i_size)
-      : m_ptr(Type), m_size(i_size) {}
-  explicit unique_reference(unique_reference<T> &&other) noexcept {
+  explicit unique_reference(const std::initializer_list<T> &list) {
+    if (list.size > Size)
+      throw new std::invalid_argument("");
+
+    for (const T &it : list) {
+      m_ptr[i] = it;
+      m_index += 1;
+    }
+  }
+
+  explicit unique_reference(unique_reference<T, Size> &&other) noexcept {
     other.swap(*this);
   }
 
-  unique_reference &operator=(const unique_reference<T> &other) = delete;
-  unique_reference &operator=(unique_reference<T> &&other) noexcept {
+  unique_reference<T, Size> &
+  operator=(const unique_reference<T, Size> &) = delete;
+  unique_reference<T, Size> &
+  operator=(unique_reference<T, Size> &&other) noexcept {
     other.swap(*this);
   }
 
   ~unique_reference() {
     if (m_ptr != nullptr) {
-      for (size_t i = 0; i < m_size; ++i)
+      for (size_t i = 0; i < m_index; ++i)
         m_ptr[i]->~T(); // calls the destructor of T.
       delete[] m_ptr;   // deallocates memory block.
     }
@@ -88,7 +101,7 @@ public:
   }
 
 private:
-  void swap(unique_reference<T> &other) noexcept {
+  void swap(unique_reference<T, Size> &other) noexcept {
     std::swap(m_size, other.m_size);
     std::swap(m_ptr, other.m_ptr);
   }
