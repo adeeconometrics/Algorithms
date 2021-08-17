@@ -6,7 +6,7 @@
  * @file Pointers.h
  * @author ddamiana
  * @brief Simple implementation of smart pointers.
- * @version 0.2
+ * @version 0.4
  * @date 2021-08-3
  *
  * @copyright Copyright (c) 2021
