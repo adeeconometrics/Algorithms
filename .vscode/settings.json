@@ -58,7 +58,8 @@
         "ratio": "cpp",
         "stdbool.h": "c",
         "stdlib.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "any": "cpp"
     },
     "java.project.sourcePaths": [
         "Java"

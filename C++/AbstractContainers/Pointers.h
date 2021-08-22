@@ -108,27 +108,19 @@ private:
 };
 
 template <typename T> class shared_reference {
-  int m_counter{0};
-  T *m_ptr{nullptr};
+  template <typename> friend class weak_reference;
+  static size_t m_counter;
+  T *m_ptr;
 
 public:
-  explicit shared_reference() = default;
-  explicit shared_reference(const shared_reference<T> &other) = delete;
-
-  explicit shared_reference(T *i_ptr)
-      : m_counter(m_counter + 1), m_ptr(i_ptr) {}
-  explicit shared_reference(shared_reference<T> &&other) noexcept {
-    other.swap(*this);
+  shared_reference() = default;
+  explicit shared_reference(T *i_ptr) : m_ptr(i_ptr) {}
+  // explicit shared_reference(shared_reference<T>* rhs) = default;
+  explicit shared_reference(shared_reference<T> &rhs) noexcept {
+    rhs.copy(*this);
   }
-
-  shared_reference &operator=(shared_reference<T> &&other) noexcept {
-    other.swap(*this);
-  }
-  shared_reference &operator=(const shared_reference<T> &other) = delete;
-
-  shared_reference &operator=(shared_reference<T> other) noexcept {
-    m_counter += 1;
-    other.m_ptr = m_ptr;
+  explicit shared_reference(shared_reference<T> &&rhs) noexcept {
+    rhs.swap(*this);
   }
 
   ~shared_reference() {
@@ -139,18 +131,31 @@ public:
     }
   }
 
+  T &operator=(shared_reference<T> &rhs) noexcept { rhs.copy(*this); }
+  T &operator=(shared_reference<T> &&rhs) noexcept { rhs.swap(*this); }
   T &operator*(void) { return *(this->m_ptr); }
   T *operator->(void) { return this->m_ptr; }
   T &operator&(shared_reference<T> &other) { return other.m_ptr; }
   T *get(void) { return this->m_ptr; }
-
-  virtual int count() const { return m_counter; }
+  size_t count() const { return m_counter; }
 
 private:
-  void swap(shared_reference<T> &other) noexcept {
-    std::swap(m_ptr, other.m_ptr);
+  void copy(shared_reference<T> &rhs) noexcept {
+    m_counter += 1;
+    rhs.m_ptr = m_ptr;
   }
+
+  void swap(shared_reference<T> &rhs) noexcept {
+    std::swap(m_ptr, rhs.m_ptr);
+    rhs.m_counter = 1;
+  }
+
+  void suppress_increment(void) noexcept { m_counter -= 1; }
+
+  void suppress_decrement(void) noexcept { m_counter += 1; }
 };
+
+template <typename T> size_t shared_reference<T>::m_counter = 1;
 
 template <typename T> class shared_reference<T[]> {
   int m_counter{0};
@@ -158,7 +163,7 @@ template <typename T> class shared_reference<T[]> {
   T *m_ptr{nullptr};
 
 public:
-  explicit shared_reference() = default;
+  shared_reference() = delete;
   explicit shared_reference(T *i_ptr, size_t i_size)
       : m_counter(m_counter + 1), m_ptr(i_ptr), m_size(i_size) {}
 
@@ -201,24 +206,33 @@ private:
   }
 };
 
-template <typename T> class weak_reference : public shared_reference<T> {
+template <typename T> class weak_reference {
   T *m_ptr{nullptr};
+  shared_reference<T> handle;
 
 public:
-  explicit weak_reference(shared_reference<T> &i_ptr) : m_ptr(i_ptr.get()) {}
+  explicit weak_reference(shared_reference<T> &i_ptr)
+      : m_ptr(i_ptr.get()), handle(i_ptr) {
+    i_ptr.suppress_increment();
+  }
 
   weak_reference() = delete;
-  weak_reference(const T &) = delete;
-  weak_reference(T &&) = delete;
-  weak_reference &operator=(T &&) = delete;
-  weak_reference &operator=(const T &Type) = delete;
-  ~weak_reference() { m_ptr = nullptr; };
+  weak_reference(const weak_reference<T> &) = delete;
+  weak_reference(weak_reference<T> &&) = delete;
+  ~weak_reference() {
+    m_ptr = nullptr;
+    handle.suppress_decrement();
+  }
+
+  weak_reference &operator=(weak_reference<T> &&) = delete;
+  weak_reference &operator=(const weak_reference<T> &Type) = delete;
 
   T &operator*(void) { return *(this->m_ptr); }
   T *operator->(void) { return this->m_ptr; }
-  T &operator&(weak_reference<T> &other) { return other.m_ptr; }
+  T &operator&(weak_reference<T> &other) { return other.m_ptr; } // test this
 
   T *get(void) { return (this->m_ptr); }
+  int count(void) { return handle.count(); }
 
   void release(void) noexcept { m_ptr = nullptr; }
   bool is_expired(void) noexcept { return m_ptr == nullptr; }
