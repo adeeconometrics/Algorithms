@@ -10,6 +10,7 @@
  *
  */
 
+#pragma once
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
@@ -281,5 +282,3 @@ private:
     std::swap(m_back, other.m_back);
   }
 };
-
-int main() {}
