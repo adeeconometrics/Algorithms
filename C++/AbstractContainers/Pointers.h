@@ -28,6 +28,7 @@ public:
   unique_reference &operator=(const unique_reference<T> &other) = delete;
   unique_reference &operator=(unique_reference<T> &&other) noexcept {
     other.swap(*this);
+    return *this;
   }
 
   ~unique_reference() {
@@ -131,8 +132,16 @@ public:
     }
   }
 
-  T &operator=(shared_reference<T> &rhs) noexcept { rhs.copy(*this); }
-  T &operator=(shared_reference<T> &&rhs) noexcept { rhs.swap(*this); }
+  shared_reference<T> &operator=(shared_reference<T> &rhs) noexcept { 
+    rhs.copy(*this); 
+    return *this;
+  }
+  
+  shared_reference<T> &operator=(shared_reference<T> &&rhs) noexcept {
+     rhs.swap(*this);
+     return *this;
+  }
+
   T &operator*(void) { return *(this->m_ptr); }
   T *operator->(void) { return this->m_ptr; }
   T &operator&(shared_reference<T> &other) { return other.m_ptr; }
