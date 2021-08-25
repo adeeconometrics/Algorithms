@@ -142,6 +142,11 @@ public:
      return *this;
   }
 
+  void operator()(shared_reference<T>& rhs) noexcept {
+    rhs.copy(*this);
+    suppress_increment();
+  }
+  
   T &operator*(void) { return *(this->m_ptr); }
   T *operator->(void) { return this->m_ptr; }
   T &operator&(shared_reference<T> &other) { return other.m_ptr; }
@@ -236,9 +241,13 @@ public:
   weak_reference &operator=(weak_reference<T> &&) = delete;
   weak_reference &operator=(const weak_reference<T> &Type) = delete;
 
+  void operator()(shared_reference<T>& sh) noexcept {
+    handle(sh);
+  }
+  
   T &operator*(void) { return *(this->m_ptr); }
   T *operator->(void) { return this->m_ptr; }
-  T &operator&(weak_reference<T> &other) { return other.m_ptr; } // test this
+  T &operator&(weak_reference<T> &other) { return other.m_ptr; }
 
   T *get(void) { return (this->m_ptr); }
   int count(void) { return handle.count(); }
