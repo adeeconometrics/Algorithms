@@ -259,9 +259,9 @@ public:
 
   iterator end() { return iterator(m_ptr + m_size); }
 
-  const_iterator cbegin() { return const_iterator(m + ptr); }
+  const_iterator cbegin() { return const_iterator(m_ptr); }
 
-  const_iterator cend() { return const_iterator(m + ptr + m_size); }
+  const_iterator cend() { return const_iterator(m_ptr + m_size); }
 
   size_type size() noexcept { return m_size; }
 
