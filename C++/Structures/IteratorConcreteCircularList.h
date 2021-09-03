@@ -14,3 +14,5 @@
 
 class CircularList_Iterator;
 class cCircularList_Iterator;
+class rCircularList_Iterator;
+class crCircularList_Iterator;

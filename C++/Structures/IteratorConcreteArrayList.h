@@ -11,3 +11,6 @@
 
 #pragma once
 #include "ConcreteArrayList.h"
+
+class ArratList_Iterator;
+class cArratList_Iterator;
