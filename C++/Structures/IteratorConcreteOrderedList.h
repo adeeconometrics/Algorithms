@@ -11,3 +11,8 @@
 
 #pragma once
 #include "ConcreteOrderedList.h"
+
+class OrderedList_Iterator;
+class cOrderedList_Iterator;
+class rOrderedList_Iterator;
+class crOrderedList_Iterator;

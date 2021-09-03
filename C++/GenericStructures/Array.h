@@ -10,10 +10,10 @@
  */
 
 #pragma once
+#include "ArrayList_Iterator.h"
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
-#include "ArrayList_Iterator.h"
 
 /**
  * Summary of complexity on Array:
@@ -28,7 +28,7 @@
  */
 template <typename T, size_t Size> class Array {
 public:
-  typedef m_ptr value_type;
+  typedef m_ptr value_type; // not sure why this is not T.
   typedef Array_Iterator<Array<T, Size>> iterator;
   typedef cArray_Iterator<Array<T, Size>> const_iterator;
 

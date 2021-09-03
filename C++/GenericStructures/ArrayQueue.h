@@ -10,103 +10,10 @@
  */
 
 #pragma once
+#include "ArrayQueue_Iterator.h"
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
-
-template <typename T, size_t Size> class ArrayQueue_Iterator {
-public:
-  typedef typename T::value_type value_type;
-  typedef value_type *pointer_type;
-  typedef value_type &reference_type;
-
-public:
-  constexpr ArrayQueue_Iterator(pointer_type ptr) : m_ptr(ptr) {}
-
-  ArrayQueue_Iterator &operator++() {
-    m_ptr++;
-    return *this;
-  }
-
-  ArrayQueue_Iterator operator++(int) {
-    ArrayQueue_Iterator iterator = *this;
-    ++(*this);
-    return iterator;
-  }
-
-  ArrayQueue_Iterator &operator--() {
-    m_ptr--;
-    return *this;
-  }
-
-  ArrayQueue_Iterator operator--(int) {
-    ArrayQueue_Iterator iterator = *this;
-    --(*this);
-    return iterator;
-  }
-
-  reference_type operator*() { return *m_ptr; }
-
-  pointer_type operator->() { return m_ptr; }
-
-  bool operator==(const ArrayQueue_Iterator &other) const {
-    return m_ptr == other.m_ptr;
-  }
-
-  bool operator!=(const ArrayQueue_Iterator &other) const {
-    return !(*this == other);
-  }
-
-private:
-  pointer_type m_ptr{nullptr};
-};
-
-template <typename T, size_t Size> class cArrayQueue_Iterator {
-public:
-  typedef typename T::value_type value_type;
-  typedef value_type *pointer_type;
-  typedef value_type &reference_type;
-
-public:
-  explicit cArrayQueue_Iterator(pointer_type ptr) : m_ptr(ptr) {}
-
-  cArrayQueue_Iterator &operator++() {
-    m_ptr++;
-    return *this;
-  }
-
-  cArrayQueue_Iterator operator++(int) {
-    cArrayQueue_Iterator iterator = *this;
-    ++(*this);
-    return iterator;
-  }
-
-  cArrayQueue_Iterator &operator--() {
-    m_ptr--;
-    return *this;
-  }
-
-  cArrayQueue_Iterator operator--(int) {
-    cArrayQueue_Iterator iterator = *this;
-    --(*this);
-    return iterator;
-  }
-
-  const reference_type operator*() const { return *m_ptr; }
-
-  const pointer_type operator->() const { return m_ptr; }
-
-  bool operator==(const cArrayQueue_Iterator &other) const {
-    return m_ptr == other.m_ptr;
-  }
-
-  bool operator!=(const cArrayQueue_Iterator &other) const {
-    return !(*this == other);
-  }
-
-private:
-  pointer_type m_ptr{nullptr};
-};
 
 /**
  * Summary of complexity on ArrayQueue:
@@ -131,6 +38,11 @@ template <typename T, size_t Size> class ArrayQueue {
 
 public:
   typedef T value_type;
+  typedef T &reference_type;
+  typedef T *pointer_type;
+  typedef const T &const_reference;
+  typedef const T *const_pointer;
+
   typedef ArrayQueue_Iterator<ArrayQueue<T, Size>> iterator;
   typedef cArrayQueue_Iterator<ArrayQueue<T, Size>> const_iterator;
 
@@ -147,21 +59,21 @@ public:
     initialize();
   }
 
-  // explicit ArrayQueue(std::initalizer_list<T, Size> list) {
-  // for (size_t i = 0; i < Size; ++i)
-  //   m_ptr[i] = 0;
-  //   try {
-  //     if (list.size() > Size)
-  //       throw std::exception;
+  explicit ArrayQueue(std::initalizer_list<T, Size> list) {
+    for (size_t i = 0; i < Size; ++i)
+      m_ptr[i] = 0;
+    try {
+      if (list.size() > Size)
+        throw std::exception;
 
-  //     m_ptr = new T[Size];
-  //     for (auto i : list)
-  //       enqueue(i);
-  //   } catch (const std::exception &e) {
-  //     std::cerr << e.what() << '\n';
-  //     exit(1);
-  //   }
-  // }
+      m_ptr = new T[Size];
+      for (auto i : list)
+        enqueue(i);
+    } catch (const std::exception &e) {
+      std::cerr << e.what() << '\n';
+      exit(1);
+    }
+  }
 
   explicit ArrayQueue(ArrayQueue<T, Size> &&other) noexcept {
     other.swap(*this);
@@ -208,7 +120,7 @@ public:
         m_ptr[m_index] = element;
         ++m_index;
       }
-    } catch (const std::lenght_error &le) {
+    } catch (const std::length_error &le) {
       std::cerr << le.what() << '\n';
       exit(1);
     }
@@ -223,7 +135,7 @@ public:
         m_ptr[m_index] = element;
         ++m_index;
       }
-    } catch (const std::lenght_error &le) {
+    } catch (const std::length_error &le) {
       std::cerr << le.what() << '\n';
       exit(1);
     }

@@ -11,3 +11,8 @@
 
 #pragma once
 #include "ConcreteVector.h"
+
+class Vector_Iterator;
+class cVector_Iterator;
+class rVector_Iterator;
+class crVector_Iterator;

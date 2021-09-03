@@ -11,3 +11,8 @@
 
 #pragma once
 #include "ConcreteDoublyList.h"
+
+class DoublyList_Iterator;
+class cDoublyList_Iterator;
+class rDoublyList_Iterator;
+class crDoublyList_Iterator;

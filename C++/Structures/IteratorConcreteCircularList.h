@@ -11,3 +11,6 @@
 
 #pragma once
 #include "ConcreteCircularList.h"
+
+class CircularList_Iterator;
+class cCircularList_Iterator;

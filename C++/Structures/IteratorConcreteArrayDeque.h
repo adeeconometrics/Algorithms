@@ -11,3 +11,8 @@
 
 #pragma once
 #include "ConcreteArrayDeque.h"
+
+class ArrayDeque_Iterator;
+class cArrayDeque_Iterator;
+class rArrayDeque_Iterator;
+class crArrayDeque_Iterator;

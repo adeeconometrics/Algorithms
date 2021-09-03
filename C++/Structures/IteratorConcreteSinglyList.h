@@ -11,3 +11,6 @@
 
 #pragma once
 #include "ConcreteSinglyList.h"
+
+class SinglyList_Iterator;
+class cSinglyList_Iterator;

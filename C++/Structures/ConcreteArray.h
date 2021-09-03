@@ -16,24 +16,33 @@
 #include <stdexcept>
 
 class Array {
-  int *m_ptr = nullptr;
-  size_t m_size{0}, m_idx{0};
 
 public:
   typedef int value_type;
   typedef int *pointer_type;
   typedef int &reference_type;
   typedef size_t size_type;
+
   typedef Array_Iterator iterator;
   typedef cArray_Iterator const_iterator;
 
+private:
+  pointer_type m_ptr = nullptr;
+  size_type m_size{0}, m_idx{0};
+
 public:
   Array() = default;
-  Array(size_type size) : m_size(size) { m_ptr = new int[size]; }
+
+  Array(size_type size) : m_size(size) { m_ptr = new value_type[size]; }
+
   Array(const std::initializer_list<int> &i_list) {
     m_size = i_list.size();
     m_ptr = new int[m_size];
-    auto it = i_list.begin();
+
+    for (const int &it : i_list) {
+      m_ptr[m_idx] = it;
+      m_idx += 1;
+    }
   }
 
   Array(const Array &rhs) {
@@ -74,25 +83,25 @@ public:
   }
 
   int operator[](size_type idx) const {
-    if (idx > m_idx)
+    if (idx > m_size)
       throw new std::domain_error("Array index is out of bound.");
     return m_ptr[idx];
   }
 
   int &operator[](size_type idx) {
-    if (idx > m_idx)
+    if (idx > m_size)
       throw new std::domain_error("Array index is out of bound.");
     return m_ptr[idx];
   }
 
   size_type size() const { return m_size; }
 
-  iterator begin() noexcept { return iterator(m_ptr); }
-  iterator end() noexcept { return iterator(m_ptr + m_size); }
   const_iterator cbegin() const noexcept { return const_iterator(m_ptr); }
   const_iterator cend() const noexcept {
     return const_iterator(m_ptr + m_size);
   }
+  iterator begin() noexcept { return iterator(m_ptr); }
+  iterator end() noexcept { return iterator(m_ptr + m_size); }
 
   friend std::ostream &operator<<(std::ostream &ss, const Array &array) {
     ss << '[';
