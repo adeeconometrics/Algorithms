@@ -27,7 +27,7 @@ public:
     return *this;
   }
 
-  Array_Iterator &operator++(int) {
+  Array_Iterator operator++(int) {
     Array_Iterator temp = *this;
     ++(*this);
     return temp;
@@ -38,7 +38,7 @@ public:
     return *this;
   }
 
-  Array_Iterator &operator--(int) {
+  Array_Iterator operator--(int) {
     Array_Iterator temp = *this;
     --(*this);
     return temp;
@@ -76,7 +76,7 @@ public:
     return *this;
   }
 
-  cArray_Iterator &operator++(int) {
+  cArray_Iterator operator++(int) {
     cArray_Iterator temp = *this;
     ++(*this);
     return temp;
@@ -87,7 +87,7 @@ public:
     return *this;
   }
 
-  cArray_Iterator &operator--(int) {
+  cArray_Iterator operator--(int) {
     cArray_Iterator temp = *this;
     --(*this);
     return temp;

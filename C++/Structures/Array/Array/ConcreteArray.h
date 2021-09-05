@@ -28,7 +28,7 @@ public:
 
 private:
   pointer_type m_ptr = nullptr;
-  size_type m_size{0}, m_idx{0};
+  size_type m_size{0};
 
 public:
   Array() = default;
@@ -38,6 +38,7 @@ public:
   Array(const std::initializer_list<int> &i_list) {
     m_size = i_list.size();
     m_ptr = new int[m_size];
+    size_t m_idx = 0;
 
     for (const int &it : i_list) {
       m_ptr[m_idx] = it;
@@ -46,7 +47,6 @@ public:
   }
 
   Array(const Array &rhs) {
-    m_idx = 0;
     m_size = rhs.m_size;
     m_ptr = new int[rhs.size()];
     for (size_type i = 0; i < rhs.size(); i++)
@@ -56,20 +56,11 @@ public:
   Array(Array &&rhs) noexcept { rhs.swap(*this); }
 
   ~Array() {
-    try {
-      if (m_ptr == nullptr)
-        throw std::range_error("Invalid operation. Array is already empty.");
-      delete[] m_ptr;
-      m_ptr = nullptr;
-
-    } catch (const std::range_error &re) {
-      std::cerr << re.what() << '\n';
-      exit(1);
-    }
+    delete[] m_ptr;
+    m_ptr = nullptr;
   }
 
   Array &operator=(const Array &rhs) {
-    m_idx = 0;
     m_size = rhs.m_size;
     m_ptr = new int[rhs.size()];
     for (size_type i = 0; i < rhs.size(); i++)
@@ -112,8 +103,7 @@ public:
 
 private:
   void swap(Array &other) noexcept {
-    std::swap(other.m_idx, m_idx);
     std::swap(other.m_ptr, m_ptr);
-    std::swap(other.m_idx, m_idx);
+    std::swap(other.m_size, m_size);
   }
 };

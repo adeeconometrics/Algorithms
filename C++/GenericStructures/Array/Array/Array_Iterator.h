@@ -11,7 +11,7 @@
 
 #pragma once
 #include "Array.h"
-
+#include <array>
 
 template <typename Array> class Array_Iterator {
 
@@ -28,7 +28,7 @@ public:
     return *this;
   }
 
-  Array_Iterator &operator++(int) {
+  Array_Iterator operator++(int) {
     Array_Iterator temp = *this;
     ++(*this);
     return temp;
@@ -39,7 +39,7 @@ public:
     return *this;
   }
 
-  Array_Iterator &operator--(int) {
+  Array_Iterator operator--(int) {
     Array_Iterator temp = *this;
     --(*this);
     return temp;
@@ -51,11 +51,11 @@ public:
 
   pointer_type operator->() { return m_ptr; }
 
-  bool operator==(const Array_Iterator &other) const {
+  bool operator==(const Array_Iterator &other) const noexcept{
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const Array_Iterator &other) const {
+  bool operator!=(const Array_Iterator &other) const noexcept{
     return !(*this == other);
   }
 
@@ -78,7 +78,7 @@ public:
     return *this;
   }
 
-  cArray_Iterator &operator++(int) {
+  cArray_Iterator operator++(int) {
     Array_Iterator temp = *this;
     ++(*this);
     return temp;
@@ -89,23 +89,23 @@ public:
     return *this;
   }
 
-  cArray_Iterator &operator--(int) {
+  cArray_Iterator operator--(int) {
     cArray_Iterator temp = *this;
     --(*this);
     return temp;
   }
 
-  const reference_type operator[](int index) const { return m_ptr[index]; }
+  reference_type operator[](int index) const noexcept { return m_ptr[index]; }
 
-  const reference_type operator*() const { return *m_ptr; }
+  reference_type operator*() const noexcept { return *m_ptr; }
 
-  const pointer_type operator->() const { return m_ptr; }
+  pointer_type operator->() const noexcept { return m_ptr; }
 
-  bool operator==(const cArray_Iterator &other) const {
+  bool operator==(const cArray_Iterator &other) const noexcept{
     return m_ptr == other.m_ptr;
   }
 
-  bool operator!=(const cArray_Iterator &other) const {
+  bool operator!=(const cArray_Iterator &other) const noexcept{
     return !(*this == other);
   }
 
