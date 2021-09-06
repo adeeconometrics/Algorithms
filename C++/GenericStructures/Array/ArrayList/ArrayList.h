@@ -66,8 +66,8 @@ public:
   //    m_array--;
   //    return *this;
   //  }
-  //
-  //  ArrayList_Iterator &operator--(int) {
+  
+  //  ArrayList_Iterator operator--(int) {
   //    value_type temp = m_array;
   //    --m_array;
   //    return temp;
