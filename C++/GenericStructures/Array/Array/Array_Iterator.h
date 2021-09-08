@@ -11,7 +11,7 @@
 
 #pragma once
 #include "Array.h"
-#include <array>
+#include <type_traits>
 
 template <typename Array> class Array_Iterator {
 

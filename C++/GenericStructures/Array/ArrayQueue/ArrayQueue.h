@@ -94,10 +94,7 @@ public:
     return *this;
   }
 
-  ~ArrayQueue() {
-    if (!is_empty())
-      clear();
-  }
+  ~ArrayQueue() { clear(); }
 
   const T &operator[](size_t idx) const {
     try {
@@ -177,8 +174,14 @@ public:
   }
 
   void clear() {
-    delete[] m_ptr;
-    m_ptr = nullptr;
+    if (is_empty()) {
+      for (size_t i = 0; i < m_size; ++i) {
+        m_ptr[i]->~T();
+      }
+
+      delete[] m_ptr;
+      m_ptr = nullptr;
+    }
   }
 
   T top() const noexcept { return m_ptr[0]; }

@@ -11,6 +11,7 @@
 
 #pragma once
 #include "IteratorConcreteArray.h"
+#include <array>
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
@@ -75,17 +76,23 @@ public:
 
   int operator[](size_type idx) const {
     if (idx > m_size)
-      throw new std::domain_error("Array index is out of bound.");
+      throw std::domain_error("Array index is out of bound.");
     return m_ptr[idx];
   }
 
   int &operator[](size_type idx) {
     if (idx > m_size)
-      throw new std::domain_error("Array index is out of bound.");
+      throw std::domain_error("Array index is out of bound.");
     return m_ptr[idx];
   }
 
   size_type size() const { return m_size; }
+  bool is_empty() const { return m_ptr == nullptr && m_size == 0; }
+
+  void initialize(int element) {
+    for (size_t i = 0; i < m_size; ++i)
+      m_ptr[i] = element;
+  }
 
   const_iterator cbegin() const noexcept { return const_iterator(m_ptr); }
   const_iterator cend() const noexcept {

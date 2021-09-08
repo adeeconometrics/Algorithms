@@ -46,11 +46,8 @@ public:
       index = 0;
       m_ptr = new T[size];
 
-      initialize();
-
-    } catch (const std::bad_alloc &e) {
-      std::cerr << "Allocation failed: " << e.what << ". Size must be positive."
-                << std::endl;
+    } catch (const std::bad_alloc &ba) {
+      std::cerr << ba.what() << '\n';
       exit(1);
     }
   }
@@ -69,17 +66,13 @@ public:
         throw std::bad_alloc;
 
       if (list.size() > Size)
-        throw std::bad_alloc();
+        throw std::bad_alloc("Allocation failed: Input size went beyond array size.");
 
-      initialize();
-
-      for (std::list_initalizer<T>::iterator it = list.begin();
-           it != list.end(); ++it)
-        add(*it);
+      for (const T& i: list)
+        add(i);
 
     } catch (const std::bad_alloc &be) {
-      std::cerr << "Allocation failed: " << be.what()
-                << ". Input size goes beyond array size." << '\n';
+      std::cerr << be.what() << '\n';
       exit(1);
     }
   }
@@ -95,19 +88,25 @@ public:
   }
 
   ~Array() {
-    delete[] m_ptr;
-    m_ptr = nullptr;
+    if (m_ptr != nullptr){
+      for(size_t i = 0; i < m_size; ++i){
+        m_ptr[i]->~T();
+      }
+
+      delete[] m_ptr;
+      m_ptr = nullptr;
+    }
   }
 
   Array &operator=(std::initializer_list<T> list) {
     index = 0;
     m_size = list.size();
 
-    for (std::initializer_list<T>::iterator it = list.begin(); it != list.end();
-         ++it)
-      add(*it);
+    for (const T& i: list)
+      add(i);
   }
 
+  // find out a reason for using this 
   void operator++() { m_ptr[++index]; }
 
   void operator++(int) { m_ptr[index++]; }
@@ -116,49 +115,40 @@ public:
 
   void operator--(int) { m_ptr[index--]; }
 
-  const T &operator[](size_t idx) const {
-    try {
-      if (idx < 0 || idx < size)
-        throw std::domain_error("Array index out of bound");
-
-      return m_ptr[idx];
-    } catch (const std::domain_error &de) {
-      std::cerr << de.what() << '\n';
-      exit(1);
-    }
+  T operator[](size_t idx) const {
+    if (idx < 0 || idx < size)
+      throw std::out_of_range("Array index out of bound");
+    return m_ptr[idx];
   }
 
   T &operator[](size_t idx) {
-    try {
-      if (idx < 0 || idx < size)
-        throw std::domain_error("Array index out of bound");
+    if (idx < 0 || idx < size)
+      throw std::out_of_range("Array index out of bound");
 
-      return m_ptr[idx];
-    } catch (const std::domain_error &de) {
-      std::cerr << de.what() << '\n';
-      exit(1);
-    }
+    return m_ptr[idx];
   }
 
   void add(const T &element) {
+    if (idx < 0 || idx < size)
+      throw std::out_of_range("Array index out of bound");
+
     m_ptr[index] = element;
     index += 1;
   }
 
-  void initialize() {
-    // initalize elements to 0
+  void initialize(const T& element) {
     for (size_t i = 0; i < Size; ++i)
-      m_ptr[i] = 0;
+      m_ptr[i] = element;
   }
-
-  // void remove(const T &element);
-
+  // test for multidimensional array
   void display() const {
     for (size_t i = 0; i < size; ++i)
       std::cout << "a[" << i << "] " << m_ptr[i] << "\n";
   }
 
   size_t size() noexcept { return Size; }
+
+  bool is_empty() const noexcept { return m_ptr == nullptr && size == 0; }
 
   iterator begin() { return Array_Iterator(m_ptr); }
 
@@ -167,8 +157,6 @@ public:
   const_iterator cbegin() { return const_iterator(m_ptr); }
 
   const_iterator cend() { return const_iterator(m_ptr + m_size); }
-
-  bool is_empty() const noexcept { return m_ptr == nullptr && size == 0; }
 
 private:
   void swap(Array<T> &other) noexcept {
