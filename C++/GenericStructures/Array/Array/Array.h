@@ -2,7 +2,7 @@
  * @file Array.cpp
  * @author ddamiana
  * @brief Array implementation with move semantics.
- * @version 1.1
+ * @version 0.3
  * @date 2021-07-29
  *
  * @copyright Copyright (c) 2021
@@ -10,7 +10,7 @@
  */
 
 #pragma once
-#include "ArrayList_Iterator.h"
+#include "Array_Iterator.h"
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
@@ -28,32 +28,21 @@
  */
 template <typename T, size_t Size> class Array {
 public:
-  typedef m_ptr value_type; // not sure why this is not T.
+  typedef T value_type; 
   typedef Array_Iterator<Array<T, Size>> iterator;
   typedef cArray_Iterator<Array<T, Size>> const_iterator;
 
 private:
   T *m_ptr{nullptr};
   size_t m_size{Size};
-  size_t index{0};
 
 public:
   explicit Array() {
-    try {
-      if (Size < 0)
-        throw std::bad_alloc();
-
-      index = 0;
-      m_ptr = new T[size];
-
-    } catch (const std::bad_alloc &ba) {
-      std::cerr << ba.what() << '\n';
-      exit(1);
-    }
+      m_ptr = static_cast<T*>(::operator new(Size * sizeof(T)));
   }
 
-  explicit Array(const Array<T> &other) {
-    m_ptr = new T[other.size()];
+  explicit Array(const Array &other) {
+    m_ptr = static_cast<T*>(::operator new(Size * sizeof(T)));
     m_size = other.size();
     std::copy(other.begin(), other.end(), m_ptr);
   }
@@ -62,23 +51,25 @@ public:
 
   explicit Array(std::initializer_list<T> list) {
     try {
-      if (Size < 0)
-        throw std::bad_alloc;
+      if (list.size() > m_size)
+        throw std::exception();
 
-      if (list.size() > Size)
-        throw std::bad_alloc("Allocation failed: Input size went beyond array size.");
+      m_ptr = static_cast<T*>(::operator new(m_size * sizeof(T)));
+      
+      size_t i = 0;
+      for(auto item: list){
+        m_ptr[i] = item;
+        ++i;
+      }
 
-      for (const T& i: list)
-        add(i);
-
-    } catch (const std::bad_alloc &be) {
+    } catch (const std::exception &be) {
       std::cerr << be.what() << '\n';
       exit(1);
     }
   }
 
   Array &operator=(const Array &other) {
-    Array<T> copy(other).swap(other);
+    Array copy(other);
     return *this;
   }
 
@@ -88,80 +79,48 @@ public:
   }
 
   ~Array() {
-    if (m_ptr != nullptr){
-      for(size_t i = 0; i < m_size; ++i){
-        m_ptr[i]->~T();
-      }
-
-      delete[] m_ptr;
+    if (!is_empty()){
+      ::operator delete(m_ptr);
       m_ptr = nullptr;
+      m_size = 0;
     }
   }
 
-  Array &operator=(std::initializer_list<T> list) {
-    index = 0;
-    m_size = list.size();
-
-    for (const T& i: list)
-      add(i);
-  }
-
-  // find out a reason for using this 
-  void operator++() { m_ptr[++index]; }
-
-  void operator++(int) { m_ptr[index++]; }
-
-  void operator--() { m_ptr[--index]; }
-
-  void operator--(int) { m_ptr[index--]; }
-
-  T operator[](size_t idx) const {
-    if (idx < 0 || idx < size)
+  T &operator[](size_t idx) const {
+    if (idx > m_size)
       throw std::out_of_range("Array index out of bound");
     return m_ptr[idx];
   }
 
   T &operator[](size_t idx) {
-    if (idx < 0 || idx < size)
+    if (idx > m_size)
       throw std::out_of_range("Array index out of bound");
-
     return m_ptr[idx];
   }
 
   void add(const T &element) {
-    if (idx < 0 || idx < size)
-      throw std::out_of_range("Array index out of bound");
-
     m_ptr[index] = element;
     index += 1;
   }
 
+  size_t size() noexcept { return m_size; }
+  bool is_empty() const noexcept { return m_ptr == nullptr && m_size == 0; }
   void initialize(const T& element) {
-    for (size_t i = 0; i < Size; ++i)
+    for (size_t i = 0; i < m_size; ++i)
       m_ptr[i] = element;
   }
-  // test for multidimensional array
-  void display() const {
-    for (size_t i = 0; i < size; ++i)
-      std::cout << "a[" << i << "] " << m_ptr[i] << "\n";
-  }
 
-  size_t size() noexcept { return Size; }
+  iterator begin() noexcept { return iterator(m_ptr); }
 
-  bool is_empty() const noexcept { return m_ptr == nullptr && size == 0; }
+  iterator end() noexcept { return iterator(m_ptr + m_size); }
 
-  iterator begin() { return Array_Iterator(m_ptr); }
+  const_iterator cbegin() const noexcept{ return const_iterator(m_ptr); }
 
-  iterator end() { return Array_Iterator(m_ptr + Size); }
-
-  const_iterator cbegin() { return const_iterator(m_ptr); }
-
-  const_iterator cend() { return const_iterator(m_ptr + m_size); }
+  const_iterator cend() const noexcept{ return const_iterator(m_ptr + m_size); }
 
 private:
-  void swap(Array<T> &other) noexcept {
+  void swap(Array &other) noexcept {
     std::swap(m_ptr, other.m_ptr);
     std::swap(m_size, other.m_size);
-    std::swap(index, other.index);
   }
 };
